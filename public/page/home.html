@@ -218,7 +218,7 @@
             <div>
               <span class="text-sm font-semibold">Customize Style</span>
               <span class="block text-[11px] text-base-content/40"
-                >Colors, size, label & more</span
+                >Colors, size, label, logo & more</span
               >
             </div>
           </div>
@@ -462,6 +462,177 @@
             </div>
           </div>
 
+          <div class="mt-6 pt-4 border-t border-base-200">
+            <label class="label pb-1"
+              ><span class="label-text font-bold text-sm"
+                >Center Logo</span
+              ></label
+            >
+            <div id="logo-picker" class="flex flex-wrap gap-2.5 mt-1">
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value=""
+                  class="hidden"
+                  checked
+                />
+                <div class="logo-box selected">
+                  <span class="text-[10px] font-medium text-base-content/40"
+                    >None</span
+                  >
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="globe"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/globe.svg"
+                    alt="Globe"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="wifi"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/wifi.svg"
+                    alt="WiFi"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="contact"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/contact.svg"
+                    alt="Contact"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="email"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/email.svg"
+                    alt="Email"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="phone"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/phone.svg"
+                    alt="Phone"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="link"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/link.svg"
+                    alt="Link"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="star"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/star.svg"
+                    alt="Star"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="line"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/line.svg"
+                    alt="LINE"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+
+              <label class="cursor-pointer logo-option">
+                <input
+                  type="radio"
+                  name="style.logoPreset"
+                  value="facebook"
+                  class="hidden"
+                />
+                <div class="logo-box">
+                  <img
+                    src="/icons/facebook.svg"
+                    alt="Facebook"
+                    class="w-6 h-6 opacity-60"
+                  />
+                </div>
+              </label>
+            </div>
+            <p class="text-[11px] text-base-content/40 mt-2 pl-0.5">
+              Auto-switches to "High" error correction when adding a logo.
+            </p>
+          </div>
+
           <!-- Border / Frame -->
           <div class="mt-6 pt-4 border-t border-base-200">
             <label class="label pb-1"
@@ -523,6 +694,19 @@
                 <input
                   type="radio"
                   name="style.borderStyle"
+                  value="circle"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-circle"><div class="bp-qr"></div></div>
+                  <span class="bp-label">Circle</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
                   value="glow"
                   class="hidden"
                 />
@@ -560,6 +744,38 @@
                     <div class="bp-qr"></div>
                   </div>
                   <span class="bp-label">Gradient</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="scan-me"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-scanme">
+                    <div class="bp-qr"></div>
+                    <span class="bp-scanme-text">SCAN ME</span>
+                  </div>
+                  <span class="bp-label">Scan Me</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="ticker"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-ticker">
+                    <span class="bp-ticker-text">&#9670; QR FORGE &#9670;</span>
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Ticker</span>
                 </div>
               </label>
             </div>
@@ -840,6 +1056,27 @@
 </div>
 
 <style>
+  .logo-box {
+    width: 2.75rem;
+    height: 2.75rem;
+    border-radius: 0.5rem;
+    border: 2px solid oklch(var(--b3));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+  }
+  .logo-box:hover {
+    border-color: oklch(var(--bc) / 0.3);
+  }
+  .logo-box.selected {
+    border-color: oklch(var(--p));
+    background: oklch(var(--p) / 0.08);
+  }
+  .logo-box.selected img {
+    opacity: 1;
+  }
+
   /* Border picker thumbnails */
   .border-preview-box {
     display: flex;
@@ -903,6 +1140,11 @@
     border-radius: 8px;
     padding: 3px;
   }
+  .bp-circle {
+    border: 2px solid oklch(var(--bc) / 0.35);
+    border-radius: 50%;
+    padding: 5px;
+  }
   .bp-glow {
     border: 2px solid oklch(var(--bc) / 0.35);
     border-radius: 6px;
@@ -945,6 +1187,31 @@
     width: 22px;
     height: 22px;
   }
+
+  .bp-scanme {
+    border: 2px solid oklch(var(--bc) / 0.35);
+    border-radius: 4px;
+    padding: 3px 3px 1px;
+    gap: 1px;
+  }
+  .bp-scanme-text {
+    font-size: 4px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    color: oklch(var(--bc) / 0.5);
+  }
+
+  .bp-ticker {
+    border: 1.5px solid oklch(var(--bc) / 0.2);
+    padding: 1px 3px 3px;
+    gap: 1px;
+  }
+  .bp-ticker-text {
+    font-size: 3.5px;
+    font-weight: 800;
+    color: oklch(var(--bc) / 0.4);
+    letter-spacing: 0.3px;
+  }
 </style>
 
 <script>
@@ -969,70 +1236,127 @@
     document.getElementById("qr-type").value = clickedBtn.dataset.type;
   }
 
-  document.addEventListener("DOMContentLoaded", function () {
-    /** Border picker */
-    var borderPicker = document.getElementById("border-picker");
-    if (borderPicker) {
-      borderPicker.addEventListener("click", function (e) {
-        var label = e.target.closest(".border-option");
-        if (!label) return;
+  // ใช้ IIFE เพื่อรันโค้ดทันทีที่ไฟล์นี้ถูกโหลด (รองรับทั้ง Page Load ปกติ และ HTMX Swap)
+  (function () {
+    function initPickers() {
+      /** Logo picker */
+      var logoPicker = document.getElementById("logo-picker");
+      if (logoPicker) {
+        // ลบ Event Listener เก่าออกก่อนเพื่อป้องกันการซ้อนทับ (ถ้ามี)
+        var newLogoPicker = logoPicker.cloneNode(true);
+        logoPicker.parentNode.replaceChild(newLogoPicker, logoPicker);
+        logoPicker = newLogoPicker;
 
-        borderPicker
-          .querySelectorAll(".border-preview-box")
-          .forEach(function (box) {
+        logoPicker.addEventListener("click", function (e) {
+          var label = e.target.closest(".logo-option");
+          if (!label) return;
+
+          logoPicker.querySelectorAll(".logo-box").forEach(function (box) {
             box.classList.remove("selected");
           });
 
-        var box = label.querySelector(".border-preview-box");
-        if (box) box.classList.add("selected");
+          var box = label.querySelector(".logo-box");
+          if (box) box.classList.add("selected");
 
-        var radio = label.querySelector("input[type='radio']");
-        if (radio) radio.checked = true;
-      });
+          var radio = label.querySelector("input[type='radio']");
+          if (radio) radio.checked = true;
+        });
+      }
+
+      /** Border picker */
+      var borderPicker = document.getElementById("border-picker");
+      if (borderPicker) {
+        // จัดการ Event Listener ให้ทำงานใหม่ทุกครั้งที่โหลดหน้ามา
+        var newBorderPicker = borderPicker.cloneNode(true);
+        borderPicker.parentNode.replaceChild(newBorderPicker, borderPicker);
+        borderPicker = newBorderPicker;
+
+        borderPicker.addEventListener("click", function (e) {
+          var label = e.target.closest(".border-option");
+          if (!label) return;
+
+          borderPicker
+            .querySelectorAll(".border-preview-box")
+            .forEach(function (box) {
+              box.classList.remove("selected");
+            });
+
+          var box = label.querySelector(".border-preview-box");
+          if (box) box.classList.add("selected");
+
+          var radio = label.querySelector("input[type='radio']");
+          if (radio) radio.checked = true;
+        });
+      }
+
+      /** Sync color pickers */
+      var fgColor = document.getElementById("fg-color");
+      if (fgColor) {
+        fgColor.oninput = function () {
+          document.getElementById("fg-color-text").value = this.value;
+        };
+      }
+
+      var bgColor = document.getElementById("bg-color");
+      if (bgColor) {
+        bgColor.oninput = function () {
+          document.getElementById("bg-color-text").value = this.value;
+        };
+      }
+
+      var lblColor = document.getElementById("lbl-color");
+      if (lblColor) {
+        lblColor.oninput = function () {
+          document.getElementById("lbl-color-text").value = this.value;
+        };
+      }
+
+      var borderColor = document.getElementById("border-color");
+      if (borderColor) {
+        borderColor.oninput = function () {
+          document.getElementById("border-color-text").value = this.value;
+        };
+      }
     }
-  });
 
-  /** Sync color pickers */
-  // Foreground
-  document.getElementById("fg-color").addEventListener("input", function () {
-    document.getElementById("fg-color-text").value = this.value;
-  });
-  // Background
-  document.getElementById("bg-color").addEventListener("input", function () {
-    document.getElementById("bg-color-text").value = this.value;
-  });
-  // Label Color (New)
-  document.getElementById("lbl-color").addEventListener("input", function () {
-    document.getElementById("lbl-color-text").value = this.value;
-  });
-  // Border Color
-  document
-    .getElementById("border-color")
-    .addEventListener("input", function () {
-      document.getElementById("border-color-text").value = this.value;
-    });
+    // รันทันที
+    initPickers();
+
+    // เผื่อกรณี HTMX history restore
+    if (!window.htmxPickerInitAttached) {
+      document.body.addEventListener("htmx:afterSwap", function (evt) {
+        if (evt.target.id === "main-content") {
+          initPickers();
+        }
+      });
+      window.htmxPickerInitAttached = true;
+    }
+  })();
 
   /** Thumbnail for history after QR generated */
-  document.body.addEventListener("htmx:afterSwap", function (event) {
-    if (event.detail.target.id !== "qr-preview") return;
-    var img = document.querySelector("#qr-preview img");
-    if (!img) return;
+  if (!window.htmxThumbnailInitAttached) {
+    document.body.addEventListener("htmx:afterSwap", function (event) {
+      if (event.detail.target.id !== "qr-preview") return;
+      var img = document.querySelector("#qr-preview img");
+      if (!img) return;
 
-    // Create thumbnail
-    var canvas = document.createElement("canvas");
-    canvas.width = 128;
-    canvas.height = 128;
-    var tempImg = new Image();
-    // Allow SVG data URL to be drawn
-    tempImg.crossOrigin = "anonymous";
-    tempImg.onload = function () {
-      canvas.getContext("2d").drawImage(tempImg, 0, 0, 128, 128);
-      var saveBtn = document.getElementById("save-to-history-btn");
-      if (saveBtn)
-        saveBtn.dataset.thumbnail = canvas.toDataURL("image/png", 0.7);
-    };
-    tempImg.src = img.src;
-  });
+      // Create thumbnail
+      var canvas = document.createElement("canvas");
+      canvas.width = 128;
+      canvas.height = 128;
+      var tempImg = new Image();
+      // Allow SVG data URL to be drawn
+      tempImg.crossOrigin = "anonymous";
+      tempImg.onload = function () {
+        canvas.getContext("2d").drawImage(tempImg, 0, 0, 128, 128);
+        var saveBtn = document.getElementById("save-to-history-btn");
+        if (saveBtn)
+          saveBtn.dataset.thumbnail = canvas.toDataURL("image/png", 0.7);
+      };
+      tempImg.src = img.src;
+    });
+    window.htmxThumbnailInitAttached = true;
+  }
 
   /** Save to localStorage */
   function saveToHistory() {
