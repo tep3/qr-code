@@ -35,7 +35,7 @@ export class SimpleTemplate {
     const cached = templateCache.get(filePath);
     if (cached) return cached;
 
-    console.log("Loading file:", filePath);
+    //console.log("Loading file:", filePath);
 
     const content = await Bun.file(filePath).text();
 
