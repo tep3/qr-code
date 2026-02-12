@@ -1,0 +1,1113 @@
+<div class="text-center mb-12 animate-fade-up">
+  <div
+    class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wide mb-5"
+  >
+    <svg
+      class="w-3.5 h-3.5"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="2"
+      viewBox="0 0 24 24"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
+      />
+    </svg>
+    Free · No signup · Works offline
+  </div>
+  <h1 class="text-4xl sm:text-5xl font-serif mb-3 tracking-tight">
+    Craft your <span class="text-primary">QR Code</span>
+  </h1>
+  <p
+    class="text-base-content/50 text-base sm:text-lg max-w-md mx-auto leading-relaxed"
+  >
+    Generate beautiful QR codes for links, WiFi, contacts and more — in seconds.
+  </p>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-10 items-start">
+  <div class="lg:col-span-3 space-y-5">
+    <div class="animate-fade-up delay-1">
+      <label
+        class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-2.5 font-semibold pl-1"
+      >
+        What do you want to encode?
+      </label>
+      <div id="type-tabs" class="flex flex-wrap gap-2" role="tablist">
+        <button
+          hx-get="/partials/qr-form/url"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-primary bg-primary/5 transition-all duration-200 min-w-[60px]"
+          data-type="url"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">🔗</span>
+          <span class="text-[11px] font-semibold text-primary">URL</span>
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/text"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="text"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">📝</span>
+          <span class="text-[11px] font-medium text-base-content/50">Text</span>
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/wifi"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="wifi"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">📶</span>
+          <span class="text-[11px] font-medium text-base-content/50">WiFi</span>
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/vcard"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="vcard"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">👤</span>
+          <span class="text-[11px] font-medium text-base-content/50"
+            >vCard</span
+          >
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/email"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="email"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">✉️</span>
+          <span class="text-[11px] font-medium text-base-content/50"
+            >Email</span
+          >
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/phone"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="phone"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">📞</span>
+          <span class="text-[11px] font-medium text-base-content/50"
+            >Phone</span
+          >
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/sms"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="sms"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">💬</span>
+          <span class="text-[11px] font-medium text-base-content/50">SMS</span>
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/line"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="line"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">💚</span>
+          <span class="text-[11px] font-medium text-base-content/50">LINE</span>
+        </button>
+
+        <button
+          hx-get="/partials/qr-form/facebook"
+          hx-target="#form-fields"
+          hx-swap="innerHTML transition:true"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          data-type="facebook"
+          onclick="switchTab(this)"
+        >
+          <span class="text-lg leading-none">📘</span>
+          <span class="text-[11px] font-medium text-base-content/50"
+            >Facebook</span
+          >
+        </button>
+      </div>
+    </div>
+
+    <form
+      id="qr-form"
+      hx-post="/api/qr/generate"
+      hx-target="#qr-preview"
+      hx-swap="innerHTML transition:true"
+      hx-indicator="#loading-spinner"
+      class="space-y-5"
+    >
+      <input type="hidden" name="type" id="qr-type" value="url" />
+      <div
+        class="animate-fade-up delay-2 bg-base-100 rounded-2xl border border-base-200 p-5 shadow-sm"
+      >
+        <label
+          class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-3 font-semibold"
+          >Content</label
+        >
+        <div id="form-fields">
+          <div class="form-control">
+            <label class="label pb-1"
+              ><span class="label-text font-medium">Website URL</span></label
+            >
+            <input
+              type="url"
+              name="content.url"
+              placeholder="https://example.com"
+              class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary focus:bg-base-100 transition-colors"
+              required
+            />
+            <label class="label pt-1"
+              ><span class="label-text-alt text-base-content/40"
+                >Enter the full URL including https://</span
+              ></label
+            >
+          </div>
+        </div>
+      </div>
+
+      <details
+        class="animate-fade-up delay-3 group bg-base-100 rounded-2xl border border-base-200 shadow-sm overflow-hidden"
+      >
+        <summary
+          class="flex items-center justify-between cursor-pointer p-5 select-none hover:bg-base-200/30 transition-colors"
+        >
+          <div class="flex items-center gap-3">
+            <div
+              class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center"
+            >
+              <svg
+                class="w-4 h-4 text-primary"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9.53 16.122a3 3 0 00-5.78 1.128 2.25 2.25 0 01-2.4 2.245 4.5 4.5 0 008.4-2.245c0-.399-.078-.78-.22-1.128zm0 0a15.998 15.998 0 003.388-1.62m-5.043-.025a15.994 15.994 0 011.622-3.395m3.42 3.42a15.995 15.995 0 004.764-4.648l3.876-5.814a1.151 1.151 0 00-1.597-1.597L14.146 6.32a15.996 15.996 0 00-4.649 4.763m3.42 3.42a6.776 6.776 0 00-3.42-3.42"
+                />
+              </svg>
+            </div>
+            <div>
+              <span class="text-sm font-semibold">Customize Style</span>
+              <span class="block text-[11px] text-base-content/40"
+                >Colors, size, label & more</span
+              >
+            </div>
+          </div>
+          <svg
+            class="w-5 h-5 text-base-content/30 transition-transform duration-300 group-open:rotate-180"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M19.5 8.25l-7.5 7.5-7.5-7.5"
+            />
+          </svg>
+        </summary>
+
+        <div class="px-5 pb-5 pt-2 border-t border-base-200">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-3">
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text font-medium text-sm"
+                  >Foreground</span
+                ></label
+              >
+              <div class="flex items-center gap-3">
+                <input
+                  type="color"
+                  name="style.fgColor"
+                  value="#000000"
+                  id="fg-color"
+                  class="w-10 h-10 rounded-lg cursor-pointer border border-base-200 bg-transparent p-0.5"
+                />
+                <input
+                  type="text"
+                  value="#000000"
+                  id="fg-color-text"
+                  class="input input-bordered input-sm w-28 bg-base-200/50 border-base-200 font-mono text-xs"
+                  pattern="^#[0-9a-fA-F]{6}$"
+                  onchange="
+                    document.getElementById('fg-color').value = this.value
+                  "
+                />
+              </div>
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text font-medium text-sm"
+                  >Background</span
+                ></label
+              >
+              <div class="flex items-center gap-3">
+                <input
+                  type="color"
+                  name="style.bgColor"
+                  value="#ffffff"
+                  id="bg-color"
+                  class="w-10 h-10 rounded-lg cursor-pointer border border-base-200 bg-transparent p-0.5"
+                />
+                <input
+                  type="text"
+                  value="#ffffff"
+                  id="bg-color-text"
+                  class="input input-bordered input-sm w-28 bg-base-200/50 border-base-200 font-mono text-xs"
+                  pattern="^#[0-9a-fA-F]{6}$"
+                  onchange="
+                    document.getElementById('bg-color').value = this.value
+                  "
+                />
+              </div>
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text font-medium text-sm"
+                  >Dot Style</span
+                ></label
+              >
+              <select
+                name="style.dotStyle"
+                class="select select-bordered select-sm w-full bg-base-200/50 border-base-200"
+              >
+                <option value="square" selected>■ Square</option>
+                <option value="rounded">● Rounded</option>
+                <option value="dots">◉ Dots</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text font-medium text-sm"
+                  >Error Correction</span
+                ></label
+              >
+              <select
+                name="style.ecLevel"
+                class="select select-bordered select-sm w-full bg-base-200/50 border-base-200"
+              >
+                <option value="L">Low (7%)</option>
+                <option value="M" selected>Medium (15%)</option>
+                <option value="Q">Quartile (25%)</option>
+                <option value="H">High (30%)</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text font-medium text-sm">Size</span></label
+              >
+              <select
+                name="style.width"
+                class="select select-bordered select-sm w-full bg-base-200/50 border-base-200"
+              >
+                <option value="256">256 × 256</option>
+                <option value="512" selected>512 × 512</option>
+                <option value="1024">1024 × 1024</option>
+                <option value="2048">2048 × 2048</option>
+              </select>
+            </div>
+            <div class="form-control">
+              <label class="label pb-1"
+                ><span class="label-text font-medium text-sm"
+                  >Margin</span
+                ></label
+              >
+              <input
+                type="range"
+                name="style.margin"
+                min="0"
+                max="8"
+                value="2"
+                class="range range-xs range-primary mt-2"
+                id="margin-range"
+                oninput="
+                  document.getElementById('margin-value').textContent =
+                    this.value
+                "
+              />
+              <label class="label pt-0.5">
+                <span class="label-text-alt text-base-content/40"
+                  >Quiet zone: <span id="margin-value">2</span> modules</span
+                >
+              </label>
+            </div>
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-base-200">
+            <label class="label pb-2"
+              ><span class="label-text font-bold text-sm"
+                >Label Text (Optional)</span
+              ></label
+            >
+            <div
+              class="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-base-200/30 p-4 rounded-xl"
+            >
+              <div class="form-control sm:col-span-2">
+                <input
+                  type="text"
+                  name="style.labelText"
+                  placeholder="Enter text (e.g. SCAN ME)"
+                  class="input input-bordered input-sm w-full focus:border-primary"
+                  maxlength="25"
+                />
+              </div>
+
+              <div class="form-control">
+                <label class="label pb-0"
+                  ><span class="label-text-alt font-medium">Size</span></label
+                >
+                <input
+                  type="range"
+                  name="style.labelSize"
+                  min="4"
+                  max="15"
+                  value="7"
+                  class="range range-xs range-primary mt-2"
+                />
+                <div
+                  class="flex justify-between text-[10px] text-base-content/40 px-1 mt-1"
+                >
+                  <span>Small</span><span>Large</span>
+                </div>
+              </div>
+
+              <div class="form-control">
+                <label class="label pb-0"
+                  ><span class="label-text-alt font-medium"
+                    >Position</span
+                  ></label
+                >
+                <div class="flex gap-4 mt-2">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="style.labelPosition"
+                      value="bottom"
+                      class="radio radio-xs radio-primary"
+                      checked
+                    />
+                    <span class="text-xs">Bottom</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="style.labelPosition"
+                      value="top"
+                      class="radio radio-xs radio-primary"
+                    />
+                    <span class="text-xs">Top</span>
+                  </label>
+                </div>
+              </div>
+
+              <div class="form-control sm:col-span-2">
+                <label class="label pb-1"
+                  ><span class="label-text-alt font-medium"
+                    >Text Color</span
+                  ></label
+                >
+                <div class="flex items-center gap-3">
+                  <input
+                    type="color"
+                    name="style.labelColor"
+                    value="#000000"
+                    id="lbl-color"
+                    class="w-8 h-8 rounded cursor-pointer border border-base-200 p-0.5"
+                  />
+                  <input
+                    type="text"
+                    value="#000000"
+                    id="lbl-color-text"
+                    class="input input-bordered input-sm w-28 bg-base-100 border-base-200 font-mono text-xs"
+                    pattern="^#[0-9a-fA-F]{6}$"
+                    onchange="
+                      document.getElementById('lbl-color').value = this.value
+                    "
+                  />
+                  <span class="text-[10px] text-base-content/40"
+                    >Matches QR color by default</span
+                  >
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Border / Frame -->
+          <div class="mt-6 pt-4 border-t border-base-200">
+            <label class="label pb-1"
+              ><span class="label-text font-bold text-sm"
+                >Border / Frame</span
+              ></label
+            >
+            <div
+              id="border-picker"
+              class="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-1"
+            >
+              <!-- None -->
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="none"
+                  class="hidden"
+                  checked
+                />
+                <div class="border-preview-box selected">
+                  <div class="bp-qr"></div>
+                  <span class="bp-label">None</span>
+                </div>
+              </label>
+
+              <!-- Rounded Frames -->
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="round-sm"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-round-sm">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Rounded</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="round-lg"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-round-lg">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Pill</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="glow"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-glow"><div class="bp-qr"></div></div>
+                  <span class="bp-label">Glow</span>
+                </div>
+              </label>
+
+              <!-- Decorative -->
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="corners"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-corners">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Corners</span>
+                </div>
+              </label>
+
+              <label class="cursor-pointer border-option">
+                <input
+                  type="radio"
+                  name="style.borderStyle"
+                  value="gradient"
+                  class="hidden"
+                />
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-gradient">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Gradient</span>
+                </div>
+              </label>
+            </div>
+
+            <!-- Border Color -->
+            <div class="flex items-center gap-3 mt-3" id="border-color-row">
+              <label class="label-text-alt font-medium">Border Color</label>
+              <input
+                type="color"
+                name="style.borderColor"
+                value="#000000"
+                id="border-color"
+                class="w-8 h-8 rounded cursor-pointer border border-base-200 p-0.5"
+              />
+              <input
+                type="text"
+                value="#000000"
+                id="border-color-text"
+                class="input input-bordered input-sm w-28 bg-base-200/50 border-base-200 font-mono text-xs"
+                pattern="^#[0-9a-fA-F]{6}$"
+                onchange="
+                  document.getElementById('border-color').value = this.value
+                "
+              />
+              <span class="text-[10px] text-base-content/40"
+                >Matches QR color by default</span
+              >
+            </div>
+          </div>
+        </div>
+      </details>
+
+      <div class="animate-fade-up delay-4">
+        <button
+          type="submit"
+          class="btn btn-primary w-full text-base gap-2.5 h-13 rounded-xl shadow-md hover:shadow-lg transition-shadow font-semibold"
+        >
+          <span
+            id="loading-spinner"
+            class="loading loading-spinner loading-sm htmx-indicator"
+          ></span>
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
+            />
+          </svg>
+          Generate QR Code
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="lg:col-span-2">
+    <div class="lg:sticky lg:top-24 space-y-4">
+      <div
+        class="animate-fade-up delay-2 bg-base-100 rounded-2xl border border-base-200 p-6 shadow-sm"
+      >
+        <label
+          class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-4 font-semibold"
+          >Preview</label
+        >
+        <div id="qr-preview">
+          <div
+            class="flex flex-col items-center justify-center py-10 text-center"
+          >
+            <div
+              class="relative w-44 h-44 rounded-2xl bg-base-200/50 flex items-center justify-center mb-5"
+            >
+              <svg
+                class="w-24 h-24 text-base-content/10"
+                viewBox="0 0 120 120"
+                fill="currentColor"
+              >
+                <rect x="4" y="4" width="32" height="32" rx="4" />
+                <rect
+                  x="10"
+                  y="10"
+                  width="20"
+                  height="20"
+                  rx="2"
+                  fill="oklch(var(--b1))"
+                />
+                <rect x="14" y="14" width="12" height="12" rx="1" />
+                <rect x="84" y="4" width="32" height="32" rx="4" />
+                <rect
+                  x="90"
+                  y="10"
+                  width="20"
+                  height="20"
+                  rx="2"
+                  fill="oklch(var(--b1))"
+                />
+                <rect x="94" y="14" width="12" height="12" rx="1" />
+                <rect x="4" y="84" width="32" height="32" rx="4" />
+                <rect
+                  x="10"
+                  y="90"
+                  width="20"
+                  height="20"
+                  rx="2"
+                  fill="oklch(var(--b1))"
+                />
+                <rect x="14" y="94" width="12" height="12" rx="1" />
+                <rect
+                  x="44"
+                  y="8"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.5"
+                />
+                <rect
+                  x="56"
+                  y="8"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.3"
+                />
+                <rect
+                  x="68"
+                  y="8"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.5"
+                />
+                <rect
+                  x="44"
+                  y="44"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.4"
+                />
+                <rect
+                  x="56"
+                  y="44"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.6"
+                />
+                <rect
+                  x="68"
+                  y="44"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.3"
+                />
+                <rect
+                  x="44"
+                  y="56"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.5"
+                />
+                <rect
+                  x="56"
+                  y="56"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.3"
+                />
+                <rect
+                  x="68"
+                  y="56"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.5"
+                />
+                <rect
+                  x="80"
+                  y="80"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.4"
+                />
+                <rect
+                  x="92"
+                  y="80"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.5"
+                />
+                <rect
+                  x="104"
+                  y="80"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.3"
+                />
+                <rect
+                  x="80"
+                  y="92"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.3"
+                />
+                <rect
+                  x="92"
+                  y="92"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.5"
+                />
+                <rect
+                  x="104"
+                  y="104"
+                  width="8"
+                  height="8"
+                  rx="1.5"
+                  opacity="0.3"
+                />
+              </svg>
+            </div>
+            <p class="text-base-content/40 text-sm font-medium">
+              Your QR code will appear here
+            </p>
+            <p class="text-base-content/25 text-xs mt-1">
+              Fill in the content and hit Generate
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="animate-fade-up delay-3 grid grid-cols-3 gap-2">
+        <div
+          class="bg-base-100 rounded-xl border border-base-200 p-3 text-center"
+        >
+          <div class="text-base mb-1">🔒</div>
+          <div
+            class="text-[10px] font-semibold text-base-content/50 leading-tight"
+          >
+            Private
+          </div>
+        </div>
+        <div
+          class="bg-base-100 rounded-xl border border-base-200 p-3 text-center"
+        >
+          <div class="text-base mb-1">⚡</div>
+          <div
+            class="text-[10px] font-semibold text-base-content/50 leading-tight"
+          >
+            Instant
+          </div>
+        </div>
+        <div
+          class="bg-base-100 rounded-xl border border-base-200 p-3 text-center"
+        >
+          <div class="text-base mb-1">🎁</div>
+          <div
+            class="text-[10px] font-semibold text-base-content/50 leading-tight"
+          >
+            100% Free
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Border picker thumbnails */
+  .border-preview-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.25rem;
+    border-radius: 0.5rem;
+    border: 2px solid oklch(var(--b3));
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+  .border-preview-box:hover {
+    border-color: oklch(var(--bc) / 0.3);
+  }
+  .border-preview-box.selected {
+    border-color: oklch(var(--p));
+    background: oklch(var(--p) / 0.08);
+  }
+  .bp-label {
+    font-size: 0.6rem;
+    font-weight: 600;
+    color: oklch(var(--bc) / 0.4);
+    text-align: center;
+  }
+  .border-preview-box.selected .bp-label {
+    color: oklch(var(--p));
+  }
+  .bp-qr {
+    width: 24px;
+    height: 24px;
+    border-radius: 2px;
+    background:
+      linear-gradient(135deg, oklch(var(--bc) / 0.5) 25%, transparent 25%) -4px
+        0/8px 8px,
+      linear-gradient(225deg, oklch(var(--bc) / 0.5) 25%, transparent 25%) -4px
+        0/8px 8px,
+      linear-gradient(315deg, oklch(var(--bc) / 0.5) 25%, transparent 25%) 0
+        0/8px 8px,
+      linear-gradient(45deg, oklch(var(--bc) / 0.5) 25%, oklch(var(--b2)) 25%) 0
+        0/8px 8px;
+  }
+  .bp-demo {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .bp-demo .bp-qr {
+    width: 20px;
+    height: 20px;
+  }
+
+  .bp-round-sm {
+    border: 2px solid oklch(var(--bc) / 0.35);
+    border-radius: 4px;
+    padding: 3px;
+  }
+  .bp-round-lg {
+    border: 2px solid oklch(var(--bc) / 0.35);
+    border-radius: 8px;
+    padding: 3px;
+  }
+  .bp-glow {
+    border: 2px solid oklch(var(--bc) / 0.35);
+    border-radius: 6px;
+    padding: 3px;
+    box-shadow: 0 0 6px oklch(var(--p) / 0.4);
+  }
+
+  .bp-corners {
+    position: relative;
+    padding: 5px;
+  }
+  .bp-corners::before,
+  .bp-corners::after {
+    content: "";
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-color: oklch(var(--bc) / 0.5);
+    border-style: solid;
+  }
+  .bp-corners::before {
+    top: 0;
+    left: 0;
+    border-width: 2px 0 0 2px;
+  }
+  .bp-corners::after {
+    top: 0;
+    right: 0;
+    border-width: 2px 2px 0 0;
+  }
+
+  .bp-gradient {
+    padding: 2px;
+    border-radius: 4px;
+    background: linear-gradient(135deg, #ff6b6b, #ffd93d, #00e5a0, #6c63ff);
+  }
+  .bp-gradient .bp-qr {
+    border-radius: 2px;
+    background: oklch(var(--b1));
+    width: 22px;
+    height: 22px;
+  }
+</style>
+
+<script>
+  /** Tab switching */
+  function switchTab(clickedBtn) {
+    document.querySelectorAll(".tab-btn").forEach(function (btn) {
+      btn.classList.remove("border-primary", "bg-primary/5");
+      btn.classList.add("border-base-200", "bg-base-100");
+      var label = btn.querySelector("span:last-child");
+      if (label) {
+        label.classList.remove("text-primary", "font-semibold");
+        label.classList.add("text-base-content/50", "font-medium");
+      }
+    });
+    clickedBtn.classList.remove("border-base-200", "bg-base-100");
+    clickedBtn.classList.add("border-primary", "bg-primary/5");
+    var activeLabel = clickedBtn.querySelector("span:last-child");
+    if (activeLabel) {
+      activeLabel.classList.remove("text-base-content/50", "font-medium");
+      activeLabel.classList.add("text-primary", "font-semibold");
+    }
+    document.getElementById("qr-type").value = clickedBtn.dataset.type;
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    /** Border picker */
+    var borderPicker = document.getElementById("border-picker");
+    if (borderPicker) {
+      borderPicker.addEventListener("click", function (e) {
+        var label = e.target.closest(".border-option");
+        if (!label) return;
+
+        borderPicker
+          .querySelectorAll(".border-preview-box")
+          .forEach(function (box) {
+            box.classList.remove("selected");
+          });
+
+        var box = label.querySelector(".border-preview-box");
+        if (box) box.classList.add("selected");
+
+        var radio = label.querySelector("input[type='radio']");
+        if (radio) radio.checked = true;
+      });
+    }
+  });
+
+  /** Sync color pickers */
+  // Foreground
+  document.getElementById("fg-color").addEventListener("input", function () {
+    document.getElementById("fg-color-text").value = this.value;
+  });
+  // Background
+  document.getElementById("bg-color").addEventListener("input", function () {
+    document.getElementById("bg-color-text").value = this.value;
+  });
+  // Label Color (New)
+  document.getElementById("lbl-color").addEventListener("input", function () {
+    document.getElementById("lbl-color-text").value = this.value;
+  });
+  // Border Color
+  document
+    .getElementById("border-color")
+    .addEventListener("input", function () {
+      document.getElementById("border-color-text").value = this.value;
+    });
+
+  /** Thumbnail for history after QR generated */
+  document.body.addEventListener("htmx:afterSwap", function (event) {
+    if (event.detail.target.id !== "qr-preview") return;
+    var img = document.querySelector("#qr-preview img");
+    if (!img) return;
+
+    // Create thumbnail
+    var canvas = document.createElement("canvas");
+    canvas.width = 128;
+    canvas.height = 128;
+    var tempImg = new Image();
+    // Allow SVG data URL to be drawn
+    tempImg.crossOrigin = "anonymous";
+    tempImg.onload = function () {
+      canvas.getContext("2d").drawImage(tempImg, 0, 0, 128, 128);
+      var saveBtn = document.getElementById("save-to-history-btn");
+      if (saveBtn)
+        saveBtn.dataset.thumbnail = canvas.toDataURL("image/png", 0.7);
+    };
+    tempImg.src = img.src;
+  });
+
+  /** Save to localStorage */
+  function saveToHistory() {
+    var form = document.getElementById("qr-form");
+    var formData = new FormData(form);
+    var saveBtn = document.getElementById("save-to-history-btn");
+
+    var entry = {
+      id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
+      type: formData.get("type"),
+      content: {},
+      style: {},
+      label: "",
+      starred: false,
+      createdAt: new Date().toISOString(),
+      source: "generated",
+      thumbnail: saveBtn ? saveBtn.dataset.thumbnail || "" : "",
+    };
+
+    for (var pair of formData.entries()) {
+      if (pair[0].startsWith("content."))
+        entry.content[pair[0].replace("content.", "")] = pair[1];
+      if (pair[0].startsWith("style."))
+        entry.style[pair[0].replace("style.", "")] = pair[1];
+    }
+
+    // Set label based on content type
+    var t = entry.type;
+    if (t === "url") entry.label = entry.content.url || "URL";
+    else if (t === "text")
+      entry.label = (entry.content.text || "Text").substring(0, 50);
+    else if (t === "wifi") entry.label = entry.content.ssid || "WiFi";
+    else if (t === "vcard")
+      entry.label = (
+        (entry.content.firstName || "") +
+        " " +
+        (entry.content.lastName || "")
+      ).trim();
+    else if (t === "email") entry.label = entry.content.to || "Email";
+    else if (t === "phone") entry.label = entry.content.phone || "Phone";
+    else if (t === "sms") entry.label = entry.content.phone || "SMS";
+    else if (t === "line") entry.label = entry.content.lineId || "LINE";
+    else if (t === "facebook")
+      entry.label = entry.content.facebookUrl || "Facebook";
+
+    try {
+      var history = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
+      history.unshift(entry);
+      if (history.length > 50) history.pop();
+      localStorage.setItem("qrforge_history", JSON.stringify(history));
+    } catch (e) {
+      console.error("Failed to save:", e);
+    }
+
+    if (saveBtn) {
+      saveBtn.innerHTML = "✅ Saved!";
+      saveBtn.classList.add("btn-disabled");
+      setTimeout(function () {
+        saveBtn.innerHTML = "💾 Save to History";
+        saveBtn.classList.remove("btn-disabled");
+      }, 2000);
+    }
+
+    // Update badges if they exist
+    try {
+      var count = JSON.parse(
+        localStorage.getItem("qrforge_history") || "[]",
+      ).length;
+      ["history-badge", "history-badge-mobile"].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.textContent = count;
+          el.classList.remove("hidden");
+        }
+      });
+    } catch (e) {}
+  }
+</script>

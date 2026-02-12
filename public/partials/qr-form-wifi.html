@@ -1,0 +1,29 @@
+<div class="space-y-3">
+  <div class="form-control">
+    <label class="label pb-1"><span class="label-text font-medium">Network Name (SSID)</span></label>
+    <input type="text" name="content.ssid" placeholder="My WiFi Network"
+      class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary focus:bg-base-100 transition-colors" required />
+  </div>
+  <div class="form-control">
+    <label class="label pb-1"><span class="label-text font-medium">Password</span></label>
+    <input type="text" name="content.password" placeholder="WiFi password"
+      class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary focus:bg-base-100 transition-colors" />
+  </div>
+  <div class="grid grid-cols-2 gap-3">
+    <div class="form-control">
+      <label class="label pb-1"><span class="label-text font-medium">Encryption</span></label>
+      <select name="content.encryption" class="select select-bordered w-full bg-base-200/50 border-base-200">
+        <option value="WPA" selected>WPA/WPA2</option>
+        <option value="WEP">WEP</option>
+        <option value="nopass">None</option>
+      </select>
+    </div>
+    <div class="form-control">
+      <label class="label pb-1"><span class="label-text font-medium">Hidden?</span></label>
+      <label class="flex items-center gap-2 cursor-pointer mt-2">
+        <input type="checkbox" name="content.hidden" value="true" class="checkbox checkbox-sm checkbox-primary" />
+        <span class="label-text text-base-content/60">Hidden network</span>
+      </label>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,441 @@
+<div class="max-w-3xl mx-auto animate-fade-up">
+  <!-- Header -->
+  <div class="text-center mb-10">
+    <div
+      class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wide mb-5"
+    >
+      <svg
+        class="w-3.5 h-3.5"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+        />
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+        />
+      </svg>
+      Fast & Secure
+    </div>
+    <h1 class="text-4xl sm:text-5xl font-serif mb-3 tracking-tight">
+      Scan <span class="text-primary">QR Code</span>
+    </h1>
+    <p
+      class="text-base-content/50 text-base sm:text-lg max-w-md mx-auto leading-relaxed"
+    >
+      Use your camera to scan a QR code instantly, or upload an image file from
+      your device.
+    </p>
+  </div>
+
+  <div
+    class="bg-base-100 rounded-3xl border border-base-200 shadow-sm overflow-hidden p-6 sm:p-10"
+  >
+    <!-- Scanner UI (Active) -->
+    <div id="scanner-container" class="space-y-6">
+      <!-- Video Area -->
+      <div
+        id="video-wrapper"
+        class="relative w-full aspect-square sm:aspect-video bg-base-200 rounded-2xl overflow-hidden flex flex-col items-center justify-center border-2 border-base-300 border-dashed transition-all"
+      >
+        <div
+          id="reader-video"
+          class="w-full h-full [&>video]:object-cover hidden"
+        ></div>
+
+        <!-- Placeholder / Start Button -->
+        <div id="camera-placeholder" class="text-center p-6 z-10">
+          <div
+            class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4"
+          >
+            <svg
+              class="w-8 h-8"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+              ></path>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+              ></path>
+            </svg>
+          </div>
+          <p class="font-medium mb-4 text-base-content/70">
+            Camera access is required to scan
+          </p>
+          <button
+            id="start-camera-btn"
+            class="btn btn-primary shadow-sm hover:shadow-md transition-all"
+          >
+            Start Camera
+          </button>
+        </div>
+
+        <!-- Stop Button (Overlay) -->
+        <button
+          id="stop-camera-btn"
+          class="btn btn-sm btn-circle btn-error absolute top-4 right-4 hidden z-20 shadow-md"
+          title="Stop Camera"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <div
+        class="divider text-xs text-base-content/30 font-bold uppercase tracking-widest"
+      >
+        OR
+      </div>
+
+      <!-- File Upload Area -->
+      <div class="form-control w-full">
+        <label class="label pt-0 pb-2">
+          <span class="label-text font-medium">Upload Image File</span>
+        </label>
+        <input
+          type="file"
+          id="qr-input-file"
+          accept="image/*"
+          class="file-input file-input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary transition-colors"
+        />
+      </div>
+    </div>
+
+    <!-- Result UI (Hidden by default) -->
+    <div id="result-container" class="hidden animate-fade-up space-y-6">
+      <div class="text-center mt-2">
+        <div
+          class="w-16 h-16 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-4"
+        >
+          <svg
+            class="w-8 h-8"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+        </div>
+        <h3 class="text-2xl font-serif mb-1">Scan Successful</h3>
+        <p class="text-base-content/50 text-sm">
+          Saved to your history automatically
+        </p>
+      </div>
+
+      <div class="bg-base-200/50 rounded-2xl p-5 border border-base-200">
+        <label
+          class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-2 font-semibold"
+          >Decoded Content</label
+        >
+        <div
+          class="break-all font-mono text-sm sm:text-base text-base-content bg-base-100 p-4 rounded-xl border border-base-200 min-h-[5rem] flex items-center"
+          id="scanned-text"
+        >
+          <!-- Result text injected here -->
+        </div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+        <button id="copy-btn" class="btn btn-outline flex-1">
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+            ></path>
+          </svg>
+          Copy Text
+        </button>
+        <a
+          id="open-link-btn"
+          href="#"
+          target="_blank"
+          class="btn btn-primary flex-1 hidden"
+        >
+          <svg
+            class="w-4 h-4 mr-2"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+            ></path>
+          </svg>
+          Open Link
+        </a>
+      </div>
+
+      <div class="text-center mt-4">
+        <button
+          id="scan-again-btn"
+          class="btn btn-ghost text-base-content/60 hover:text-base-content"
+        >
+          Scan Another QR Code
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // 1. โหลดไลบรารี html5-qrcode แบบ Dynamic เพื่อรองรับ HTMX
+    function loadHtml5Qrcode(callback) {
+      if (typeof Html5Qrcode !== "undefined") {
+        callback();
+        return;
+      }
+      var script = document.createElement("script");
+      script.src = "https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js";
+      script.onload = callback;
+      document.head.appendChild(script);
+    }
+
+    // ตัวแปร UI
+    var scannerContainer = document.getElementById("scanner-container");
+    var resultContainer = document.getElementById("result-container");
+    var videoWrapper = document.getElementById("video-wrapper");
+    var readerVideo = document.getElementById("reader-video");
+    var cameraPlaceholder = document.getElementById("camera-placeholder");
+    var startBtn = document.getElementById("start-camera-btn");
+    var stopBtn = document.getElementById("stop-camera-btn");
+    var fileInput = document.getElementById("qr-input-file");
+    var scannedTextEl = document.getElementById("scanned-text");
+    var copyBtn = document.getElementById("copy-btn");
+    var openLinkBtn = document.getElementById("open-link-btn");
+    var scanAgainBtn = document.getElementById("scan-again-btn");
+
+    var html5QrCode = null;
+    var currentResult = "";
+
+    function initScanner() {
+      html5QrCode = new Html5Qrcode("reader-video");
+      window.qrScannerInstance = html5QrCode; // เก็บไว้ล้างค่าตอนเปลี่ยนหน้า HTMX
+    }
+
+    // --- Actions ---
+
+    function onScanSuccess(decodedText) {
+      currentResult = decodedText;
+      stopCamera();
+
+      // สลับ UI
+      scannerContainer.classList.add("hidden");
+      resultContainer.classList.remove("hidden");
+
+      // แสดงผลข้อความ
+      scannedTextEl.textContent = decodedText;
+
+      // เช็คว่าเป็น URL หรือไม่
+      var isUrl = false;
+      try {
+        new URL(decodedText);
+        isUrl = true;
+      } catch (_) {
+        // Fallback ตรวจจับ http
+        isUrl =
+          decodedText.startsWith("http://") ||
+          decodedText.startsWith("https://");
+      }
+
+      if (isUrl) {
+        openLinkBtn.href = decodedText;
+        openLinkBtn.classList.remove("hidden");
+      } else {
+        openLinkBtn.classList.add("hidden");
+      }
+
+      saveToHistory(decodedText, isUrl);
+    }
+
+    function startCamera() {
+      if (!html5QrCode) return;
+
+      cameraPlaceholder.classList.add("hidden");
+      readerVideo.classList.remove("hidden");
+      stopBtn.classList.remove("hidden");
+      videoWrapper.classList.remove("border-dashed", "border-base-300");
+
+      html5QrCode
+        .start(
+          { facingMode: "environment" },
+          { fps: 10, qrbox: { width: 250, height: 250 } },
+          onScanSuccess,
+          function (errorMessage) {
+            /* ซ่อน error ตอนสแกนหาไม่เจอในแต่ละเฟรม */
+          },
+        )
+        .catch(function (err) {
+          console.error(err);
+          alert("Failed to start camera. Please check permissions.");
+          stopCamera();
+        });
+    }
+
+    function stopCamera() {
+      if (html5QrCode && html5QrCode.isScanning) {
+        html5QrCode
+          .stop()
+          .then(function () {
+            resetScannerUI();
+          })
+          .catch(function (err) {
+            console.error("Failed to stop camera", err);
+          });
+      } else {
+        resetScannerUI();
+      }
+    }
+
+    function resetScannerUI() {
+      readerVideo.classList.add("hidden");
+      cameraPlaceholder.classList.remove("hidden");
+      stopBtn.classList.add("hidden");
+      videoWrapper.classList.add("border-dashed", "border-base-300");
+    }
+
+    function saveToHistory(text, isUrl) {
+      var entry = {
+        id:
+          Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
+        type: isUrl ? "url" : "text",
+        content: isUrl ? { url: text } : { text: text },
+        style: {},
+        label: text.substring(0, 50) + (text.length > 50 ? "..." : ""),
+        starred: false,
+        createdAt: new Date().toISOString(),
+        source: "scanned",
+        thumbnail: "",
+      };
+
+      try {
+        var history = JSON.parse(
+          localStorage.getItem("qrforge_history") || "[]",
+        );
+        history.unshift(entry);
+        if (history.length > 50) history.pop();
+        localStorage.setItem("qrforge_history", JSON.stringify(history));
+
+        // อัปเดต badges ทันที
+        var count = history.length;
+        ["history-badge", "history-badge-mobile"].forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) {
+            el.textContent = count;
+            el.classList.remove("hidden");
+          }
+        });
+      } catch (e) {
+        console.error("Failed to save scan to history", e);
+      }
+    }
+
+    // --- Event Listeners ---
+
+    startBtn.addEventListener("click", startCamera);
+    stopBtn.addEventListener("click", stopCamera);
+
+    scanAgainBtn.addEventListener("click", function () {
+      resultContainer.classList.add("hidden");
+      scannerContainer.classList.remove("hidden");
+      fileInput.value = ""; // เคลียร์ไฟล์
+      currentResult = "";
+    });
+
+    copyBtn.addEventListener("click", function () {
+      if (!currentResult) return;
+      navigator.clipboard.writeText(currentResult).then(function () {
+        var originalText = copyBtn.innerHTML;
+        copyBtn.innerHTML = "✅ Copied!";
+        setTimeout(function () {
+          copyBtn.innerHTML = originalText;
+        }, 2000);
+      });
+    });
+
+    fileInput.addEventListener("change", function (e) {
+      if (e.target.files.length === 0 || !html5QrCode) return;
+
+      var imageFile = e.target.files[0];
+      html5QrCode
+        .scanFile(imageFile, true)
+        .then((decodedText) => {
+          onScanSuccess(decodedText);
+        })
+        .catch((err) => {
+          alert("No QR code found in this image. Please try another one.");
+          fileInput.value = "";
+        });
+    });
+
+    // เริ่มโหลด Library
+    loadHtml5Qrcode(initScanner);
+  })();
+</script>
+
+<script>
+  // ตัวจัดการตอนเปลี่ยนหน้าด้วย HTMX (หยุดกล้องอัตโนมัติเมื่อกดไปเมนูอื่น)
+  (function () {
+    function handleBeforeRequest(e) {
+      if (window.qrScannerInstance && window.qrScannerInstance.isScanning) {
+        window.qrScannerInstance
+          .stop()
+          .then(function () {
+            window.qrScannerInstance.clear();
+          })
+          .catch(function (e) {
+            console.log(e);
+          });
+      }
+      document.body.removeEventListener(
+        "htmx:beforeRequest",
+        handleBeforeRequest,
+      );
+    }
+
+    // ผูก Event รอไว้
+    document.body.addEventListener("htmx:beforeRequest", handleBeforeRequest);
+  })();
+</script>

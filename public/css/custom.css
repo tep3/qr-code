@@ -1,0 +1,17 @@
+/* Color picker cleanup */
+input[type="color"] {
+  -webkit-appearance: none;
+  appearance: none;
+  padding: 2px;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+  border: none;
+  border-radius: 6px;
+}
+
+/* HTMX swap transitions */
+.htmx-swapping { opacity: 0; transition: opacity 0.15s ease-out; }
+.htmx-settling { opacity: 1; transition: opacity 0.15s ease-in; }

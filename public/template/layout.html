@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en" data-theme="silk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Forge — {{title}}</title>
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚒️</text></svg>"
+      type="image/svg+xml"
+    />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Tailwind + DaisyUI -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ["Outfit", "sans-serif"],
+              serif: ["DM Serif Display", "serif"],
+              mono: ["Space Mono", "monospace"],
+            },
+          },
+        },
+      };
+    </script>
+
+    <!-- HTMX -->
+    <script
+      src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <style>
+      .nav-link {
+        position: relative;
+        transition: color 0.2s ease;
+      }
+      .nav-link::after {
+        content: "";
+        position: absolute;
+        bottom: -4px;
+        left: 50%;
+        width: 0;
+        height: 2px;
+        background: oklch(var(--p));
+        border-radius: 1px;
+        transition:
+          width 0.25s ease,
+          left 0.25s ease;
+      }
+      .nav-link:hover::after,
+      .nav-link.active::after {
+        width: 100%;
+        left: 0;
+      }
+      .nav-link:hover,
+      .nav-link.active {
+        color: oklch(var(--p));
+      }
+
+      .htmx-indicator {
+        display: none;
+      }
+      .htmx-request .htmx-indicator,
+      .htmx-request.htmx-indicator {
+        display: inline-flex;
+      }
+
+      @keyframes fadeUp {
+        from {
+          opacity: 0;
+          transform: translateY(16px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+      .animate-fade-up {
+        animation: fadeUp 0.5s ease-out both;
+      }
+      .delay-1 {
+        animation-delay: 0.08s;
+      }
+      .delay-2 {
+        animation-delay: 0.16s;
+      }
+      .delay-3 {
+        animation-delay: 0.24s;
+      }
+      .delay-4 {
+        animation-delay: 0.32s;
+      }
+      #form-fields > * {
+        animation: fadeUp 0.2s ease-out both;
+      }
+    </style>
+
+    <link rel="stylesheet" href="/css/custom.css" />
+  </head>
+
+  <body class="min-h-screen font-sans bg-base-100 text-base-content">
+    <!-- NAVBAR -->
+    <nav
+      class="sticky top-0 z-50 bg-base-100/80 backdrop-blur-lg border-b border-base-200"
+    >
+      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex items-center justify-between h-16">
+          <a
+            href="/"
+            hx-get="/"
+            hx-select="#main-content"
+            hx-target="#main-content"
+            hx-push-url="true"
+            class="flex items-center gap-2.5 group"
+          >
+            <span
+              class="text-2xl transition-transform group-hover:rotate-12 duration-300"
+              >⚒️</span
+            >
+            <span class="text-xl font-serif tracking-tight">
+              <span class="text-primary">QR</span> Forge
+            </span>
+          </a>
+
+          <!-- Desktop Links -->
+          <div class="hidden sm:flex items-center gap-8">
+            <a
+              href="/"
+              hx-get="/"
+              hx-select="#main-content"
+              hx-target="#main-content"
+              hx-push-url="true"
+              class="nav-link text-sm font-medium {{navGenerate}}"
+              >Generate</a
+            >
+            <a
+              href="/scan"
+              hx-get="/scan"
+              hx-select="#main-content"
+              hx-target="#main-content"
+              hx-push-url="true"
+              class="nav-link text-sm font-medium {{navScan}}"
+              >Scan</a
+            >
+            <a
+              href="/history"
+              hx-get="/history"
+              hx-select="#main-content"
+              hx-target="#main-content"
+              hx-push-url="true"
+              class="nav-link text-sm font-medium {{navHistory}}"
+            >
+              History
+              <span
+                id="history-badge"
+                class="ml-1 badge badge-xs badge-primary font-bold hidden"
+              ></span>
+            </a>
+          </div>
+
+          <!-- Mobile Toggle -->
+          <div class="sm:hidden">
+            <button
+              onclick="
+                document
+                  .getElementById('mobile-menu')
+                  .classList.toggle('hidden')
+              "
+              class="btn btn-ghost btn-sm btn-square"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mobile Menu Links -->
+      <div
+        id="mobile-menu"
+        class="hidden sm:hidden bg-base-100 border-t border-base-200"
+      >
+        <div class="px-4 py-3 space-y-1">
+          <a
+            href="/"
+            hx-get="/"
+            hx-select="#main-content"
+            hx-target="#main-content"
+            hx-push-url="true"
+            onclick="
+              document.getElementById('mobile-menu').classList.add('hidden')
+            "
+            class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navGenerate}}"
+            >🎨 Generate</a
+          >
+          <a
+            href="/scan"
+            hx-get="/scan"
+            hx-select="#main-content"
+            hx-target="#main-content"
+            hx-push-url="true"
+            onclick="
+              document.getElementById('mobile-menu').classList.add('hidden')
+            "
+            class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navScan}}"
+            >📷 Scan</a
+          >
+          <a
+            href="/history"
+            hx-get="/history"
+            hx-select="#main-content"
+            hx-target="#main-content"
+            hx-push-url="true"
+            onclick="
+              document.getElementById('mobile-menu').classList.add('hidden')
+            "
+            class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navHistory}}"
+          >
+            📋 History
+            <span
+              id="history-badge-mobile"
+              class="ml-1 badge badge-xs badge-primary font-bold hidden"
+            ></span>
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- MAIN -->
+    <main id="main-content" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      {{content}}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="border-t border-base-200 mt-20">
+      <div
+        class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-base-content/40"
+      >
+        <p>
+          <span class="font-serif text-base-content/60">QR Forge</span> — Free &
+          Open QR Tool
+        </p>
+        <p class="font-mono text-xs tracking-wide">
+          No accounts · No tracking · 100% free
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      (function () {
+        // อัปเดตตัวเลขแจ้งเตือนประวัติตอนโหลดหน้าแรก
+        try {
+          var h = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
+          if (h.length > 0) {
+            ["history-badge", "history-badge-mobile"].forEach(function (id) {
+              var el = document.getElementById(id);
+              if (el) {
+                el.textContent = h.length;
+                el.classList.remove("hidden");
+              }
+            });
+          }
+        } catch (e) {}
+      })();
+
+      // อัปเดตสถานะ Active ของเมนูเวลาเปลี่ยนหน้าด้วย HTMX
+      document.body.addEventListener("htmx:afterSwap", function (event) {
+        if (event.detail.target.id === "main-content") {
+          const path = window.location.pathname;
+
+          // เปลี่ยนสถานะของเมนู Desktop
+          document.querySelectorAll(".nav-link").forEach((link) => {
+            if (link.getAttribute("href") === path) {
+              link.classList.add("active");
+            } else {
+              link.classList.remove("active");
+            }
+          });
+
+          // เปลี่ยนสถานะของเมนู Mobile
+          document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+            if (link.getAttribute("href") === path) {
+              link.classList.add("bg-base-200");
+            } else {
+              link.classList.remove("bg-base-200");
+            }
+          });
+        }
+      });
+    </script>
+    <script src="/js/app.js" defer></script>
+  </body>
+</html>
