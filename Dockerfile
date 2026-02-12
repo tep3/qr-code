@@ -31,9 +31,23 @@ ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE $PORT
 
-# Create non-root user
-RUN apt-get update && apt-get install -y --no-install-recommends adduser
+# --------------------------------------------------------
+# Update System & Install Fonts + Utilities
+# --------------------------------------------------------
+# adduser: สำหรับสร้าง user ปลอดภัย
+# fonts-dejavu, fonts-liberation: ฟอนต์พื้นฐาน (Latin)
+# fonts-thai-tlwg: ฟอนต์ภาษาไทย (จำเป็นต้องใส่เพื่อให้ Sharp วาดภาษาไทยได้)
+# fontconfig: ระบบจัดการฟอนต์
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    adduser \
+    fonts-dejavu \
+    fonts-liberation \
+    fonts-thai-tlwg \
+    fontconfig \
+    && fc-cache -f -v \
+    && rm -rf /var/lib/apt/lists/*
 
+# Create non-root user
 RUN adduser --disabled-password --gecos "" appuser && \
     chown -R appuser:appuser /app
 USER appuser
