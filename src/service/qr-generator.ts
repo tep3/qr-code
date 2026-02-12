@@ -6,7 +6,7 @@ import type { QRStyle, BorderStyle } from "../type";
 /**
  * Generate a QR code image (PNG or SVG).
  *
- * Pipeline: QR modules → Label → Border → output
+ * Pipeline: QR modules → Logo → Label → Border → output
  * PNG with overlays uses SVG → sharp conversion (transparent bg).
  */
 export async function generateQR(
@@ -17,6 +17,8 @@ export async function generateQR(
   if (!data || data.trim().length === 0) {
     throw new Error("QR content cannot be empty");
   }
+
+  // Logo logic removed
 
   const ecMap: Record<string, "low" | "medium" | "quartile" | "high"> = {
     L: "low",
@@ -50,20 +52,29 @@ async function generateSVG(
   style: QRStyle,
   transparentBg: boolean = false,
 ): Promise<Uint8Array> {
-  let svgString = await QRCode.toString(data, {
-    ...options,
-    type: "svg",
-  });
+  let svgString = "";
 
+  // 1. Generate Base QR SVG
+  if (!style.dotStyle || style.dotStyle === "square") {
+    svgString = await QRCode.toString(data, {
+      ...options,
+      type: "svg",
+    });
+  } else {
+    svgString = await generateStyledSVGString(data, style);
+  }
+
+  // 2. Add Label (Bottom/Top)
   if (style.labelText) {
     svgString = addLabelToSVG(svgString, style.labelText, style, transparentBg);
   }
 
-  // Border is always the LAST step — wraps everything
+  // 3. Add Border (Surrounding)
   if (style.borderStyle && style.borderStyle !== "none") {
     svgString = addBorderToSVG(svgString, style, transparentBg);
   }
 
+  // 4. Finalize Dimensions & Background
   svgString = setSvgDimensions(
     svgString,
     style.width,
@@ -72,6 +83,66 @@ async function generateSVG(
   );
 
   return new TextEncoder().encode(svgString);
+}
+
+// --- Custom Renderer for Dots/Rounded ----------------------------
+
+async function generateStyledSVGString(
+  data: string,
+  style: QRStyle,
+): Promise<string> {
+  const qr = QRCode.create(data, {
+    errorCorrectionLevel: style.ecLevel as any,
+  });
+
+  const modules = qr.modules;
+  const size = modules.size;
+  const margin = style.margin;
+  const totalSize = size + margin * 2;
+
+  let pathParts: string[] = [];
+
+  for (let r = 0; r < size; r++) {
+    for (let c = 0; c < size; c++) {
+      if (modules.data[r * size + c]) {
+        const x = c + margin;
+        const y = r + margin;
+
+        // เช็คว่าเป็น Finder Patterns (3 มุมหลัก) หรือไม่?
+        // Top-Left (0,0 ถึง 6,6)
+        // Top-Right (0,size-7 ถึง 6,size-1)
+        // Bottom-Left (size-7,0 ถึง size-1,6)
+        const isFinderPattern =
+          (r < 7 && c < 7) ||
+          (r < 7 && c >= size - 7) ||
+          (r >= size - 7 && c < 7);
+
+        if (isFinderPattern) {
+          // *** สำคัญ: Finder Pattern ต้องเป็นสี่เหลี่ยมเสมอเพื่อให้สแกนติดง่าย ***
+          pathParts.push(`<rect x="${x}" y="${y}" width="1" height="1" />`);
+        } else {
+          // ส่วนที่เป็น Data อื่นๆ ให้วาดตาม Style ที่เลือก
+          if (style.dotStyle === "dots") {
+            pathParts.push(
+              `<circle cx="${x + 0.5}" cy="${y + 0.5}" r="0.45" />`,
+            );
+          } else if (style.dotStyle === "rounded") {
+            pathParts.push(
+              `<rect x="${x}" y="${y}" width="1" height="1" rx="0.35" ry="0.35" />`,
+            );
+          } else {
+            pathParts.push(`<rect x="${x}" y="${y}" width="1" height="1" />`);
+          }
+        }
+      }
+    }
+  }
+
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${totalSize} ${totalSize}">
+    <g fill="${style.fgColor}">
+      ${pathParts.join("")}
+    </g>
+  </svg>`;
 }
 
 // --- PNG Generation ----------------------------------------------
@@ -83,15 +154,23 @@ async function generatePNG(
 ): Promise<Uint8Array> {
   const hasOverlays = !!(
     style.labelText ||
-    (style.borderStyle && style.borderStyle !== "none")
+    (style.borderStyle && style.borderStyle !== "none") ||
+    (style.dotStyle && style.dotStyle !== "square")
   );
 
   if (hasOverlays) {
-    // สร้าง SVG แบบพื้นทึบเพื่อนำมาแปลงเป็น PNG (ไม่ส่ง transparentOptions แล้ว)
-    const svgBuffer = await generateSVG(data, options, style, false);
+    const transparentOptions = {
+      ...options,
+      color: {
+        ...(options.color as Record<string, string>),
+        light: "#00000000",
+      },
+    };
+    const svgBuffer = await generateSVG(data, transparentOptions, style, true);
+
     const pngBuffer = await sharp(Buffer.from(svgBuffer))
       .resize(style.width)
-      .flatten({ background: style.bgColor }) // บังคับเทสีพื้นหลังทับเพื่อรับประกันความทึบ
+      .flatten({ background: style.bgColor })
       .png()
       .toBuffer();
     return new Uint8Array(pngBuffer);
@@ -123,10 +202,10 @@ function addLabelToSVG(
   const height = parseFloat(parts[3]);
 
   const sizePercent = style.labelSize || 7;
-  const fontSize = Math.round(width * (sizePercent / 100));
+  const fontSize = width * (sizePercent / 100);
   const fontColor = style.labelColor || style.fgColor;
 
-  const gap = Math.round(fontSize * 0.8);
+  const gap = fontSize * 0.8;
   const extraHeight = gap + fontSize + gap;
 
   let newViewBox = "";
@@ -152,7 +231,7 @@ function addLabelToSVG(
   const textElement = `
     ${labelBgRect}
     <text
-      x="${width / 2}"
+      x="${minX + width / 2}"
       y="${textY}"
       font-family="sans-serif"
       font-size="${fontSize}"
@@ -180,7 +259,6 @@ function addBorderToSVG(
   const border = style.borderStyle || "none";
   if (border === "none") return svgString;
 
-  // 1. Parse current viewBox
   const viewBoxMatch = svgString.match(/viewBox=["']?([\d\s,\.-]+)["']?/i);
   if (!viewBoxMatch) return svgString;
 
@@ -191,116 +269,57 @@ function addBorderToSVG(
   const vbH = parseFloat(vbParts[3]);
 
   const borderColor = style.borderColor || style.fgColor;
-  const strokeW = Math.round(vbW * 0.02); // 2% of width
-  const pad = Math.round(vbW * 0.06); // 6% padding around content
+  const strokeW = vbW * 0.02;
+  const pad = vbW * 0.06;
 
-  // 2. New dimensions (content shifted by pad)
   const totalW = vbW + pad * 2;
   const totalH = vbH + pad * 2;
   const newViewBox = `0 0 ${totalW} ${totalH}`;
 
-  // 3. Extract inner content
   const innerMatch = svgString.match(/<svg[^>]*>([\s\S]*)<\/svg>/i);
   if (!innerMatch) return svgString;
   const innerContent = innerMatch[1];
 
-  // 4. Build border elements based on style
   let defs = "";
   let borderElements = "";
-
-  // Inset for stroke (half stroke sits outside)
   const inset = strokeW / 2;
 
   switch (border) {
-    // ── Rounded Frames ──────────────────────────────
     case "round-sm": {
-      const rx = Math.round(totalW * 0.05);
-      borderElements = `
-        <rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}"
-          rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" />
-      `;
+      const rx = totalW * 0.05;
+      borderElements = `<rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}" rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" />`;
       break;
     }
-
     case "round-lg": {
-      const rx = Math.round(totalW * 0.12);
-      borderElements = `
-        <rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}"
-          rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" />
-      `;
+      const rx = totalW * 0.12;
+      borderElements = `<rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}" rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" />`;
       break;
     }
-
     case "glow": {
-      const rx = Math.round(totalW * 0.08);
+      const rx = totalW * 0.08;
       const filterId = "qr-glow";
-      defs = `
-        <defs>
-          <filter id="${filterId}" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur in="SourceGraphic" stdDeviation="${strokeW * 2}" result="blur" />
-            <feMerge>
-              <feMergeNode in="blur" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
-          </filter>
-        </defs>
-      `;
-      borderElements = `
-        <rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}"
-          rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}"
-          filter="url(#${filterId})" opacity="0.7" />
-        <rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}"
-          rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${Math.max(1, strokeW * 0.5)}" />
-      `;
+      defs = `<defs><filter id="${filterId}" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur in="SourceGraphic" stdDeviation="${strokeW * 2}" result="blur" /><feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge></filter></defs>`;
+      borderElements = `<rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}" rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" filter="url(#${filterId})" opacity="0.7" /><rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}" rx="${rx}" ry="${rx}" fill="none" stroke="${borderColor}" stroke-width="${Math.max(1, strokeW * 0.5)}" />`;
       break;
     }
-
-    // ── Decorative ──────────────────────────────────
     case "corners": {
-      const cornerLen = Math.round(totalW * 0.15);
-      // Top-left
+      const cornerLen = totalW * 0.15;
       const tl = `M ${inset} ${inset + cornerLen} L ${inset} ${inset} L ${inset + cornerLen} ${inset}`;
-      // Top-right
       const tr = `M ${totalW - inset - cornerLen} ${inset} L ${totalW - inset} ${inset} L ${totalW - inset} ${inset + cornerLen}`;
-      // Bottom-left
       const bl = `M ${inset} ${totalH - inset - cornerLen} L ${inset} ${totalH - inset} L ${inset + cornerLen} ${totalH - inset}`;
-      // Bottom-right
       const br = `M ${totalW - inset - cornerLen} ${totalH - inset} L ${totalW - inset} ${totalH - inset} L ${totalW - inset} ${totalH - inset - cornerLen}`;
-
-      borderElements = `
-        <path d="${tl}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" />
-        <path d="${tr}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" />
-        <path d="${bl}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" />
-        <path d="${br}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" />
-      `;
+      borderElements = `<path d="${tl}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" /><path d="${tr}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" /><path d="${bl}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" /><path d="${br}" fill="none" stroke="${borderColor}" stroke-width="${strokeW}" stroke-linecap="round" />`;
       break;
     }
-
     case "gradient": {
-      const rx = Math.round(totalW * 0.06);
+      const rx = totalW * 0.06;
       const gradId = "qr-border-grad";
-      defs = `
-        <defs>
-          <linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stop-color="#ff6b6b" />
-            <stop offset="33%" stop-color="#ffd93d" />
-            <stop offset="66%" stop-color="#00e5a0" />
-            <stop offset="100%" stop-color="#6c63ff" />
-          </linearGradient>
-        </defs>
-      `;
-      borderElements = `
-        <rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}"
-          rx="${rx}" ry="${rx}" fill="none" stroke="url(#${gradId})" stroke-width="${strokeW * 1.5}" />
-      `;
+      defs = `<defs><linearGradient id="${gradId}" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff6b6b" /><stop offset="33%" stop-color="#ffd93d" /><stop offset="66%" stop-color="#00e5a0" /><stop offset="100%" stop-color="#6c63ff" /></linearGradient></defs>`;
+      borderElements = `<rect x="${inset}" y="${inset}" width="${totalW - strokeW}" height="${totalH - strokeW}" rx="${rx}" ry="${rx}" fill="none" stroke="url(#${gradId})" stroke-width="${strokeW * 1.5}" />`;
       break;
     }
-
-    default:
-      return svgString;
   }
 
-  // 5. Assemble final SVG (for non-special layouts)
   return assembleSVG(
     newViewBox,
     defs,
@@ -309,39 +328,7 @@ function addBorderToSVG(
   );
 }
 
-/** Assemble a complete SVG string */
-function assembleSVG(
-  viewBox: string,
-  defs: string,
-  borderElements: string,
-  content: string,
-): string {
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">
-${defs}
-${borderElements}
-${content}
-</svg>`;
-}
-
 // --- Helpers -----------------------------------------------------
-
-function escapeXml(unsafe: string): string {
-  return unsafe.replace(/[<>&'"]/g, (c) => {
-    switch (c) {
-      case "<":
-        return "&lt;";
-      case ">":
-        return "&gt;";
-      case "&":
-        return "&amp;";
-      case "'":
-        return "&apos;";
-      case '"':
-        return "&quot;";
-    }
-    return c;
-  });
-}
 
 function setSvgDimensions(
   svgString: string,
@@ -358,18 +345,67 @@ function setSvgDimensions(
   const vbW = parseFloat(parts[2]);
   const vbH = parseFloat(parts[3]);
 
-  // คำนวณความสูงให้ได้สัดส่วนที่ถูกต้องตาม viewBox
   const targetHeight = Math.round(targetWidth * (vbH / vbW));
 
   let bgRect = "";
   if (!transparentBg) {
-    // สร้างกรอบสี่เหลี่ยมสีทึบขนาดเท่า viewBox ทั้งหมด ไว้ด้านหลังสุด (ครอบคลุมความโปร่งใสทั้งหมด)
-    bgRect = `\n  <rect x="${vbX}" y="${vbY}" width="${vbW}" height="${vbH}" fill="${bgColor}" />`;
+    bgRect = `<rect x="${vbX}" y="${vbY}" width="${vbW}" height="${vbH}" fill="${bgColor}" />`;
   }
 
-  // ลบ width/height เดิมออก และบังคับใส่ค่า pixel size ที่ชัดเจนลงไป พร้อมแทรก bgRect
   return svgString.replace(/<svg([^>]+)>/i, (_, attrs) => {
     const cleanAttrs = attrs.replace(/\b(?:width|height)=["'][^"']*["']/gi, "");
     return `<svg width="${targetWidth}" height="${targetHeight}"${cleanAttrs}>${bgRect}`;
+  });
+}
+
+function assembleSVG(
+  viewBox: string,
+  defs: string,
+  borderElements: string,
+  content: string,
+): string {
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}">
+${defs}
+${borderElements}
+${content}
+</svg>`;
+}
+
+function extractSvgDetails(svgString: string): {
+  content: string;
+  viewBox: string;
+} {
+  const viewBoxMatch = svgString.match(/viewBox=["']?([\d\s,\.-]+)["']?/i);
+  const viewBox = viewBoxMatch ? viewBoxMatch[1] : "0 0 24 24";
+
+  const contentMatch = svgString.match(/<svg[^>]*>([\s\S]*?)<\/svg>/i);
+  let content = contentMatch ? contentMatch[1].trim() : "";
+
+  if (!content && svgString.includes("<path")) {
+    const start = svgString.indexOf(">");
+    const end = svgString.lastIndexOf("</svg>");
+    if (start > -1 && end > -1) {
+      content = svgString.substring(start + 1, end).trim();
+    }
+  }
+
+  return { content, viewBox };
+}
+
+function escapeXml(unsafe: string): string {
+  return unsafe.replace(/[<>&'"]/g, (c) => {
+    switch (c) {
+      case "<":
+        return "&lt;";
+      case ">":
+        return "&gt;";
+      case "&":
+        return "&amp;";
+      case "'":
+        return "&apos;";
+      case '"':
+        return "&quot;";
+    }
+    return c;
   });
 }
