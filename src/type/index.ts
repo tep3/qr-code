@@ -9,7 +9,8 @@ export type QRType =
   | "phone"
   | "sms"
   | "line"
-  | "facebook";
+  | "facebook"
+  | "promptpay";
 
 // ─── Content Interfaces (one per QR type) ─────────────────────────
 
@@ -61,6 +62,11 @@ export interface FacebookContent {
   facebookUrl: string;
 }
 
+export interface PromptPayContent {
+  promptpayId: string;
+  amount?: string;
+}
+
 export type QRContent =
   | URLContent
   | TextContent
@@ -70,7 +76,8 @@ export type QRContent =
   | PhoneContent
   | SMSContent
   | LineContent
-  | FacebookContent;
+  | FacebookContent
+  | PromptPayContent;
 
 // ─── Border Style ─────────────────────────────────────────────────
 
@@ -138,6 +145,7 @@ export const VALID_QR_TYPES: QRType[] = [
   "sms",
   "line",
   "facebook",
+  "promptpay",
 ];
 
 export function parseQRStyle(raw: Record<string, unknown>): QRStyle {

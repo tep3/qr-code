@@ -1,0 +1,81 @@
+<div class="space-y-4">
+  <div class="form-control">
+    <label class="label pb-1">
+      <span class="label-text font-medium" data-i18n="label_promptpay_id"
+        >PromptPay ID</span
+      >
+    </label>
+    <input
+      type="text"
+      name="content.promptpayId"
+      placeholder="08X-XXX-XXXX or Tax ID"
+      data-i18n-ph="ph_promptpay_id"
+      class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary focus:bg-base-100 transition-colors font-mono"
+      required
+    />
+    <label class="label pt-1">
+      <span
+        class="label-text-alt text-base-content/40"
+        data-i18n="help_promptpay_id"
+        >Mobile number or Tax ID / E-Wallet ID</span
+      >
+    </label>
+  </div>
+
+  <div class="form-control">
+    <label class="label pb-1">
+      <span class="label-text font-medium" data-i18n="label_promptpay_amount"
+        >Amount (Optional)</span
+      >
+    </label>
+    <div class="relative">
+      <input
+        type="number"
+        name="content.amount"
+        placeholder="0.00"
+        step="0.01"
+        min="0"
+        class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary focus:bg-base-100 transition-colors font-mono pr-14"
+      />
+      <span
+        class="absolute right-3 top-1/2 -translate-y-1/2 text-base-content/40 font-medium text-sm"
+        data-i18n="promptpay_currency"
+        >THB</span
+      >
+    </div>
+    <label class="label pt-1">
+      <span
+        class="label-text-alt text-base-content/40"
+        data-i18n="help_promptpay_amount"
+        >Leave empty for transfer without fixed amount</span
+      >
+    </label>
+  </div>
+
+  <!-- Info callout -->
+  <div
+    class="bg-info/5 border border-info/20 rounded-xl p-3 flex gap-3 items-start"
+  >
+    <span class="text-lg leading-none mt-0.5">💡</span>
+    <div class="text-xs text-base-content/60 leading-relaxed">
+      <p
+        class="font-medium text-base-content/70 mb-1"
+        data-i18n="promptpay_formats_title"
+      >
+        Supported ID formats:
+      </p>
+      <ul class="space-y-0.5 list-disc list-inside">
+        <li data-i18n="promptpay_fmt_mobile">
+          Mobile: <span class="font-mono">08X-XXX-XXXX</span>
+        </li>
+        <li data-i18n="promptpay_fmt_natid">
+          National ID: <span class="font-mono">X-XXXX-XXXXX-XX-X</span> (13
+          digits)
+        </li>
+        <li data-i18n="promptpay_fmt_taxid">
+          Tax ID: <span class="font-mono">XXXXXXXXXXXXX</span> (13 digits)
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

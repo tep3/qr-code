@@ -73,6 +73,21 @@
             tab_sms: "SMS",
             tab_line: "LINE",
             tab_facebook: "Facebook",
+            tab_promptpay: "PromptPay",
+            label_promptpay_id: "PromptPay ID",
+            ph_promptpay_id: "08X-XXX-XXXX or Tax ID",
+            help_promptpay_id: "Mobile number or Tax ID / E-Wallet ID",
+            label_promptpay_amount: "Amount (Optional)",
+            help_promptpay_amount:
+              "Leave empty for transfer without fixed amount",
+            promptpay_currency: "THB",
+            promptpay_formats_title: "Supported ID formats:",
+            promptpay_fmt_mobile:
+              'Mobile: <span class="font-mono">08X-XXX-XXXX</span>',
+            promptpay_fmt_natid:
+              'National ID: <span class="font-mono">X-XXXX-XXXXX-XX-X</span> (13 digits)',
+            promptpay_fmt_taxid:
+              'Tax ID: <span class="font-mono">XXXXXXXXXXXXX</span> (13 digits)',
             label_content: "Content",
             label_website_url: "Website URL",
             ph_website_url: "https://example.com",
@@ -170,6 +185,21 @@
             tab_sms: "SMS",
             tab_line: "LINE",
             tab_facebook: "Facebook",
+            tab_promptpay: "PromptPay",
+            label_promptpay_id: "หมายเลข PromptPay",
+            ph_promptpay_id: "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
+            help_promptpay_id:
+              "เบอร์มือถือ, เลขประจำตัวผู้เสียภาษี หรือ E-Wallet",
+            label_promptpay_amount: "จำนวนเงิน (ไม่บังคับ)",
+            help_promptpay_amount: "เว้นว่างไว้สำหรับโอนเงินไม่ระบุจำนวน",
+            promptpay_currency: "บาท",
+            promptpay_formats_title: "รูปแบบ ID ที่รองรับ:",
+            promptpay_fmt_mobile:
+              'เบอร์มือถือ: <span class="font-mono">08X-XXX-XXXX</span>',
+            promptpay_fmt_natid:
+              'เลขบัตรประชาชน: <span class="font-mono">X-XXXX-XXXXX-XX-X</span> (13 หลัก)',
+            promptpay_fmt_taxid:
+              'เลขประจำตัวผู้เสียภาษี: <span class="font-mono">XXXXXXXXXXXXX</span> (13 หลัก)',
             label_content: "เนื้อหา",
             label_website_url: "ลิงก์เว็บไซต์",
             ph_website_url: "https://example.com",
@@ -274,9 +304,19 @@
             if (data[key]) {
               if (el.tagName === "INPUT" && el.getAttribute("placeholder")) {
                 el.placeholder = data[key];
+              } else if (data[key].includes("<")) {
+                el.innerHTML = data[key];
               } else {
                 el.innerText = data[key];
               }
+            }
+          });
+
+          // 1b. Update placeholders via data-i18n-ph
+          document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+            const key = el.getAttribute("data-i18n-ph");
+            if (data[key]) {
+              el.placeholder = data[key];
             }
           });
 
@@ -305,7 +345,20 @@
               "Facebook URL": "ลิงก์ Facebook",
               "Enter text": "กรอกข้อความ",
               "Enter phone number": "กรอกเบอร์โทรศัพท์",
+              "PromptPay ID": "หมายเลข PromptPay",
+              "Amount (Optional)": "จำนวนเงิน (ไม่บังคับ)",
+              "Mobile number, National ID, or Tax ID":
+                "เบอร์มือถือ, เลขประจำตัว หรือ เลขประจำตัวผู้เสียภาษี",
+              "Mobile number or Tax ID / E-Wallet ID":
+                "เบอร์มือถือ, เลขประจำตัวผู้เสียภาษี หรือ E-Wallet",
+              "Leave empty for transfer without fixed amount":
+                "เว้นว่างไว้สำหรับโอนเงินไม่ระบุจำนวน",
+              "08X-XXX-XXXX or 1-XXXX-XXXXX-XX-X":
+                "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
+              "08X-XXX-XXXX or Tax ID":
+                "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
               "Enter email": "กรอกอีเมล",
+              THB: "บาท",
             };
 
             // Translate Labels
@@ -347,7 +400,7 @@
 
         // Re-run on HTMX swaps (This is the key fix for navigation)
         // htmx:afterSwap ensures content is in DOM before we try to translate it
-        document.addEventListener("htmx:afterSwap", () => {
+        document.body.addEventListener("htmx:afterSwap", () => {
           updatePageContent();
         });
       })();
