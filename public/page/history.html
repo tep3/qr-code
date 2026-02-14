@@ -4,8 +4,16 @@
     class="flex flex-col sm:flex-row justify-between items-start sm:items-end gap-4 mb-8"
   >
     <div>
-      <h1 class="text-3xl sm:text-4xl font-serif tracking-tight">History</h1>
-      <p class="text-base-content/50 mt-2 text-sm sm:text-base">
+      <h1
+        class="text-3xl sm:text-4xl font-serif tracking-tight"
+        data-i18n="history_title"
+      >
+        History
+      </h1>
+      <p
+        class="text-base-content/50 mt-2 text-sm sm:text-base"
+        data-i18n="history_desc"
+      >
         Your recently generated QR codes (saved locally on your device)
       </p>
     </div>
@@ -27,7 +35,7 @@
           d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
         />
       </svg>
-      Clear All
+      <span data-i18n="btn_clear_all">Clear All</span>
     </button>
   </div>
 
@@ -49,8 +57,10 @@
     >
       📭
     </div>
-    <h3 class="text-xl font-semibold mb-2">No QR Codes Yet</h3>
-    <p class="text-base-content/50 max-w-sm mb-6">
+    <h3 class="text-xl font-semibold mb-2" data-i18n="empty_title">
+      No QR Codes Yet
+    </h3>
+    <p class="text-base-content/50 max-w-sm mb-6" data-i18n="empty_desc">
       You haven't generated any QR codes. Head back to the home page to create
       your first one!
     </p>
@@ -61,7 +71,7 @@
       hx-target="#main-content"
       class="btn btn-primary"
     >
-      Create QR Code
+      <span data-i18n="btn_create_first">Create QR Code</span>
     </a>
   </div>
 </div>
@@ -169,10 +179,7 @@
 
     // Attach functions to window object to be accessible by inline onclick handlers
     window.deleteHistoryItem = function (id) {
-      if (
-        !confirm("Are you sure you want to delete this QR code from history?")
-      )
-        return;
+      if (!confirm(window.t("confirm_delete"))) return;
 
       let history = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
       history = history.filter((item) => item.id !== id);
@@ -183,12 +190,7 @@
     };
 
     window.clearHistory = function () {
-      if (
-        !confirm(
-          "Are you sure you want to clear ALL history? This cannot be undone.",
-        )
-      )
-        return;
+      if (!confirm(window.t("confirm_clear"))) return;
 
       localStorage.removeItem("qrforge_history");
 

@@ -1,227 +1,147 @@
-<div class="max-w-3xl mx-auto animate-fade-up">
-  <!-- Header -->
-  <div class="text-center mb-10">
-    <div
-      class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wide mb-5"
-    >
-      <svg
-        class="w-3.5 h-3.5"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-        />
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-        />
+<div class="w-full max-w-2xl mx-auto animate-fade-up">
+  
+  <!-- Header Section -->
+  <div class="text-center mb-8">
+    <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase mb-4 shadow-sm">
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.131A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.2-2.85.59-4.171" />
       </svg>
-      Fast & Secure
+      <span data-i18n="scan_badge">AI Powered & Secure</span>
     </div>
-    <h1 class="text-4xl sm:text-5xl font-serif mb-3 tracking-tight">
-      Scan <span class="text-primary">QR Code</span>
+    <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-base-content">
+      <span data-i18n="scan_title">Scan</span> <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">QR Code</span>
     </h1>
-    <p
-      class="text-base-content/50 text-base sm:text-lg max-w-md mx-auto leading-relaxed"
-    >
-      Use your camera to scan a QR code instantly, or upload an image file from
-      your device.
+    <p class="text-base-content/60 text-lg max-w-md mx-auto leading-relaxed font-light" data-i18n="scan_desc">
+      Point your camera at a QR code or upload an image to decode instantly.
     </p>
   </div>
 
-  <div
-    class="bg-base-100 rounded-3xl border border-base-200 shadow-sm overflow-hidden p-6 sm:p-10"
-  >
-    <!-- Scanner UI (Active) -->
-    <div id="scanner-container" class="space-y-6">
-      <!-- Video Area -->
-      <div
-        id="video-wrapper"
-        class="relative w-full aspect-square sm:aspect-video bg-base-200 rounded-2xl overflow-hidden flex flex-col items-center justify-center border-2 border-base-300 border-dashed transition-all"
-      >
-        <div
-          id="reader-video"
-          class="w-full h-full [&>video]:object-cover hidden"
-        ></div>
+  <!-- Main Card -->
+  <div class="bg-base-100 rounded-[2rem] shadow-xl border border-base-200 overflow-hidden relative">
+    <!-- Decorative background blobs -->
+    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-secondary/5 rounded-full blur-3xl pointer-events-none"></div>
 
-        <!-- Placeholder / Start Button -->
-        <div id="camera-placeholder" class="text-center p-6 z-10">
-          <div
-            class="w-16 h-16 bg-primary/10 text-primary rounded-full flex items-center justify-center mx-auto mb-4"
-          >
-            <svg
-              class="w-8 h-8"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-              ></path>
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-              ></path>
-            </svg>
+    <div class="p-6 sm:p-8 relative z-10">
+      
+      <!-- Scanner UI (Active) -->
+      <div id="scanner-container" class="space-y-8 transition-all duration-300">
+        
+        <!-- Video Area -->
+        <div id="video-wrapper" class="relative w-full aspect-square sm:aspect-[4/3] bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50">
+          
+          <!-- The actual video element from library -->
+          <div id="reader-video" class="w-full h-full [&>video]:object-cover hidden absolute inset-0 z-10"></div>
+          
+          <!-- Scanner Overlay (Green Line) - Only visible when scanning -->
+          <div id="scan-overlay" class="hidden absolute inset-0 z-20 pointer-events-none">
+            <div class="w-full h-1 bg-primary shadow-[0_0_15px_rgba(var(--p),0.8)] absolute animate-scan-line"></div>
+            <div class="absolute top-4 left-4 w-12 h-12 border-t-4 border-l-4 border-primary rounded-tl-xl opacity-50"></div>
+            <div class="absolute top-4 right-4 w-12 h-12 border-t-4 border-r-4 border-primary rounded-tr-xl opacity-50"></div>
+            <div class="absolute bottom-4 left-4 w-12 h-12 border-b-4 border-l-4 border-primary rounded-bl-xl opacity-50"></div>
+            <div class="absolute bottom-4 right-4 w-12 h-12 border-b-4 border-r-4 border-primary rounded-br-xl opacity-50"></div>
           </div>
-          <p class="font-medium mb-4 text-base-content/70">
-            Camera access is required to scan
-          </p>
-          <button
-            id="start-camera-btn"
-            class="btn btn-primary shadow-sm hover:shadow-md transition-all"
-          >
-            Start Camera
+
+          <!-- Placeholder / Start UI -->
+          <div id="camera-placeholder" class="text-center p-6 z-0 flex flex-col items-center justify-center h-full w-full">
+            <div class="w-20 h-20 bg-base-100 shadow-md text-primary rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+            </div>
+            <h3 class="text-lg font-bold text-base-content mb-1" data-i18n="camera_access">Camera Access</h3>
+            <p class="text-sm text-base-content/50 mb-6 max-w-[200px]" data-i18n="camera_start_help">Click below to start scanning via your webcam.</p>
+            <button id="start-camera-btn" class="btn btn-primary rounded-full px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all">
+              <span data-i18n="btn_start_camera">Start Camera</span>
+            </button>
+          </div>
+
+          <!-- Stop Button (Overlay) -->
+          <button id="stop-camera-btn" class="btn btn-circle btn-error btn-sm absolute top-4 right-4 hidden z-30 shadow-lg transform hover:scale-110 transition-transform">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
           </button>
         </div>
 
-        <!-- Stop Button (Overlay) -->
-        <button
-          id="stop-camera-btn"
-          class="btn btn-sm btn-circle btn-error absolute top-4 right-4 hidden z-20 shadow-md"
-          title="Stop Camera"
-        >
-          <svg
-            class="w-4 h-4"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            ></path>
-          </svg>
-        </button>
-      </div>
-
-      <div
-        class="divider text-xs text-base-content/30 font-bold uppercase tracking-widest"
-      >
-        OR
-      </div>
-
-      <!-- File Upload Area -->
-      <div class="form-control w-full">
-        <label class="label pt-0 pb-2">
-          <span class="label-text font-medium">Upload Image File</span>
-        </label>
-        <input
-          type="file"
-          id="qr-input-file"
-          accept="image/*"
-          class="file-input file-input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary transition-colors"
-        />
-      </div>
-    </div>
-
-    <!-- Result UI (Hidden by default) -->
-    <div id="result-container" class="hidden animate-fade-up space-y-6">
-      <div class="text-center mt-2">
-        <div
-          class="w-16 h-16 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-4"
-        >
-          <svg
-            class="w-8 h-8"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M5 13l4 4L19 7"
-            ></path>
-          </svg>
+        <div class="relative flex py-2 items-center">
+          <div class="flex-grow border-t border-base-300"></div>
+          <span class="flex-shrink-0 mx-4 text-base-content/30 text-xs font-bold uppercase tracking-widest" data-i18n="or_upload">OR Upload Image</span>
+          <div class="flex-grow border-t border-base-300"></div>
         </div>
-        <h3 class="text-2xl font-serif mb-1">Scan Successful</h3>
-        <p class="text-base-content/50 text-sm">
-          Saved to your history automatically
-        </p>
-      </div>
 
-      <div class="bg-base-200/50 rounded-2xl p-5 border border-base-200">
-        <label
-          class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-2 font-semibold"
-          >Decoded Content</label
-        >
-        <div
-          class="break-all font-mono text-sm sm:text-base text-base-content bg-base-100 p-4 rounded-xl border border-base-200 min-h-[5rem] flex items-center"
-          id="scanned-text"
-        >
-          <!-- Result text injected here -->
+        <!-- Drag & Drop File Upload Area -->
+        <div class="w-full">
+          <label for="qr-input-file" class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-base-300 rounded-2xl cursor-pointer bg-base-100 hover:bg-base-200/50 hover:border-primary transition-all group relative overflow-hidden">
+            <div class="flex flex-col items-center justify-center pt-5 pb-6 relative z-10">
+              <svg class="w-8 h-8 mb-3 text-base-content/40 group-hover:text-primary transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+              <p class="mb-1 text-sm text-base-content/70"><span class="font-semibold text-primary" data-i18n="upload_help">Click to upload</span> <span data-i18n="upload_help_sub">or drag and drop</span></p>
+              <p class="text-xs text-base-content/40">SVG, PNG, JPG or GIF</p>
+            </div>
+            <input type="file" id="qr-input-file" accept="image/*" class="hidden" />
+            <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          </label>
         </div>
       </div>
 
-      <div class="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-        <button id="copy-btn" class="btn btn-outline flex-1">
-          <svg
-            class="w-4 h-4 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-            ></path>
-          </svg>
-          Copy Text
-        </button>
-        <a
-          id="open-link-btn"
-          href="#"
-          target="_blank"
-          class="btn btn-primary flex-1 hidden"
-        >
-          <svg
-            class="w-4 h-4 mr-2"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-            ></path>
-          </svg>
-          Open Link
-        </a>
+      <!-- Result UI (Hidden by default) -->
+      <div id="result-container" class="hidden space-y-8 animate-[fade-up_0.5s_ease-out]">
+        <div class="text-center pt-4">
+          <div class="relative inline-block">
+            <div class="w-20 h-20 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-4 animate-[bounce_1s_ease-in-out_1]">
+              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              </svg>
+            </div>
+            <div class="absolute inset-0 rounded-full bg-success/20 animate-ping opacity-20"></div>
+          </div>
+          <h3 class="text-3xl font-bold mb-2 text-base-content" data-i18n="scan_success">Success!</h3>
+          <p class="text-base-content/50" data-i18n="scan_success_desc">Content successfully decoded.</p>
+        </div>
+
+        <div class="bg-base-200/50 rounded-2xl p-6 border border-base-200 shadow-inner">
+          <div class="flex justify-between items-center mb-3">
+            <label class="text-xs uppercase tracking-widest text-base-content/50 font-bold" data-i18n="result_content">Result Content</label>
+            <span class="badge badge-sm badge-neutral">Text</span>
+          </div>
+          <div class="relative group">
+            <div class="break-all font-mono text-sm md:text-base text-base-content bg-base-100 p-5 rounded-xl border border-base-200 min-h-[6rem] flex items-center shadow-sm" id="scanned-text">
+              <!-- Result text injected here -->
+            </div>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <button id="copy-btn" class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-400 text-base-content h-12 rounded-xl normal-case text-base font-medium">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+            <span data-i18n="btn_copy">Copy Content</span>
+          </button>
+          
+          <a id="open-link-btn" href="#" target="_blank" class="btn btn-primary h-12 rounded-xl normal-case text-base font-medium hidden shadow-lg shadow-primary/20">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path></svg>
+            <span data-i18n="btn_open">Open Link</span>
+          </a>
+        </div>
+
+        <div class="text-center pt-2">
+          <button id="scan-again-btn" class="btn btn-ghost text-base-content/50 hover:text-base-content hover:bg-transparent -ml-2 group">
+            <svg class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            <span data-i18n="btn_back_scan">Back to Scanner</span>
+          </button>
+        </div>
       </div>
 
-      <div class="text-center mt-4">
-        <button
-          id="scan-again-btn"
-          class="btn btn-ghost text-base-content/60 hover:text-base-content"
-        >
-          Scan Another QR Code
-        </button>
-      </div>
     </div>
   </div>
+  
+  <p class="text-center text-xs text-base-content/30 mt-8 font-medium" data-i18n="scan_footer">
+    Secure Client-Side Processing. No data is sent to servers.
+  </p>
 </div>
 
+<!-- Scripts -->
 <script>
   (function () {
-    // 1. โหลดไลบรารี html5-qrcode แบบ Dynamic เพื่อรองรับ HTMX
+    // 1. Dynamic Library Loading
     function loadHtml5Qrcode(callback) {
       if (typeof Html5Qrcode !== "undefined") {
         callback();
@@ -233,11 +153,12 @@
       document.head.appendChild(script);
     }
 
-    // ตัวแปร UI
+    // UI Variables
     var scannerContainer = document.getElementById("scanner-container");
     var resultContainer = document.getElementById("result-container");
     var videoWrapper = document.getElementById("video-wrapper");
     var readerVideo = document.getElementById("reader-video");
+    var scanOverlay = document.getElementById("scan-overlay"); 
     var cameraPlaceholder = document.getElementById("camera-placeholder");
     var startBtn = document.getElementById("start-camera-btn");
     var stopBtn = document.getElementById("stop-camera-btn");
@@ -251,40 +172,48 @@
     var currentResult = "";
 
     function initScanner() {
+      // Guard: readerVideo might be null if DOM not ready or element missing
+      if (!document.getElementById("reader-video")) return;
       html5QrCode = new Html5Qrcode("reader-video");
-      window.qrScannerInstance = html5QrCode; // เก็บไว้ล้างค่าตอนเปลี่ยนหน้า HTMX
+      window.qrScannerInstance = html5QrCode; 
     }
 
     // --- Actions ---
 
     function onScanSuccess(decodedText) {
       currentResult = decodedText;
-      stopCamera();
+      stopCamera(); // Important: Stop camera after success
 
-      // สลับ UI
-      scannerContainer.classList.add("hidden");
-      resultContainer.classList.remove("hidden");
+      // Switch UI with simple fade effect
+      if (scannerContainer) scannerContainer.classList.add("hidden");
+      if (resultContainer) resultContainer.classList.remove("hidden");
 
-      // แสดงผลข้อความ
-      scannedTextEl.textContent = decodedText;
+      // Display text
+      if (scannedTextEl) scannedTextEl.textContent = decodedText;
 
-      // เช็คว่าเป็น URL หรือไม่
+      // URL Detection
       var isUrl = false;
       try {
         new URL(decodedText);
         isUrl = true;
       } catch (_) {
-        // Fallback ตรวจจับ http
-        isUrl =
-          decodedText.startsWith("http://") ||
-          decodedText.startsWith("https://");
+        isUrl = decodedText.startsWith("http://") || decodedText.startsWith("https://");
       }
 
       if (isUrl) {
-        openLinkBtn.href = decodedText;
-        openLinkBtn.classList.remove("hidden");
+        if (openLinkBtn) {
+          openLinkBtn.href = decodedText;
+          openLinkBtn.classList.remove("hidden");
+        }
+        // Adjust grid if only one button
+        if (copyBtn && copyBtn.parentElement) copyBtn.parentElement.classList.add("sm:grid-cols-2");
       } else {
-        openLinkBtn.classList.add("hidden");
+        if (openLinkBtn) openLinkBtn.classList.add("hidden");
+        // Center copy button if it's alone
+        if (copyBtn && copyBtn.parentElement) {
+          copyBtn.parentElement.classList.remove("sm:grid-cols-2");
+          copyBtn.parentElement.classList.add("grid-cols-1");
+        }
       }
 
       saveToHistory(decodedText, isUrl);
@@ -293,10 +222,16 @@
     function startCamera() {
       if (!html5QrCode) return;
 
-      cameraPlaceholder.classList.add("hidden");
-      readerVideo.classList.remove("hidden");
-      stopBtn.classList.remove("hidden");
-      videoWrapper.classList.remove("border-dashed", "border-base-300");
+      if (cameraPlaceholder) cameraPlaceholder.classList.add("hidden");
+      if (readerVideo) readerVideo.classList.remove("hidden");
+      if (scanOverlay) scanOverlay.classList.remove("hidden"); 
+      if (stopBtn) stopBtn.classList.remove("hidden");
+      
+      // Update wrapper style for active state
+      if (videoWrapper) {
+        videoWrapper.classList.remove("border-dashed", "border-base-300");
+        videoWrapper.classList.add("border-transparent");
+      }
 
       html5QrCode
         .start(
@@ -304,7 +239,7 @@
           { fps: 10, qrbox: { width: 250, height: 250 } },
           onScanSuccess,
           function (errorMessage) {
-            /* ซ่อน error ตอนสแกนหาไม่เจอในแต่ละเฟรม */
+            // Scanning... ignore errors
           },
         )
         .catch(function (err) {
@@ -330,16 +265,22 @@
     }
 
     function resetScannerUI() {
-      readerVideo.classList.add("hidden");
-      cameraPlaceholder.classList.remove("hidden");
-      stopBtn.classList.add("hidden");
-      videoWrapper.classList.add("border-dashed", "border-base-300");
+      if (readerVideo) readerVideo.classList.add("hidden");
+      if (scanOverlay) scanOverlay.classList.add("hidden");
+      if (cameraPlaceholder) cameraPlaceholder.classList.remove("hidden");
+      if (stopBtn) stopBtn.classList.add("hidden");
+      
+      // Reset wrapper style
+      if (videoWrapper) {
+        videoWrapper.classList.add("border-dashed", "border-base-300");
+        videoWrapper.classList.remove("border-transparent");
+      }
     }
 
     function saveToHistory(text, isUrl) {
+      // Original Logic maintained
       var entry = {
-        id:
-          Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
+        id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
         type: isUrl ? "url" : "text",
         content: isUrl ? { url: text } : { text: text },
         style: {},
@@ -351,14 +292,12 @@
       };
 
       try {
-        var history = JSON.parse(
-          localStorage.getItem("qrforge_history") || "[]",
-        );
+        var history = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
         history.unshift(entry);
         if (history.length > 50) history.pop();
         localStorage.setItem("qrforge_history", JSON.stringify(history));
 
-        // อัปเดต badges ทันที
+        // Update badges if they exist outside this component
         var count = history.length;
         ["history-badge", "history-badge-mobile"].forEach(function (id) {
           var el = document.getElementById(id);
@@ -372,52 +311,76 @@
       }
     }
 
-    // --- Event Listeners ---
+    // --- Event Listeners (Guarded) ---
 
-    startBtn.addEventListener("click", startCamera);
-    stopBtn.addEventListener("click", stopCamera);
+    // Ensure we don't attach listeners to null elements
+    // The TypeError usually happens here if elements aren't found
+    if (startBtn) startBtn.addEventListener("click", startCamera);
+    if (stopBtn) stopBtn.addEventListener("click", stopCamera);
 
-    scanAgainBtn.addEventListener("click", function () {
-      resultContainer.classList.add("hidden");
-      scannerContainer.classList.remove("hidden");
-      fileInput.value = ""; // เคลียร์ไฟล์
-      currentResult = "";
-    });
-
-    copyBtn.addEventListener("click", function () {
-      if (!currentResult) return;
-      navigator.clipboard.writeText(currentResult).then(function () {
-        var originalText = copyBtn.innerHTML;
-        copyBtn.innerHTML = "✅ Copied!";
-        setTimeout(function () {
-          copyBtn.innerHTML = originalText;
-        }, 2000);
+    if (scanAgainBtn) {
+      scanAgainBtn.addEventListener("click", function () {
+        if (resultContainer) resultContainer.classList.add("hidden");
+        if (scannerContainer) scannerContainer.classList.remove("hidden");
+        if (fileInput) fileInput.value = ""; // Clear file
+        currentResult = "";
       });
-    });
+    }
 
-    fileInput.addEventListener("change", function (e) {
-      if (e.target.files.length === 0 || !html5QrCode) return;
-
-      var imageFile = e.target.files[0];
-      html5QrCode
-        .scanFile(imageFile, true)
-        .then((decodedText) => {
-          onScanSuccess(decodedText);
-        })
-        .catch((err) => {
-          alert("No QR code found in this image. Please try another one.");
-          fileInput.value = "";
+    if (copyBtn) {
+      copyBtn.addEventListener("click", function () {
+        if (!currentResult) return;
+        
+        // Modern copy visual feedback
+        navigator.clipboard.writeText(currentResult).then(function () {
+          var originalHTML = copyBtn.innerHTML;
+          var originalClasses = copyBtn.className;
+          
+          copyBtn.innerHTML = `
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+            ${window.t ? window.t('copied') : 'Copied!'}
+          `;
+          copyBtn.classList.add("btn-success", "text-white");
+          copyBtn.classList.remove("btn-outline", "text-base-content");
+          
+          setTimeout(function () {
+            copyBtn.innerHTML = originalHTML;
+            copyBtn.className = originalClasses;
+          }, 2000);
         });
-    });
+      });
+    }
 
-    // เริ่มโหลด Library
+    if (fileInput) {
+      fileInput.addEventListener("change", function (e) {
+        if (e.target.files.length === 0 || !html5QrCode) return;
+
+        var imageFile = e.target.files[0];
+        // Show loading state could be added here
+        html5QrCode
+          .scanFile(imageFile, true)
+          .then((decodedText) => {
+            onScanSuccess(decodedText);
+          })
+          .catch((err) => {
+            alert(window.t ? window.t('err_no_qr') : "No QR code found in this image. Please try another one.");
+            fileInput.value = "";
+          });
+      });
+    }
+
+    // Start Library Load
     loadHtml5Qrcode(initScanner);
   })();
-</script>
 
-<script>
-  // ตัวจัดการตอนเปลี่ยนหน้าด้วย HTMX (หยุดกล้องอัตโนมัติเมื่อกดไปเมนูอื่น)
+  // HTMX Cleanup Handler (Fixed for Multiple Instances)
   (function () {
+    // 1. Remove previous listener if it exists (using global reference)
+    if (window.qrScanCleanup) {
+       document.body.removeEventListener("htmx:beforeRequest", window.qrScanCleanup);
+    }
+
+    // 2. Define new handler
     function handleBeforeRequest(e) {
       if (window.qrScannerInstance && window.qrScannerInstance.isScanning) {
         window.qrScannerInstance
@@ -429,13 +392,13 @@
             console.log(e);
           });
       }
-      document.body.removeEventListener(
-        "htmx:beforeRequest",
-        handleBeforeRequest,
-      );
     }
 
-    // ผูก Event รอไว้
+    // 3. Attach new listener
     document.body.addEventListener("htmx:beforeRequest", handleBeforeRequest);
+
+    // 4. Store reference globally so we can remove it next time
+    window.qrScanCleanup = handleBeforeRequest;
   })();
 </script>
+</div>

@@ -1,27 +1,17 @@
 <div class="text-center mb-12 animate-fade-up">
   <div
     class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-semibold tracking-wide mb-5"
+    data-i18n="home_badge"
   >
-    <svg
-      class="w-3.5 h-3.5"
-      fill="none"
-      stroke="currentColor"
-      stroke-width="2"
-      viewBox="0 0 24 24"
-    >
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z"
-      />
-    </svg>
     Free · No signup · Works offline
   </div>
   <h1 class="text-4xl sm:text-5xl font-serif mb-3 tracking-tight">
-    Craft your <span class="text-primary">QR Code</span>
+    <span data-i18n="home_title_pre">Craft your</span>
+    <span class="text-primary" data-i18n="home_title_post">QR Code</span>
   </h1>
   <p
     class="text-base-content/50 text-base sm:text-lg max-w-md mx-auto leading-relaxed"
+    data-i18n="home_desc"
   >
     Generate beautiful QR codes for links, WiFi, contacts and more — in seconds.
   </p>
@@ -32,6 +22,7 @@
     <div class="animate-fade-up delay-1">
       <label
         class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-2.5 font-semibold pl-1"
+        data-i18n="label_encode"
       >
         What do you want to encode?
       </label>
@@ -45,7 +36,11 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">🔗</span>
-          <span class="text-[11px] font-semibold text-primary">URL</span>
+          <span
+            class="text-[11px] font-semibold text-primary"
+            data-i18n="tab_url"
+            >URL</span
+          >
         </button>
 
         <button
@@ -57,7 +52,11 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">📝</span>
-          <span class="text-[11px] font-medium text-base-content/50">Text</span>
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_text"
+            >Text</span
+          >
         </button>
 
         <button
@@ -69,7 +68,11 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">📶</span>
-          <span class="text-[11px] font-medium text-base-content/50">WiFi</span>
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_wifi"
+            >WiFi</span
+          >
         </button>
 
         <button
@@ -81,7 +84,9 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">👤</span>
-          <span class="text-[11px] font-medium text-base-content/50"
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_vcard"
             >vCard</span
           >
         </button>
@@ -95,7 +100,9 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">✉️</span>
-          <span class="text-[11px] font-medium text-base-content/50"
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_email"
             >Email</span
           >
         </button>
@@ -109,7 +116,9 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">📞</span>
-          <span class="text-[11px] font-medium text-base-content/50"
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_phone"
             >Phone</span
           >
         </button>
@@ -123,7 +132,11 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">💬</span>
-          <span class="text-[11px] font-medium text-base-content/50">SMS</span>
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_sms"
+            >SMS</span
+          >
         </button>
 
         <button
@@ -135,7 +148,11 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">💚</span>
-          <span class="text-[11px] font-medium text-base-content/50">LINE</span>
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_line"
+            >LINE</span
+          >
         </button>
 
         <button
@@ -147,7 +164,9 @@
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">📘</span>
-          <span class="text-[11px] font-medium text-base-content/50"
+          <span
+            class="text-[11px] font-medium text-base-content/50"
+            data-i18n="tab_facebook"
             >Facebook</span
           >
         </button>
@@ -168,12 +187,17 @@
       >
         <label
           class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-3 font-semibold"
+          data-i18n="label_content"
           >Content</label
         >
         <div id="form-fields">
           <div class="form-control">
             <label class="label pb-1"
-              ><span class="label-text font-medium">Website URL</span></label
+              ><span
+                class="label-text font-medium"
+                data-i18n="label_website_url"
+                >Website URL</span
+              ></label
             >
             <input
               type="url"
@@ -181,9 +205,12 @@
               placeholder="https://example.com"
               class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary focus:bg-base-100 transition-colors"
               required
+              data-i18n="ph_website_url"
             />
             <label class="label pt-1"
-              ><span class="label-text-alt text-base-content/40"
+              ><span
+                class="label-text-alt text-base-content/40"
+                data-i18n="help_website_url"
                 >Enter the full URL including https://</span
               ></label
             >
@@ -216,8 +243,12 @@
               </svg>
             </div>
             <div>
-              <span class="text-sm font-semibold">Customize Style</span>
-              <span class="block text-[11px] text-base-content/40"
+              <span class="text-sm font-semibold" data-i18n="summary_style"
+                >Customize Style</span
+              >
+              <span
+                class="block text-[11px] text-base-content/40"
+                data-i18n="summary_style_desc"
                 >Colors, size, label, logo & more</span
               >
             </div>
@@ -241,7 +272,9 @@
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-3">
             <div class="form-control">
               <label class="label pb-1"
-                ><span class="label-text font-medium text-sm"
+                ><span
+                  class="label-text font-medium text-sm"
+                  data-i18n="style_fg"
                   >Foreground</span
                 ></label
               >
@@ -267,7 +300,9 @@
             </div>
             <div class="form-control">
               <label class="label pb-1"
-                ><span class="label-text font-medium text-sm"
+                ><span
+                  class="label-text font-medium text-sm"
+                  data-i18n="style_bg"
                   >Background</span
                 ></label
               >
@@ -293,7 +328,9 @@
             </div>
             <div class="form-control">
               <label class="label pb-1"
-                ><span class="label-text font-medium text-sm"
+                ><span
+                  class="label-text font-medium text-sm"
+                  data-i18n="style_dot"
                   >Dot Style</span
                 ></label
               >
@@ -308,7 +345,9 @@
             </div>
             <div class="form-control">
               <label class="label pb-1"
-                ><span class="label-text font-medium text-sm"
+                ><span
+                  class="label-text font-medium text-sm"
+                  data-i18n="style_ec"
                   >Error Correction</span
                 ></label
               >
@@ -324,7 +363,11 @@
             </div>
             <div class="form-control">
               <label class="label pb-1"
-                ><span class="label-text font-medium text-sm">Size</span></label
+                ><span
+                  class="label-text font-medium text-sm"
+                  data-i18n="style_size"
+                  >Size</span
+                ></label
               >
               <select
                 name="style.width"
@@ -338,7 +381,9 @@
             </div>
             <div class="form-control">
               <label class="label pb-1"
-                ><span class="label-text font-medium text-sm"
+                ><span
+                  class="label-text font-medium text-sm"
+                  data-i18n="style_margin"
                   >Margin</span
                 ></label
               >
@@ -357,7 +402,9 @@
               />
               <label class="label pt-0.5">
                 <span class="label-text-alt text-base-content/40"
-                  >Quiet zone: <span id="margin-value">2</span> modules</span
+                  ><span data-i18n="style_quiet_zone">Quiet zone:</span>
+                  <span id="margin-value">2</span>
+                  <span data-i18n="style_modules">modules</span></span
                 >
               </label>
             </div>
@@ -365,7 +412,9 @@
 
           <div class="mt-6 pt-4 border-t border-base-200">
             <label class="label pb-2"
-              ><span class="label-text font-bold text-sm"
+              ><span
+                class="label-text font-bold text-sm"
+                data-i18n="label_text_opt"
                 >Label Text (Optional)</span
               ></label
             >
@@ -384,7 +433,11 @@
 
               <div class="form-control">
                 <label class="label pb-0"
-                  ><span class="label-text-alt font-medium">Size</span></label
+                  ><span
+                    class="label-text-alt font-medium"
+                    data-i18n="label_size"
+                    >Size</span
+                  ></label
                 >
                 <input
                   type="range"
@@ -403,7 +456,9 @@
 
               <div class="form-control">
                 <label class="label pb-0"
-                  ><span class="label-text-alt font-medium"
+                  ><span
+                    class="label-text-alt font-medium"
+                    data-i18n="label_pos"
                     >Position</span
                   ></label
                 >
@@ -416,7 +471,9 @@
                       class="radio radio-xs radio-primary"
                       checked
                     />
-                    <span class="text-xs">Bottom</span>
+                    <span class="text-xs" data-i18n="label_pos_bottom"
+                      >Bottom</span
+                    >
                   </label>
                   <label class="flex items-center gap-2 cursor-pointer">
                     <input
@@ -425,14 +482,16 @@
                       value="top"
                       class="radio radio-xs radio-primary"
                     />
-                    <span class="text-xs">Top</span>
+                    <span class="text-xs" data-i18n="label_pos_top">Top</span>
                   </label>
                 </div>
               </div>
 
               <div class="form-control sm:col-span-2">
                 <label class="label pb-1"
-                  ><span class="label-text-alt font-medium"
+                  ><span
+                    class="label-text-alt font-medium"
+                    data-i18n="label_color"
                     >Text Color</span
                   ></label
                 >
@@ -454,7 +513,9 @@
                       document.getElementById('lbl-color').value = this.value
                     "
                   />
-                  <span class="text-[10px] text-base-content/40"
+                  <span
+                    class="text-[10px] text-base-content/40"
+                    data-i18n="label_color_help"
                     >Matches QR color by default</span
                   >
                 </div>
@@ -465,7 +526,9 @@
           <!-- Border / Frame -->
           <div class="mt-6 pt-4 border-t border-base-200">
             <label class="label pb-1"
-              ><span class="label-text font-bold text-sm"
+              ><span
+                class="label-text font-bold text-sm"
+                data-i18n="border_frame"
                 >Border / Frame</span
               ></label
             >
@@ -611,7 +674,9 @@
 
             <!-- Border Color -->
             <div class="flex items-center gap-3 mt-3" id="border-color-row">
-              <label class="label-text-alt font-medium">Border Color</label>
+              <label class="label-text-alt font-medium" data-i18n="border_color"
+                >Border Color</label
+              >
               <input
                 type="color"
                 name="style.borderColor"
@@ -629,7 +694,9 @@
                   document.getElementById('border-color').value = this.value
                 "
               />
-              <span class="text-[10px] text-base-content/40"
+              <span
+                class="text-[10px] text-base-content/40"
+                data-i18n="label_color_help"
                 >Matches QR color by default</span
               >
             </div>
@@ -659,7 +726,7 @@
               d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"
             />
           </svg>
-          Generate QR Code
+          <span data-i18n="btn_generate">Generate QR Code</span>
         </button>
       </div>
     </form>
@@ -672,6 +739,7 @@
       >
         <label
           class="block text-[11px] uppercase tracking-widest text-base-content/40 mb-4 font-semibold"
+          data-i18n="preview_title"
           >Preview</label
         >
         <div id="qr-preview">
@@ -838,10 +906,16 @@
                 />
               </svg>
             </div>
-            <p class="text-base-content/40 text-sm font-medium">
+            <p
+              class="text-base-content/40 text-sm font-medium"
+              data-i18n="preview_placeholder"
+            >
               Your QR code will appear here
             </p>
-            <p class="text-base-content/25 text-xs mt-1">
+            <p
+              class="text-base-content/25 text-xs mt-1"
+              data-i18n="preview_help"
+            >
               Fill in the content and hit Generate
             </p>
           </div>
@@ -855,6 +929,7 @@
           <div class="text-base mb-1">🔒</div>
           <div
             class="text-[10px] font-semibold text-base-content/50 leading-tight"
+            data-i18n="badge_private"
           >
             Private
           </div>
@@ -865,6 +940,7 @@
           <div class="text-base mb-1">⚡</div>
           <div
             class="text-[10px] font-semibold text-base-content/50 leading-tight"
+            data-i18n="badge_instant"
           >
             Instant
           </div>
@@ -875,6 +951,7 @@
           <div class="text-base mb-1">🎁</div>
           <div
             class="text-[10px] font-semibold text-base-content/50 leading-tight"
+            data-i18n="badge_free"
           >
             100% Free
           </div>
@@ -1241,10 +1318,10 @@
     }
 
     if (saveBtn) {
-      saveBtn.innerHTML = "✅ Saved!";
+      saveBtn.innerHTML = window.t("saved"); // Translated string
       saveBtn.classList.add("btn-disabled");
       setTimeout(function () {
-        saveBtn.innerHTML = "💾 Save to History";
+        saveBtn.innerHTML = window.t("btn_save_history"); // Translated string
         saveBtn.classList.remove("btn-disabled");
       }, 2000);
     }

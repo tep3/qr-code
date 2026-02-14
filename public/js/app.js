@@ -103,10 +103,16 @@
       .catch(function (err) {
         console.error("QR generation failed:", err);
         if (preview) {
+          // Use window.t if available for error message, otherwise fallback
+          const errorMsg = window.t
+            ? window.t("err_network")
+            : "Network error — please try again";
           preview.innerHTML =
             '<div class="flex flex-col items-center justify-center py-8 text-center">' +
-            '<div class="text-4xl mb-3">âš ï¸</div>' +
-            '<p class="text-red-400 text-sm font-medium">Network error — please try again</p>' +
+            '<div class="text-4xl mb-3">⚠️</div>' +
+            '<p class="text-red-400 text-sm font-medium">' +
+            errorMsg +
+            "</p>" +
             "</div>";
         }
       })
