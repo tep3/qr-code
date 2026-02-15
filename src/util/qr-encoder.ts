@@ -140,123 +140,107 @@ function encodeFacebook(content: Record<string, unknown>): string {
   return `https://www.facebook.com/${input}`;
 }
 
-// ─── PromptPay (EMVCo QR Code Standard) ──────────────────────────
+// ─── PromptPay (EMVCo Merchant Presented Mode) ───────────────────
 
 function encodePromptPay(content: Record<string, unknown>): string {
   const rawId = String(content.promptpayId || "").trim();
   if (!rawId) throw new Error("PromptPay ID is required");
 
-  const amountStr = String(content.amount || "").trim();
-  const amount = amountStr ? parseFloat(amountStr) : undefined;
+  const amount = content.amount ? parseFloat(String(content.amount)) : 0;
+  if (amount < 0) throw new Error("Amount cannot be negative");
 
-  if (amount !== undefined && (isNaN(amount) || amount < 0)) {
-    throw new Error("Amount must be a positive number");
-  }
-
-  return generatePromptPayPayload(rawId, amount);
+  return generatePromptPayPayload(rawId, amount > 0 ? amount : undefined);
 }
 
 /**
- * Generate EMVCo Merchant Presented QR Code payload for PromptPay.
+ * Generate EMVCo QR Code payload string for PromptPay
  *
- * Spec: BOT PromptPay QR Standard (based on EMVCo QR Code Specification)
+ * Format: EMV QRCPS Merchant Presented Mode
+ * Reference: Bank of Thailand / EMVCo specification
  *
- * Structure:
- *   00 - Payload Format Indicator ("01")
- *   01 - Point of Initiation ("11" static / "12" dynamic with amount)
- *   29 - Merchant Account Info (PromptPay)
- *     00 - AID ("A000000677010111")
- *     01 - Mobile number (format: 0066XXXXXXXXX) or
- *     02 - National ID / Tax ID (13 digits)
- *   53 - Transaction Currency ("764" = THB)
- *   54 - Transaction Amount (optional, when amount specified)
- *   58 - Country Code ("TH")
- *   63 - CRC-16 checksum
+ * TLV structure (Tag-Length-Value):
+ *   00 - Payload Format Indicator: "01"
+ *   01 - Point of Initiation: "11" (static) or "12" (dynamic / with amount)
+ *   29 - Merchant Account Info (PromptPay):
+ *        00 - App ID: "A000000677010111"
+ *        01 - Mobile (13 digits, 0066xxxxxxxxx)
+ *        02 - National ID / Tax ID (13 digits)
+ *        03 - E-Wallet ID (15 digits)
+ *   53 - Transaction Currency: "764" (THB)
+ *   54 - Transaction Amount (optional)
+ *   58 - Country Code: "TH"
+ *   63 - CRC checksum
  */
 function generatePromptPayPayload(id: string, amount?: number): string {
-  // Clean ID: remove dashes, spaces, plus signs
-  const cleanId = id.replace(/[\s\-+]/g, "");
+  // Strip dashes, spaces, and leading/trailing whitespace
+  const sanitized = id.replace(/[-\s]/g, "");
 
-  // Determine ID type and format
+  // Determine ID type and format accordingly
   let accountFieldTag: string;
   let formattedId: string;
 
-  if (/^\d{13}$/.test(cleanId)) {
-    // 13-digit National ID or Tax ID
+  if (/^0\d{9}$/.test(sanitized)) {
+    // Thai mobile number: 0x-xxxx-xxxx (10 digits)
+    // Convert to international format: 0066 + last 9 digits = 13 digits
+    accountFieldTag = "01";
+    formattedId = "0066" + sanitized.substring(1).padStart(9, "0");
+  } else if (/^\+?66\d{9}$/.test(sanitized)) {
+    // Already international format: +66xxxxxxxxx or 66xxxxxxxxx
+    accountFieldTag = "01";
+    const digits = sanitized.replace(/^\+/, "");
+    formattedId = "00" + digits;
+  } else if (/^\d{13}$/.test(sanitized)) {
+    // National ID or Tax ID (13 digits)
     accountFieldTag = "02";
-    formattedId = cleanId;
-  } else if (/^0\d{9}$/.test(cleanId)) {
-    // Thai mobile: 0XXXXXXXXX → 0066XXXXXXXXX
-    accountFieldTag = "01";
-    formattedId = "0066" + cleanId.substring(1);
-  } else if (/^66\d{9}$/.test(cleanId)) {
-    // Already international format without leading 00
-    accountFieldTag = "01";
-    formattedId = "00" + cleanId;
-  } else if (/^0066\d{9}$/.test(cleanId)) {
-    // Already in PromptPay format
-    accountFieldTag = "01";
-    formattedId = cleanId;
-  } else if (/^\d{10}$/.test(cleanId)) {
-    // 10-digit phone starting without 0 — assume Thai mobile
-    accountFieldTag = "01";
-    formattedId = "0066" + cleanId.substring(1);
-  } else if (/^\d{15}$/.test(cleanId)) {
+    formattedId = sanitized;
+  } else if (/^\d{15}$/.test(sanitized)) {
     // E-Wallet ID (15 digits)
     accountFieldTag = "03";
-    formattedId = cleanId;
+    formattedId = sanitized;
   } else {
     throw new Error(
-      "Invalid PromptPay ID. Use a mobile number (08X-XXX-XXXX), National ID (13 digits), or Tax ID.",
+      "Invalid PromptPay ID. Use mobile number (08x-xxx-xxxx), National ID (13 digits), or E-Wallet ID (15 digits).",
     );
   }
 
-  // Build Merchant Account Information (Tag 29)
-  const aid = tlv("00", "A000000677010111");
-  const accountId = tlv(accountFieldTag, formattedId);
-  const merchantAccountInfo = tlv("29", aid + accountId);
+  // Build merchant account info (Tag 29)
+  const merchantAccountInfo =
+    tlv("00", "A000000677010111") + tlv(accountFieldTag, formattedId);
 
-  // Point of Initiation Method
-  // "11" = static (no amount), "12" = dynamic (with amount)
-  const initMethod = amount !== undefined && amount > 0 ? "12" : "11";
+  // Point of initiation: "11" = static, "12" = dynamic (with amount)
+  const pointOfInitiation = amount ? "12" : "11";
 
   // Build payload (without CRC)
-  let payload = "";
-  payload += tlv("00", "01"); // Payload Format Indicator
-  payload += tlv("01", initMethod); // Point of Initiation Method
-  payload += merchantAccountInfo; // Merchant Account Info
-  payload += tlv("53", "764"); // Transaction Currency (THB)
+  let payload =
+    tlv("00", "01") +
+    tlv("01", pointOfInitiation) +
+    tlv("29", merchantAccountInfo) +
+    tlv("53", "764") +
+    (amount ? tlv("54", amount.toFixed(2)) : "") +
+    tlv("58", "TH");
 
-  if (amount !== undefined && amount > 0) {
-    payload += tlv("54", amount.toFixed(2)); // Transaction Amount
-  }
+  // Add CRC placeholder (tag 63, length 04, value to be calculated)
+  payload += "6304";
 
-  payload += tlv("58", "TH"); // Country Code
-
-  // Add CRC placeholder and compute
-  payload += "6304"; // Tag 63, Length 04, then CRC will be appended
+  // Calculate CRC-16/CCITT-FALSE and append
   const crc = crc16(payload);
   payload += crc;
 
   return payload;
 }
 
-/**
- * Create a TLV (Tag-Length-Value) string.
- * Length is zero-padded to 2 digits.
- */
+/** Encode a TLV (Tag-Length-Value) field */
 function tlv(tag: string, value: string): string {
   const length = value.length.toString().padStart(2, "0");
   return `${tag}${length}${value}`;
 }
 
 /**
- * CRC-16/CCITT-FALSE used by EMVCo QR Code.
- * Polynomial: 0x1021, Initial: 0xFFFF
+ * CRC-16/CCITT-FALSE (polynomial 0x1021, init 0xFFFF)
+ * Returns 4-character uppercase hex string
  */
 function crc16(data: string): string {
   let crc = 0xffff;
-
   for (let i = 0; i < data.length; i++) {
     crc ^= data.charCodeAt(i) << 8;
     for (let j = 0; j < 8; j++) {
@@ -267,7 +251,6 @@ function crc16(data: string): string {
       }
     }
   }
-
   return crc.toString(16).toUpperCase().padStart(4, "0");
 }
 

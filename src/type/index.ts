@@ -64,7 +64,7 @@ export interface FacebookContent {
 
 export interface PromptPayContent {
   promptpayId: string;
-  amount?: string;
+  amount?: number;
 }
 
 export type QRContent =

@@ -27,32 +27,27 @@
         What do you want to encode?
       </label>
       <div id="type-tabs" class="flex flex-wrap gap-2" role="tablist">
-        <!-- PromptPay Tab -->
+        <!-- PromptPay Tab (New) -->
         <button
-          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-primary bg-primary/5 transition-all duration-200 min-w-[60px]"
           data-type="promptpay"
-          hx-get="/partials/qr-form/promptpay"
-          hx-target="#form-fields"
-          hx-swap="innerHTML transition:true"
-          onclick="switchTab(this)"
+          onclick="loadPromptPayForm(this)"
         >
           <span class="text-lg leading-none">🇹🇭</span>
-          <span class="text-[11px] font-medium text-base-content/50"
-            >PromptPay</span
-          >
+          <span class="text-[11px] font-semibold text-primary">PromptPay</span>
         </button>
 
         <button
           hx-get="/partials/qr-form/url"
           hx-target="#form-fields"
           hx-swap="innerHTML transition:true"
-          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-primary bg-primary/5 transition-all duration-200 min-w-[60px]"
+          class="tab-btn flex flex-col items-center gap-1 py-2.5 px-3 rounded-xl border-2 border-base-200 hover:border-base-300 bg-base-100 transition-all duration-200 min-w-[60px]"
           data-type="url"
           onclick="switchTab(this)"
         >
           <span class="text-lg leading-none">🔗</span>
           <span
-            class="text-[11px] font-semibold text-primary"
+            class="text-[11px] font-medium text-base-content/50"
             data-i18n="tab_url"
             >URL</span
           >
@@ -196,7 +191,7 @@
       hx-indicator="#loading-spinner"
       class="space-y-5"
     >
-      <input type="hidden" name="type" id="qr-type" value="url" />
+      <input type="hidden" name="type" id="qr-type" value="promptpay" />
       <div
         class="animate-fade-up delay-2 bg-base-100 rounded-2xl border border-base-200 p-5 shadow-sm"
       >
@@ -206,29 +201,45 @@
           >Content</label
         >
         <div id="form-fields">
-          <div class="form-control">
-            <label class="label pb-1"
-              ><span
-                class="label-text font-medium"
-                data-i18n="label_website_url"
-                >Website URL</span
-              ></label
-            >
-            <input
-              type="url"
-              name="content.url"
-              placeholder="https://example.com"
-              class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary focus:bg-base-100 transition-colors"
-              required
-              data-i18n="ph_website_url"
-            />
-            <label class="label pt-1"
-              ><span
-                class="label-text-alt text-base-content/40"
-                data-i18n="help_website_url"
-                >Enter the full URL including https://</span
-              ></label
-            >
+          <div class="space-y-4">
+            <div class="form-control">
+              <label class="label pb-1">
+                <span class="label-text font-medium">
+                  <span class="text-lg mr-1">🆔</span> PromptPay ID
+                </span>
+              </label>
+              <input
+                type="text"
+                name="content.promptpayId"
+                placeholder="08X-XXX-XXXX or Tax ID"
+                class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary font-mono"
+                required
+                data-i18n="ph_promptpay_id"
+              />
+              <label class="label pt-1">
+                <span
+                  class="label-text-alt text-base-content/40"
+                  data-i18n="help_promptpay_id"
+                  >Mobile number or Tax ID / E-Wallet ID</span
+                >
+              </label>
+            </div>
+
+            <div class="form-control">
+              <label class="label pb-1">
+                <span class="label-text font-medium">
+                  <span class="text-lg mr-1">💰</span> Amount (Optional)
+                </span>
+              </label>
+              <input
+                type="number"
+                name="content.amount"
+                placeholder="0.00"
+                step="0.01"
+                min="0"
+                class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary font-mono"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -354,7 +365,7 @@
                 class="select select-bordered select-sm w-full bg-base-200/50 border-base-200"
               >
                 <option value="square" selected>■ Square</option>
-                <option value="rounded">● Rounded</option>
+                <option value="rounded">Rounded</option>
                 <option value="dots">◉ Dots</option>
               </select>
             </div>
@@ -549,712 +560,140 @@
             >
             <div
               id="border-picker"
-              class="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-2"
+              class="grid grid-cols-3 sm:grid-cols-5 gap-2 mt-1"
             >
               <!-- None -->
-              <label class="cursor-pointer group">
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="none"
-                  class="hidden peer"
+                  class="hidden"
                   checked
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-primary bg-primary/5 text-primary transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 48" class="w-9 h-9" fill="none">
-                    <rect
-                      x="12"
-                      y="12"
-                      width="24"
-                      height="24"
-                      rx="2"
-                      fill="currentColor"
-                      opacity="0.15"
-                    />
-                    <rect
-                      x="14"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.5"
-                    />
-                    <rect
-                      x="26"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.5"
-                    />
-                    <rect
-                      x="14"
-                      y="26"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.5"
-                    />
-                    <rect
-                      x="26"
-                      y="26"
-                      width="4"
-                      height="4"
-                      fill="currentColor"
-                      opacity="0.3"
-                    />
-                    <rect
-                      x="30"
-                      y="30"
-                      width="4"
-                      height="4"
-                      fill="currentColor"
-                      opacity="0.3"
-                    />
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >None</span
-                  >
+                <div class="border-preview-box selected">
+                  <div class="bp-qr"></div>
+                  <span class="bp-label">None</span>
                 </div>
               </label>
 
-              <!-- Rounded -->
-              <label class="cursor-pointer group">
+              <!-- Rounded Frames -->
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="round-sm"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 48" class="w-9 h-9" fill="none">
-                    <rect
-                      x="6"
-                      y="6"
-                      width="36"
-                      height="36"
-                      rx="6"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      opacity="0.6"
-                    />
-                    <rect
-                      x="14"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="14"
-                      y="26"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="27"
-                      y="27"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="31"
-                      y="31"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Rounded</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-round-sm">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Rounded</span>
                 </div>
               </label>
 
-              <!-- Pill -->
-              <label class="cursor-pointer group">
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="round-lg"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 48" class="w-9 h-9" fill="none">
-                    <rect
-                      x="6"
-                      y="6"
-                      width="36"
-                      height="36"
-                      rx="14"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      opacity="0.6"
-                    />
-                    <rect
-                      x="14"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="14"
-                      y="26"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="27"
-                      y="27"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="31"
-                      y="31"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Pill</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-round-lg">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Pill</span>
                 </div>
               </label>
 
-              <!-- Circle -->
-              <label class="cursor-pointer group">
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="circle"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 48" class="w-9 h-9" fill="none">
-                    <circle
-                      cx="24"
-                      cy="24"
-                      r="20"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      opacity="0.6"
-                    />
-                    <rect
-                      x="15"
-                      y="15"
-                      width="7"
-                      height="7"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="15"
-                      width="7"
-                      height="7"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="15"
-                      y="26"
-                      width="7"
-                      height="7"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="27"
-                      y="27"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="31"
-                      y="31"
-                      width="2"
-                      height="2"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Circle</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-circle"><div class="bp-qr"></div></div>
+                  <span class="bp-label">Circle</span>
                 </div>
               </label>
 
-              <!-- Glow -->
-              <label class="cursor-pointer group">
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="glow"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 48" class="w-9 h-9" fill="none">
-                    <defs>
-                      <filter
-                        id="bp-glow-f"
-                        x="-40%"
-                        y="-40%"
-                        width="180%"
-                        height="180%"
-                      >
-                        <feGaussianBlur
-                          in="SourceGraphic"
-                          stdDeviation="2.5"
-                          result="blur"
-                        />
-                        <feMerge>
-                          <feMergeNode in="blur" />
-                          <feMergeNode in="SourceGraphic" />
-                        </feMerge>
-                      </filter>
-                    </defs>
-                    <rect
-                      x="6"
-                      y="6"
-                      width="36"
-                      height="36"
-                      rx="8"
-                      stroke="oklch(var(--p))"
-                      stroke-width="2.5"
-                      filter="url(#bp-glow-f)"
-                      opacity="0.7"
-                    />
-                    <rect
-                      x="14"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="14"
-                      y="26"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="27"
-                      y="27"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="31"
-                      y="31"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Glow</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-glow"><div class="bp-qr"></div></div>
+                  <span class="bp-label">Glow</span>
                 </div>
               </label>
 
-              <!-- Corners -->
-              <label class="cursor-pointer group">
+              <!-- Decorative -->
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="corners"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 48" class="w-9 h-9" fill="none">
-                    <path
-                      d="M6 14V8a2 2 0 012-2h6"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      opacity="0.6"
-                    />
-                    <path
-                      d="M34 6h6a2 2 0 012 2v6"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      opacity="0.6"
-                    />
-                    <path
-                      d="M42 34v6a2 2 0 01-2 2h-6"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      opacity="0.6"
-                    />
-                    <path
-                      d="M14 42H8a2 2 0 01-2-2v-6"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      stroke-linecap="round"
-                      opacity="0.6"
-                    />
-                    <rect
-                      x="14"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="14"
-                      y="26"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="27"
-                      y="27"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="31"
-                      y="31"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Corners</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-corners">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Corners</span>
                 </div>
               </label>
 
-              <!-- Gradient -->
-              <label class="cursor-pointer group">
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="gradient"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 48" class="w-9 h-9" fill="none">
-                    <defs>
-                      <linearGradient
-                        id="bp-grad"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop offset="0%" stop-color="#ff6b6b" />
-                        <stop offset="33%" stop-color="#ffd93d" />
-                        <stop offset="66%" stop-color="#00e5a0" />
-                        <stop offset="100%" stop-color="#6c63ff" />
-                      </linearGradient>
-                    </defs>
-                    <rect
-                      x="6"
-                      y="6"
-                      width="36"
-                      height="36"
-                      rx="6"
-                      stroke="url(#bp-grad)"
-                      stroke-width="3"
-                    />
-                    <rect
-                      x="14"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="14"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="14"
-                      y="26"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="27"
-                      y="27"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                    <rect
-                      x="31"
-                      y="31"
-                      width="3"
-                      height="3"
-                      fill="currentColor"
-                      opacity="0.25"
-                    />
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Gradient</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-gradient">
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Gradient</span>
                 </div>
               </label>
 
-              <!-- Scan Me -->
-              <label class="cursor-pointer group">
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="scan-me"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 56" class="w-9 h-9" fill="none">
-                    <rect
-                      x="6"
-                      y="4"
-                      width="36"
-                      height="36"
-                      rx="4"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      opacity="0.6"
-                    />
-                    <rect
-                      x="14"
-                      y="12"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="12"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="14"
-                      y="24"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="10"
-                      y="44"
-                      width="28"
-                      height="9"
-                      rx="4.5"
-                      fill="currentColor"
-                      opacity="0.15"
-                    />
-                    <text
-                      x="24"
-                      y="50.5"
-                      text-anchor="middle"
-                      font-size="6"
-                      font-weight="bold"
-                      fill="currentColor"
-                      opacity="0.5"
-                      font-family="sans-serif"
-                    >
-                      SCAN ME
-                    </text>
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Scan Me</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-scanme">
+                    <div class="bp-qr"></div>
+                    <span class="bp-scanme-text">SCAN ME</span>
+                  </div>
+                  <span class="bp-label">Scan Me</span>
                 </div>
               </label>
 
-              <!-- Ticker -->
-              <label class="cursor-pointer group">
+              <label class="cursor-pointer border-option">
                 <input
                   type="radio"
                   name="style.borderStyle"
                   value="ticker"
-                  class="hidden peer"
+                  class="hidden"
                 />
-                <div
-                  class="flex flex-col items-center gap-1.5 p-2.5 rounded-xl border-2 border-base-200 bg-base-100 text-base-content/50 transition-all duration-200 hover:border-base-300 hover:bg-base-200/50 bp-card"
-                >
-                  <svg viewBox="0 0 48 56" class="w-9 h-9" fill="none">
-                    <rect
-                      x="6"
-                      y="14"
-                      width="36"
-                      height="36"
-                      rx="4"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      opacity="0.6"
-                    />
-                    <rect
-                      x="14"
-                      y="22"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="26"
-                      y="22"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="14"
-                      y="34"
-                      width="8"
-                      height="8"
-                      rx="1"
-                      fill="currentColor"
-                      opacity="0.4"
-                    />
-                    <rect
-                      x="10"
-                      y="2"
-                      width="28"
-                      height="9"
-                      rx="4.5"
-                      fill="currentColor"
-                      opacity="0.15"
-                    />
-                    <text
-                      x="24"
-                      y="8.5"
-                      text-anchor="middle"
-                      font-size="5"
-                      font-weight="bold"
-                      fill="currentColor"
-                      opacity="0.5"
-                      font-family="sans-serif"
-                    >
-                      ◆ QR FORGE ◆
-                    </text>
-                  </svg>
-                  <span class="text-[10px] font-semibold leading-none"
-                    >Ticker</span
-                  >
+                <div class="border-preview-box">
+                  <div class="bp-demo bp-ticker">
+                    <span class="bp-ticker-text">&#9670; QR FORGE &#9670;</span>
+                    <div class="bp-qr"></div>
+                  </div>
+                  <span class="bp-label">Ticker</span>
                 </div>
               </label>
             </div>
@@ -1398,6 +837,50 @@
   </div>
 </div>
 
+<!-- Template for PromptPay Form (Injected via JS) -->
+<template id="promptpay-template">
+  <div class="space-y-4">
+    <div class="form-control">
+      <label class="label pb-1">
+        <span class="label-text font-medium">
+          <span class="text-lg mr-1">🆔</span> PromptPay ID
+        </span>
+      </label>
+      <input
+        type="text"
+        name="content.promptpayId"
+        placeholder="08X-XXX-XXXX or Tax ID"
+        class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary font-mono"
+        required
+        data-i18n="ph_promptpay_id"
+      />
+      <label class="label pt-1">
+        <span
+          class="label-text-alt text-base-content/40"
+          data-i18n="help_promptpay_id"
+          >Mobile number or Tax ID / E-Wallet ID</span
+        >
+      </label>
+    </div>
+
+    <div class="form-control">
+      <label class="label pb-1">
+        <span class="label-text font-medium">
+          <span class="text-lg mr-1">💰</span> Amount (Optional)
+        </span>
+      </label>
+      <input
+        type="number"
+        name="content.amount"
+        placeholder="0.00"
+        step="0.01"
+        min="0"
+        class="input input-bordered w-full bg-base-200/50 border-base-200 focus:border-primary font-mono"
+      />
+    </div>
+  </div>
+</template>
+
 <script>
   /** Tab switching */
   function switchTab(clickedBtn) {
@@ -1420,59 +903,59 @@
     document.getElementById("qr-type").value = clickedBtn.dataset.type;
   }
 
-  // ─── Color Picker ↔ Text Input Sync ───────────────────────
-  (function () {
-    var pairs = [
-      ["fg-color", "fg-color-text"],
-      ["bg-color", "bg-color-text"],
-      ["lbl-color", "lbl-color-text"],
-      ["border-color", "border-color-text"],
-    ];
-    pairs.forEach(function (p) {
-      var picker = document.getElementById(p[0]);
-      var text = document.getElementById(p[1]);
-      if (picker && text) {
-        picker.addEventListener("input", function () {
-          text.value = picker.value;
-        });
+  // Handle PromptPay Tab separately (Client-Side Rendering)
+  function loadPromptPayForm(btn) {
+    switchTab(btn);
+    var template = document.getElementById("promptpay-template");
+    var container = document.getElementById("form-fields");
+    container.innerHTML = "";
+    container.appendChild(template.content.cloneNode(true));
+
+    // Trigger i18n update for the new content if the function exists
+    if (window.updatePageContent) window.updatePageContent();
+  }
+
+  // ─── Color Picker Sync ─────────────────────────────────────
+  // Keep <input type="color"> and its text input in sync both ways
+
+  function syncColorPair(colorId, textId) {
+    var colorInput = document.getElementById(colorId);
+    var textInput = document.getElementById(textId);
+    if (!colorInput || !textInput) return;
+
+    colorInput.addEventListener("input", function () {
+      textInput.value = colorInput.value;
+    });
+    textInput.addEventListener("change", function () {
+      if (/^#[0-9a-fA-F]{6}$/.test(textInput.value)) {
+        colorInput.value = textInput.value;
       }
     });
-  })();
+  }
 
-  // ─── Border Picker Selection Highlight ──────────────────────
-  (function () {
-    var container = document.getElementById("border-picker");
-    if (!container) return;
+  syncColorPair("fg-color", "fg-color-text");
+  syncColorPair("bg-color", "bg-color-text");
+  syncColorPair("lbl-color", "lbl-color-text");
+  syncColorPair("border-color", "border-color-text");
 
-    var activeClasses = ["border-primary", "bg-primary/5", "text-primary"];
-    var inactiveClasses = [
-      "border-base-200",
-      "bg-base-100",
-      "text-base-content/50",
-    ];
+  // ─── Border / Frame Picker ────────────────────────────────
+  // Highlight the selected border option visually
 
-    function updateSelection() {
-      container.querySelectorAll(".bp-card").forEach(function (card) {
-        var radio = card.closest("label").querySelector("input[type=radio]");
-        if (radio && radio.checked) {
-          inactiveClasses.forEach(function (c) {
-            card.classList.remove(c);
+  document
+    .querySelectorAll("#border-picker .border-option input[type=radio]")
+    .forEach(function (radio) {
+      radio.addEventListener("change", function () {
+        // Remove 'selected' from all preview boxes
+        document
+          .querySelectorAll("#border-picker .border-preview-box")
+          .forEach(function (box) {
+            box.classList.remove("selected");
           });
-          activeClasses.forEach(function (c) {
-            card.classList.add(c);
-          });
-        } else {
-          activeClasses.forEach(function (c) {
-            card.classList.remove(c);
-          });
-          inactiveClasses.forEach(function (c) {
-            card.classList.add(c);
-          });
-        }
+        // Add 'selected' to the parent preview box of the checked radio
+        var box = radio
+          .closest(".border-option")
+          .querySelector(".border-preview-box");
+        if (box) box.classList.add("selected");
       });
-    }
-
-    container.addEventListener("change", updateSelection);
-    updateSelection();
-  })();
+    });
 </script>

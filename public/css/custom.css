@@ -1,17 +1,189 @@
-/* Color picker cleanup */
-input[type="color"] {
-  -webkit-appearance: none;
-  appearance: none;
-  padding: 2px;
-}
-input[type="color"]::-webkit-color-swatch-wrapper {
-  padding: 0;
-}
-input[type="color"]::-webkit-color-swatch {
-  border: none;
-  border-radius: 6px;
+/* ─── Border / Frame Picker ────────────────────────────────── */
+
+.border-preview-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.375rem;
+  padding: 0.625rem 0.375rem;
+  border-radius: 0.75rem;
+  border: 2px solid oklch(var(--b2));
+  background: oklch(var(--b1));
+  transition: all 0.2s ease;
+  cursor: pointer;
+  min-height: 5rem;
 }
 
-/* HTMX swap transitions */
-.htmx-swapping { opacity: 0; transition: opacity 0.15s ease-out; }
-.htmx-settling { opacity: 1; transition: opacity 0.15s ease-in; }
+.border-preview-box:hover {
+  border-color: oklch(var(--b3));
+  background: oklch(var(--b2) / 0.5);
+}
+
+.border-preview-box.selected {
+  border-color: oklch(var(--p));
+  background: oklch(var(--p) / 0.06);
+}
+
+/* The mini QR square icon inside each preview */
+.bp-qr {
+  width: 1.25rem;
+  height: 1.25rem;
+  border-radius: 0.125rem;
+  background: oklch(var(--bc) / 0.5);
+}
+
+/* Label below each preview icon */
+.bp-label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  color: oklch(var(--bc) / 0.45);
+  text-align: center;
+  line-height: 1;
+}
+
+.border-preview-box.selected .bp-label {
+  color: oklch(var(--p));
+}
+
+/* Container for demo borders */
+.bp-demo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  position: relative;
+}
+
+/* Round small */
+.bp-round-sm {
+  border: 2px solid oklch(var(--bc) / 0.4);
+  border-radius: 0.25rem;
+}
+
+/* Round large / pill */
+.bp-round-lg {
+  border: 2px solid oklch(var(--bc) / 0.4);
+  border-radius: 0.625rem;
+}
+
+/* Circle */
+.bp-circle {
+  border: 2px solid oklch(var(--bc) / 0.4);
+  border-radius: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+/* Glow */
+.bp-glow {
+  border: 2px solid oklch(var(--p) / 0.6);
+  border-radius: 0.375rem;
+  box-shadow: 0 0 6px oklch(var(--p) / 0.4), 0 0 12px oklch(var(--p) / 0.15);
+}
+
+/* Corners only */
+.bp-corners {
+  position: relative;
+}
+.bp-corners::before,
+.bp-corners::after {
+  content: "";
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-color: oklch(var(--bc) / 0.5);
+  border-style: solid;
+}
+.bp-corners::before {
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+  border-top-left-radius: 2px;
+}
+.bp-corners::after {
+  top: 0;
+  right: 0;
+  border-width: 2px 2px 0 0;
+  border-top-right-radius: 2px;
+}
+/* Bottom corners via the qr child's pseudo-elements won't work easily,
+   so we use a box-shadow trick or just show top corners for preview */
+
+/* Gradient border */
+.bp-gradient {
+  border: 2px solid transparent;
+  border-radius: 0.25rem;
+  background-image:
+    linear-gradient(oklch(var(--b1)), oklch(var(--b1))),
+    linear-gradient(135deg, #ff6b6b, #ffd93d, #00e5a0, #6c63ff);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+/* Scan Me */
+.bp-scanme {
+  border: 2px solid oklch(var(--bc) / 0.4);
+  border-radius: 0.25rem;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  padding: 0.125rem;
+}
+.bp-scanme .bp-qr {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.bp-scanme-text {
+  font-size: 0.25rem;
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: oklch(var(--bc) / 0.5);
+  line-height: 1;
+}
+
+/* Ticker */
+.bp-ticker {
+  border: 2px solid oklch(var(--bc) / 0.4);
+  border-radius: 0.25rem;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  padding: 0.125rem;
+}
+.bp-ticker .bp-qr {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+.bp-ticker-text {
+  font-size: 0.2rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: oklch(var(--bc) / 0.5);
+  line-height: 1;
+}
+
+/* ─── Scanner Overlay Animation ──────────────────────────── */
+
+@keyframes scan-line {
+  0% {
+    top: 0;
+  }
+  50% {
+    top: 100%;
+  }
+  100% {
+    top: 0;
+  }
+}
+
+.animate-scan-line {
+  animation: scan-line 2.5s ease-in-out infinite;
+}
