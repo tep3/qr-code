@@ -1,32 +1,45 @@
-# --- Stage 1: Builder ---
-FROM oven/bun:1.3-slim AS builder
+FROM oven/bun:1.2-slim as builder
 
 WORKDIR /app
 
-# 1. ติดตั้ง Dependencies (Bun จะโหลด sharp สำหรับ linux-x64 มาไว้ใน node_modules)
+# Install dependencies
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-# 2. คัดลอก Source Code
+# Copy source code
 COPY src ./src
 COPY public ./public
+# COPY drizzle ./drizzle
 COPY tsconfig.json ./
 
-# 3. สร้าง Executable (จุดสำคัญ: ใช้ --external sharp)
-# --external sharp จะบอกให้ Bun ไม่ต้องแพ็ค sharp เข้าไปในไฟล์ app
-RUN bun build src/index.ts --compile --minify --external sharp --outfile app
+# Build binary
+RUN bun build src/index.ts --compile --minify --outfile app
 
-
-# --- Stage 2: Runtime ---
-FROM debian:bookworm-slim
+# Runtime stage
+FROM oven/bun:1.3-slim
 WORKDIR /app
+
+# Copy compiled binary and necessary files
+COPY --from=builder /app/app ./app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/public ./public
+# COPY --from=builder /app/drizzle ./drizzle
+
+RUN chmod +x ./app
 
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE $PORT
 
-# 4. ติดตั้ง Fonts และ Utilities ที่จำเป็นสำหรับ Sharp 
+# --------------------------------------------------------
+# Update System & Install Fonts + Utilities
+# --------------------------------------------------------
+# adduser: สำหรับสร้าง user ปลอดภัย
+# fonts-dejavu, fonts-liberation: ฟอนต์พื้นฐาน (Latin)
+# fonts-thai-tlwg: ฟอนต์ภาษาไทย (จำเป็นต้องใส่เพื่อให้ Sharp วาดภาษาไทยได้)
+# fontconfig: ระบบจัดการฟอนต์
 RUN apt-get update && apt-get install -y --no-install-recommends \
+    adduser \
     fonts-dejavu \
     fonts-liberation \
     fonts-thai-tlwg \
@@ -34,22 +47,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && fc-cache -f -v \
     && rm -rf /var/lib/apt/lists/*
 
-# 5. สร้าง non-root user
-RUN adduser --disabled-password --gecos "" appuser
-
-# 6. คัดลอกไฟล์จาก Builder
-# เอาไฟล์ Binary มา
-COPY --from=builder --chown=appuser:appuser /app/app ./app
-# เอาโฟลเดอร์ public มา
-COPY --from=builder --chown=appuser:appuser /app/public ./public
-# (สำคัญมาก) เอา node_modules มาด้วย เพื่อให้ไฟล์ app เรียกใช้ sharp แบบ external ได้
-COPY --from=builder --chown=appuser:appuser /app/node_modules ./node_modules
-
-# เปลี่ยนสิทธิ์ให้ execute ได้
-RUN chmod +x ./app
-
-# สลับไปใช้ user ที่สร้างไว้เพื่อความปลอดภัย
+# Create non-root user
+RUN adduser --disabled-password --gecos "" appuser && \
+    chown -R appuser:appuser /app
 USER appuser
 
-# รันด้วยไฟล์ Binary โดยตรง!
 CMD ["./app"]
