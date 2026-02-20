@@ -716,8 +716,8 @@
         } catch (e) {}
       })();
 
-      // อัปเดตสถานะ Active ของเมนูเวลาเปลี่ยนหน้าด้วย HTMX
-      document.body.addEventListener("htmx:afterSwap", function (event) {
+      // Use document instead of document.body to prevent null reference errors
+      document.addEventListener("htmx:afterSwap", function (event) {
         if (event.detail.target.id === "main-content") {
           const path = window.location.pathname;
 
