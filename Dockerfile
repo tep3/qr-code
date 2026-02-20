@@ -1,45 +1,33 @@
-FROM oven/bun:1.2-slim as builder
+# --- Stage 1: Builder ---
+FROM oven/bun:1.3-slim AS builder
 
 WORKDIR /app
 
-# Install dependencies
+# คัดลอกเฉพาะไฟล์จัดการ dependencies ก่อน เพื่อใช้ Cache ของ Docker
 COPY package.json bun.lock ./
 RUN bun install --frozen-lockfile
 
-# Copy source code
+# คัดลอก Source code และตั้งค่า
 COPY src ./src
 COPY public ./public
 # COPY drizzle ./drizzle
 COPY tsconfig.json ./
 
-# Build binary
+# คอมไพล์เป็น Executable Binary
 RUN bun build src/index.ts --compile --minify --outfile app
 
-# Runtime stage
-FROM oven/bun:1.3-slim
+
+# --- Stage 2: Runtime ---
+# เปลี่ยนมาใช้ debian เปล่าๆ เพราะไฟล์ app ของเรามี Bun runtime ฝังอยู่แล้ว
+FROM debian:bookworm-slim
 WORKDIR /app
-
-# Copy compiled binary and necessary files
-COPY --from=builder /app/app ./app
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/public ./public
-# COPY --from=builder /app/drizzle ./drizzle
-
-RUN chmod +x ./app
 
 ENV NODE_ENV=production
 ENV PORT=3000
 EXPOSE $PORT
 
-# --------------------------------------------------------
-# Update System & Install Fonts + Utilities
-# --------------------------------------------------------
-# adduser: สำหรับสร้าง user ปลอดภัย
-# fonts-dejavu, fonts-liberation: ฟอนต์พื้นฐาน (Latin)
-# fonts-thai-tlwg: ฟอนต์ภาษาไทย (จำเป็นต้องใส่เพื่อให้ Sharp วาดภาษาไทยได้)
-# fontconfig: ระบบจัดการฟอนต์
+# ติดตั้ง Fonts และ Utilities ที่จำเป็น (รวมถึง fontconfig สำหรับ sharp)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    adduser \
     fonts-dejavu \
     fonts-liberation \
     fonts-thai-tlwg \
@@ -47,9 +35,21 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && fc-cache -f -v \
     && rm -rf /var/lib/apt/lists/*
 
-# Create non-root user
-RUN adduser --disabled-password --gecos "" appuser && \
-    chown -R appuser:appuser /app
+# สร้าง non-root user
+RUN adduser --disabled-password --gecos "" appuser
+
+# คัดลอกไฟล์จาก builder พร้อมเปลี่ยนสิทธิ์เจ้าของเป็น appuser ทันที (ประหยัด Layer)
+COPY --from=builder --chown=appuser:appuser /app/app ./app
+# ถ้าใช้ sharp จำเป็นต้องเอา node_modules มาด้วย แต่ถ้าไม่ได้ใช้ native module สามารถลบบรรทัดล่างทิ้งได้เลย
+COPY --from=builder --chown=appuser:appuser /app/node_modules ./node_modules
+COPY --from=builder --chown=appuser:appuser /app/public ./public
+# COPY --from=builder --chown=appuser:appuser /app/drizzle ./drizzle
+
+# เปลี่ยนสิทธิ์ให้ execute ได้
+RUN chmod +x ./app
+
+# สลับไปใช้ user ที่สร้างไว้
 USER appuser
 
+# สั่งรันแอป
 CMD ["./app"]

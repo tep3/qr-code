@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+    <!-- Background -->
+    <rect width="512" height="512" fill="#0d1117" rx="110" />
+    
+    <!-- QR Pattern Group -->
+    <g fill="#00e5a0">
+        <!-- Top Left Eye -->
+        <rect x="96" y="96" width="128" height="128" rx="28" fill="none" stroke="#00e5a0" stroke-width="24"/>
+        <rect x="136" y="136" width="48" height="48" rx="12"/>
+        
+        <!-- Top Right Eye -->
+        <rect x="288" y="96" width="128" height="128" rx="28" fill="none" stroke="#00e5a0" stroke-width="24"/>
+        <rect x="328" y="136" width="48" height="48" rx="12"/>
+        
+        <!-- Bottom Left Eye -->
+        <rect x="96" y="288" width="128" height="128" rx="28" fill="none" stroke="#00e5a0" stroke-width="24"/>
+        <rect x="136" y="328" width="48" height="48" rx="12"/>
+
+        <!-- Decorative Forge/QR Elements Bottom Right -->
+        <rect x="288" y="288" width="48" height="48" rx="12"/>
+        <rect x="368" y="288" width="48" height="48" rx="12"/>
+        <rect x="288" y="368" width="128" height="48" rx="12"/>
+        
+        <!-- Center Decoration (Small Dots) -->
+        <circle cx="256" cy="256" r="16"/>
+        <circle cx="256" cy="160" r="16"/>
+        <circle cx="160" cy="256" r="16"/>
+    </g>
+</svg>
