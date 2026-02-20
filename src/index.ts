@@ -16,6 +16,9 @@ const app = new Elysia()
   )
   .use(pageRoutes)
   .use(apiRoutes)
+  .get("/.well-known/assetlinks.json", () =>
+    Bun.file("./public/assetlinks.json"),
+  )
   .listen(Number(process.env.PORT) || 3000);
 
 console.log(`⚒️  QR Forge is running at http://localhost:${app.server?.port}`);

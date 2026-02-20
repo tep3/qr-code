@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "com.thaiapp.qr_code.twa",
+        "sha256_cert_fingerprints": ["F6:34:A5:71:06:02:18:E2:7D:A7:EB:0F:5F:DA:A1:20:62:B1:69:85:C6:66:7A:4B:3B:57:BF:EB:7E:B6:ED:30"]
+      }
+    }]
