@@ -1,0 +1,904 @@
+<!doctype html>
+<html lang="en" data-theme="silk">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QR Forge – Privacy Policy</title>
+
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚒️</text></svg>"
+        type="image/svg+xml" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet" />
+
+    <!-- Tailwind + DaisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ["Outfit", "Noto Sans Thai", "sans-serif"],
+                        serif: ["DM Serif Display", "Noto Sans Thai", "serif"],
+                        mono: ["Space Mono", "monospace"],
+                    },
+                },
+            },
+        };
+    </script>
+
+    <style>
+        /* ── Layout ── */
+        body {
+            font-family: "Outfit", "Noto Sans Thai", sans-serif;
+        }
+
+        /* ── Animated entrance ── */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-up {
+            opacity: 0;
+            animation: fadeUp 0.5s ease forwards;
+        }
+
+        .fade-up-1 {
+            animation-delay: 0.05s;
+        }
+
+        .fade-up-2 {
+            animation-delay: 0.12s;
+        }
+
+        .fade-up-3 {
+            animation-delay: 0.20s;
+        }
+
+        /* ── Decorative QR grid background ── */
+        .hero-bg {
+            background-image:
+                radial-gradient(circle at 20% 50%, oklch(0.88 0.04 155 / 0.18) 0%, transparent 55%),
+                radial-gradient(circle at 80% 20%, oklch(0.88 0.04 220 / 0.12) 0%, transparent 45%);
+        }
+
+        /* ── Section cards ── */
+        .policy-card {
+            border: 1px solid oklch(0.92 0.01 0);
+            background: oklch(0.98 0.005 0 / 0.6);
+            backdrop-filter: blur(4px);
+            border-radius: 1rem;
+            padding: 1.75rem 2rem;
+            transition: border-color 0.2s;
+        }
+
+        .policy-card:hover {
+            border-color: oklch(0.75 0.10 155);
+        }
+
+        /* ── Section icon badge ── */
+        .section-icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 0.625rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            flex-shrink: 0;
+            background: oklch(0.93 0.04 155 / 0.35);
+        }
+
+        /* ── Highlight pill ── */
+        .highlight-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            background: oklch(0.90 0.07 155 / 0.30);
+            color: oklch(0.42 0.12 155);
+            border: 1px solid oklch(0.82 0.08 155 / 0.40);
+        }
+
+        /* ── Language toggle ── */
+        .lang-btn {
+            cursor: pointer;
+            padding: 0.3rem 0.8rem;
+            border-radius: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: 1px solid transparent;
+            transition: all 0.15s;
+        }
+
+        .lang-btn.active {
+            background: oklch(0.42 0.12 155);
+            color: white;
+        }
+
+        .lang-btn:not(.active):hover {
+            border-color: oklch(0.42 0.12 155);
+            color: oklch(0.42 0.12 155);
+        }
+
+        /* ── TOC ── */
+        .toc-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.35rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.82rem;
+            color: oklch(0.50 0.01 0);
+            text-decoration: none;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .toc-link:hover {
+            background: oklch(0.93 0.04 155 / 0.30);
+            color: oklch(0.42 0.12 155);
+        }
+
+        .toc-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: oklch(0.80 0.06 155);
+            flex-shrink: 0;
+        }
+
+        /* ── Data table ── */
+        .data-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 0.5rem;
+            padding: 0.6rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.82rem;
+            align-items: start;
+        }
+
+        .data-row:nth-child(even) {
+            background: oklch(0.95 0.01 0 / 0.5);
+        }
+
+        .data-label {
+            font-weight: 600;
+            color: oklch(0.35 0.01 0);
+        }
+
+        .data-val {
+            color: oklch(0.50 0.01 0);
+        }
+
+        .data-note {
+            color: oklch(0.60 0.01 0);
+            font-style: italic;
+            font-size: 0.77rem;
+        }
+
+        /* ── Nav active ── */
+        .nav-link.active {
+            color: oklch(0.42 0.12 155);
+            font-weight: 600;
+        }
+    </style>
+</head>
+
+<body class="min-h-screen bg-base-100">
+
+    <!-- ═══════════════════════════════════════ NAVBAR ═══════════════════════════════════════ -->
+    <nav class="sticky top-0 z-50 bg-base-100/80 backdrop-blur-md border-b border-base-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+
+                <!-- Logo -->
+                <a href="/" class="flex items-center gap-2 group">
+                    <span class="text-xl">⚒️</span>
+                    <span class="font-serif text-lg tracking-tight group-hover:opacity-80 transition-opacity">QR
+                        Forge</span>
+                </a>
+
+                <!-- Desktop Nav -->
+                <div class="hidden sm:flex items-center gap-1">
+                    <a href="/"
+                        class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-base-200 transition-colors">Generate</a>
+                    <a href="/scan"
+                        class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-base-200 transition-colors">Scan</a>
+                    <a href="/history"
+                        class="nav-link px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-base-200 transition-colors">History</a>
+                    <a href="/privacy"
+                        class="nav-link active px-3 py-1.5 rounded-lg text-sm font-medium hover:bg-base-200 transition-colors">Privacy</a>
+                </div>
+
+                <!-- Lang toggle -->
+                <div class="flex items-center gap-1 bg-base-200/60 rounded-lg p-1">
+                    <button id="btn-en" class="lang-btn active" onclick="setLang('en')">EN</button>
+                    <button id="btn-th" class="lang-btn" onclick="setLang('th')">TH</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- ═══════════════════════════════════════ HERO ════════════════════════════════════════ -->
+    <section class="hero-bg border-b border-base-200">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20">
+
+            <!-- Badge -->
+            <div class="fade-up fade-up-1 flex flex-wrap gap-2 mb-6">
+                <span class="highlight-pill">🔒 <span data-i18n="badge_privacy">Privacy First</span></span>
+                <span class="highlight-pill">📵 <span data-i18n="badge_no_tracking">No Tracking</span></span>
+                <span class="highlight-pill">💾 <span data-i18n="badge_local">Local Storage Only</span></span>
+            </div>
+
+            <!-- Title -->
+            <h1 class="fade-up fade-up-2 font-serif text-4xl sm:text-5xl leading-tight mb-4">
+                <span data-i18n="hero_pre">Privacy</span>
+                <span class="text-primary"> Policy</span>
+            </h1>
+            <p class="fade-up fade-up-3 text-base-content/60 text-lg max-w-2xl" data-i18n="hero_desc">
+                QR Forge is designed to be completely private by default. No accounts, no tracking, no data sent to any
+                server.
+            </p>
+
+            <!-- Meta -->
+            <div class="fade-up fade-up-3 mt-6 flex flex-wrap gap-4 text-sm text-base-content/50 font-mono">
+                <span>📅 <span data-i18n="effective">Effective:</span> <strong>1 January 2025</strong></span>
+                <span>🔄 <span data-i18n="updated">Updated:</span> <strong id="last-updated">—</strong></span>
+                <span>🌍 <span data-i18n="applies">Applies to:</span> <strong data-i18n="all_platforms">All
+                        Platforms</strong></span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════ BODY ═════════════════════════════════════════ -->
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-10">
+
+            <!-- ── Sidebar TOC ── -->
+            <aside class="hidden lg:block">
+                <div class="sticky top-24">
+                    <p class="text-xs font-semibold uppercase tracking-widest text-base-content/40 mb-3 px-0.5"
+                        data-i18n="toc_title">On this page</p>
+                    <nav class="flex flex-col gap-0.5">
+                        <a href="#overview" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_overview">Overview</span></a>
+                        <a href="#data" class="toc-link"><span class="toc-dot"></span><span data-i18n="toc_data">What We
+                                Collect</span></a>
+                        <a href="#camera" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_camera">Camera Access</span></a>
+                        <a href="#storage" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_storage">Local Storage</span></a>
+                        <a href="#server" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_server">Server & API</span></a>
+                        <a href="#third-party" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_third">Third Parties</span></a>
+                        <a href="#children" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_children">Children</span></a>
+                        <a href="#rights" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_rights">Your Rights</span></a>
+                        <a href="#contact" class="toc-link"><span class="toc-dot"></span><span
+                                data-i18n="toc_contact">Contact</span></a>
+                    </nav>
+
+                    <!-- Quick summary card -->
+                    <div class="mt-6 rounded-xl bg-success/10 border border-success/20 p-4">
+                        <p class="text-xs font-bold text-success mb-2" data-i18n="summary_title">✅ Quick Summary</p>
+                        <ul class="text-xs text-base-content/60 space-y-1.5">
+                            <li class="flex gap-1.5">✓ <span data-i18n="sum1">No personal data collected</span></li>
+                            <li class="flex gap-1.5">✓ <span data-i18n="sum2">Camera never recorded</span></li>
+                            <li class="flex gap-1.5">✓ <span data-i18n="sum3">History stored on-device only</span></li>
+                            <li class="flex gap-1.5">✓ <span data-i18n="sum4">No ads, no tracking</span></li>
+                            <li class="flex gap-1.5">✓ <span data-i18n="sum5">QR codes never stored on server</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- ── Main Content ── -->
+            <main class="space-y-6 min-w-0">
+
+                <!-- 1. Overview -->
+                <div id="overview" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">🔐</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s1_title">Overview</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s1_sub">Who we are and what this policy
+                                covers</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s1_p1">
+                            QR Forge ("we", "our", or "the app") is a free QR code generator and scanner application.
+                            This Privacy Policy explains our data practices across all platforms where QR Forge is
+                            available: web browser, iOS app, and Android app.
+                        </p>
+                        <p data-i18n="s1_p2">
+                            We built QR Forge with a <strong>privacy-by-design</strong> philosophy. The entire
+                            architecture is stateless on the server side — QR codes are generated in memory and returned
+                            to you instantly, without ever being stored on our servers.
+                        </p>
+                        <p data-i18n="s1_p3">
+                            <strong>Short version:</strong> We don't know who you are. We don't track you. We don't sell
+                            your data. We genuinely collect nothing that could identify you personally.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. What we collect -->
+                <div id="data" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">📊</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s2_title">What We Collect</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s2_sub">A complete and honest breakdown
+                                of all data</p>
+                        </div>
+                    </div>
+
+                    <!-- Table header -->
+                    <div class="data-row font-semibold text-xs uppercase tracking-wider text-base-content/40 mb-1">
+                        <span data-i18n="col_data">Data Type</span>
+                        <span data-i18n="col_collected">Collected?</span>
+                        <span data-i18n="col_where">Stored Where?</span>
+                    </div>
+
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row1_label">Personal identity</span>
+                        <span class="text-error font-semibold text-xs" data-i18n="row1_val">❌ Never</span>
+                        <span class="data-note" data-i18n="row1_note">N/A</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row2_label">QR content you enter</span>
+                        <span class="text-warning font-semibold text-xs" data-i18n="row2_val">⚡ Transient</span>
+                        <span class="data-note" data-i18n="row2_note">Used to generate QR, then discarded from server
+                            immediately</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row3_label">Generated QR images</span>
+                        <span class="text-warning font-semibold text-xs" data-i18n="row3_val">⚡ Transient</span>
+                        <span class="data-note" data-i18n="row3_note">Generated in memory, never saved on server</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row4_label">QR history & settings</span>
+                        <span class="text-success font-semibold text-xs" data-i18n="row4_val">✅ Local only</span>
+                        <span class="data-note" data-i18n="row4_note">Your device's localStorage / app storage
+                            only</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row5_label">Scanned QR content</span>
+                        <span class="text-success font-semibold text-xs" data-i18n="row5_val">✅ Local only</span>
+                        <span class="data-note" data-i18n="row5_note">Decoded on-device, never sent to server</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row6_label">Camera / video feed</span>
+                        <span class="text-error font-semibold text-xs" data-i18n="row6_val">❌ Never recorded</span>
+                        <span class="data-note" data-i18n="row6_note">Live feed stays on-device, no recording or
+                            transmission</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row7_label">Analytics / tracking</span>
+                        <span class="text-error font-semibold text-xs" data-i18n="row7_val">❌ None</span>
+                        <span class="data-note" data-i18n="row7_note">No analytics SDK, no event tracking</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row8_label">Advertising data</span>
+                        <span class="text-error font-semibold text-xs" data-i18n="row8_val">❌ None</span>
+                        <span class="data-note" data-i18n="row8_note">No ads, no advertising identifiers</span>
+                    </div>
+                    <div class="data-row">
+                        <span class="data-label" data-i18n="row9_label">Server logs (IP address)</span>
+                        <span class="text-warning font-semibold text-xs" data-i18n="row9_val">⚡ Temporary</span>
+                        <span class="data-note" data-i18n="row9_note">Standard web server logs may be retained for up to
+                            7 days for security purposes, then automatically deleted</span>
+                    </div>
+                </div>
+
+                <!-- 3. Camera -->
+                <div id="camera" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">📷</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s3_title">Camera Access</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s3_sub">How your camera is used for QR
+                                scanning</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s3_p1">
+                            QR Forge requests camera access solely for the purpose of scanning QR codes. The camera
+                            permission is only activated when you explicitly press the <strong>"Start Camera"</strong>
+                            button on the Scan page.
+                        </p>
+                        <ul class="space-y-2 ml-1">
+                            <li class="flex gap-2 items-start">
+                                <span class="text-success mt-0.5">✓</span>
+                                <span data-i18n="s3_b1">The camera feed is processed entirely on your device using the
+                                    <code class="font-mono bg-base-200 px-1 rounded text-xs">html5-qrcode</code>
+                                    library.</span>
+                            </li>
+                            <li class="flex gap-2 items-start">
+                                <span class="text-success mt-0.5">✓</span>
+                                <span data-i18n="s3_b2">No video is recorded, captured as still images (other than the
+                                    decoded QR content), or transmitted anywhere.</span>
+                            </li>
+                            <li class="flex gap-2 items-start">
+                                <span class="text-success mt-0.5">✓</span>
+                                <span data-i18n="s3_b3">Camera access stops immediately when you navigate away from the
+                                    Scan page or press "Stop Camera".</span>
+                            </li>
+                            <li class="flex gap-2 items-start">
+                                <span class="text-success mt-0.5">✓</span>
+                                <span data-i18n="s3_b4">You can revoke camera permission at any time through your device
+                                    or browser settings.</span>
+                            </li>
+                        </ul>
+                        <p class="text-xs text-base-content/40 mt-2 font-mono" data-i18n="s3_note">
+                            Note: Camera access is required by Apple App Store and Google Play Store policies to be
+                            disclosed in this Privacy Policy, which is why it is explicitly described here.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 4. Local Storage -->
+                <div id="storage" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">💾</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s4_title">Local Storage & History</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s4_sub">Data stored on your own device
+                            </p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s4_p1">
+                            QR Forge stores your QR code history locally on your device using browser <code
+                                class="font-mono bg-base-200 px-1 rounded text-xs">localStorage</code> (web) or
+                            equivalent app storage (iOS/Android). This data <strong>never leaves your device</strong>
+                            and is never transmitted to our servers.
+                        </p>
+                        <p data-i18n="s4_p2">
+                            The locally stored data includes: QR type, content, style settings, creation date, and a
+                            small thumbnail image of the QR code. Up to 50 history items are stored, using approximately
+                            2–3 MB of local storage.
+                        </p>
+                        <div class="rounded-lg bg-warning/10 border border-warning/20 p-3 mt-2">
+                            <p class="text-xs font-semibold text-warning mb-1" data-i18n="s4_warn_title">⚠️ Important
+                                Note</p>
+                            <p class="text-xs text-base-content/60" data-i18n="s4_warn_body">
+                                Because history is stored locally, it will be lost if you clear your browser data,
+                                uninstall the app, or use a different device. We cannot recover lost history as we never
+                                have access to it.
+                            </p>
+                        </div>
+                        <p data-i18n="s4_p3">
+                            You can delete your local history at any time from within the app by using the "Clear All"
+                            button on the History page.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 5. Server -->
+                <div id="server" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">🖥️</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s5_title">Server & API</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s5_sub">How our stateless server works
+                            </p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s5_p1">
+                            When you generate a QR code, your browser sends the content and style options to our server.
+                            The server generates the QR image in memory and returns it to your browser immediately. The
+                            content is <strong>not logged, not stored, and not retained</strong> in any database.
+                        </p>
+                        <p data-i18n="s5_p2">
+                            Our server infrastructure is stateless by design — it holds no persistent data about users
+                            or their QR codes between requests.
+                        </p>
+                        <div class="rounded-lg bg-base-200/60 p-3 font-mono text-xs text-base-content/50 mt-1">
+                            <p class="mb-1 text-base-content/30" data-i18n="s5_flow_title">// Request lifecycle:</p>
+                            <p>Browser → POST /api/qr/generate → Server generates QR → Returns image → Discards request
+                                data</p>
+                        </div>
+                        <p data-i18n="s5_p3">
+                            Standard web server access logs (containing IP addresses and request timestamps) may be
+                            retained for up to 7 days for security and abuse prevention purposes, after which they are
+                            automatically deleted.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 6. Third Parties -->
+                <div id="third-party" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">🔗</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s6_title">Third-Party Services</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s6_sub">External resources loaded by the
+                                app</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s6_p1">
+                            QR Forge loads the following external resources. These are CDN-delivered assets; the
+                            providers may receive standard access log data (your IP address) when your browser fetches
+                            them:
+                        </p>
+                        <ul class="space-y-2">
+                            <li class="flex gap-2 items-start">
+                                <span class="text-base-content/30 mt-0.5 font-mono text-xs">→</span>
+                                <span><strong>Google Fonts</strong> — Outfit, DM Serif Display, Space Mono, Noto Sans
+                                    Thai fonts. <a href="https://policies.google.com/privacy" target="_blank"
+                                        class="link link-primary text-xs">Google Privacy Policy ↗</a></span>
+                            </li>
+                            <li class="flex gap-2 items-start">
+                                <span class="text-base-content/30 mt-0.5 font-mono text-xs">→</span>
+                                <span><strong>jsDelivr CDN</strong> — DaisyUI CSS and HTMX JavaScript libraries. <a
+                                        href="https://www.jsdelivr.com/terms/privacy-policy-jsdelivr-net"
+                                        target="_blank" class="link link-primary text-xs">jsDelivr Privacy Policy
+                                        ↗</a></span>
+                            </li>
+                            <li class="flex gap-2 items-start">
+                                <span class="text-base-content/30 mt-0.5 font-mono text-xs">→</span>
+                                <span><strong>Tailwind CSS CDN</strong> — CSS framework. <a
+                                        href="https://tailwindcss.com/privacy" target="_blank"
+                                        class="link link-primary text-xs">Tailwind Privacy Policy ↗</a></span>
+                            </li>
+                            <li class="flex gap-2 items-start">
+                                <span class="text-base-content/30 mt-0.5 font-mono text-xs">→</span>
+                                <span><strong>html5-qrcode</strong> — QR scanner library (loaded locally, no external
+                                    calls made by the library).</span>
+                            </li>
+                        </ul>
+                        <p data-i18n="s6_p2">
+                            We do <strong>not</strong> use any analytics services (Google Analytics, Mixpanel, etc.),
+                            advertising networks, crash reporting services, or social media tracking pixels.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 7. Children -->
+                <div id="children" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">👶</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s7_title">Children's Privacy</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s7_sub">COPPA / PDPA compliance</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s7_p1">
+                            QR Forge does not knowingly collect personal information from children under 13 years of age
+                            (or the applicable age of digital consent in your jurisdiction). Since we collect <strong>no
+                                personal information</strong> from any user, this applies equally to all age groups.
+                        </p>
+                        <p data-i18n="s7_p2">
+                            The app contains no age-restricted content. It is safe for use by users of all ages. Parents
+                            and guardians should note that locally stored history is stored on the shared device.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 8. Your Rights -->
+                <div id="rights" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">⚖️</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s8_title">Your Rights</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s8_sub">GDPR, PDPA, CCPA and other
+                                regulations</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s8_p1">
+                            Because QR Forge does not collect personal data, most data subject rights (access, erasure,
+                            portability, correction) are automatically satisfied — there is simply no personal data
+                            about you for us to process, return, or delete.
+                        </p>
+                        <p data-i18n="s8_p2">
+                            For any locally stored data (your QR history): you have full and exclusive control. You can
+                            view, export, or permanently delete it at any time from within the app. We cannot access
+                            this data on your behalf.
+                        </p>
+                        <p data-i18n="s8_p3">
+                            If you are located in the European Economic Area, Thailand, California, or another
+                            jurisdiction with privacy regulations, you can contact us with any questions. As we process
+                            no personal data, there is nothing to restrict or object to.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 9. Contact -->
+                <div id="contact" class="policy-card">
+                    <div class="flex items-start gap-3 mb-4">
+                        <div class="section-icon">✉️</div>
+                        <div>
+                            <h2 class="font-serif text-xl" data-i18n="s9_title">Contact Us</h2>
+                            <p class="text-sm text-base-content/50" data-i18n="s9_sub">Questions about this policy</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-sm text-base-content/70 leading-relaxed">
+                        <p data-i18n="s9_p1">
+                            If you have any questions, concerns, or feedback regarding this Privacy Policy or QR Forge's
+                            data practices, please reach out:
+                        </p>
+                        <div class="rounded-lg bg-base-200/60 p-4 font-mono text-sm">
+                            <p><span class="text-base-content/40">App: </span> QR Forge</p>
+                            <p><span class="text-base-content/40">Email: </span> <a href="mailto:privacy@qrforge.app"
+                                    class="link link-primary">privacy@qrforge.app</a></p>
+                            <p><span class="text-base-content/40">Web: </span> <a href="https://qrforge.app"
+                                    class="link link-primary">https://qrforge.app</a></p>
+                        </div>
+                        <p data-i18n="s9_p2">
+                            We aim to respond to all privacy-related inquiries within 5 business days.
+                        </p>
+                        <p class="text-xs text-base-content/40 mt-2" data-i18n="s9_changes">
+                            We reserve the right to update this Privacy Policy at any time. Material changes will be
+                            communicated via an in-app notice. Continued use of QR Forge after changes constitutes
+                            acceptance of the updated policy.
+                        </p>
+                    </div>
+                </div>
+
+            </main>
+        </div>
+    </div>
+
+    <!-- ═══════════════════════════════════════ FOOTER ════════════════════════════════════════ -->
+    <footer class="border-t border-base-200 mt-20">
+        <div
+            class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-base-content/40">
+            <p>
+                <span class="font-serif text-base-content/60">QR Forge</span> –
+                <span>Free &amp; Open QR Tool</span>
+            </p>
+            <div class="flex items-center gap-4 text-xs font-mono tracking-wide">
+                <a href="/privacy" class="hover:text-primary transition-colors" data-i18n="footer_privacy">Privacy
+                    Policy</a>
+                <span>·</span>
+                <span>No accounts · No tracking · 100% free</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- ═══════════════════════════════════════ I18N ══════════════════════════════════════════ -->
+    <script>
+        const translations = {
+            en: {
+                badge_privacy: "Privacy First",
+                badge_no_tracking: "No Tracking",
+                badge_local: "Local Storage Only",
+                hero_pre: "Privacy",
+                hero_desc: "QR Forge is designed to be completely private by default. No accounts, no tracking, no data sent to any server.",
+                effective: "Effective:",
+                updated: "Updated:",
+                applies: "Applies to:",
+                all_platforms: "All Platforms",
+                toc_title: "On this page",
+                toc_overview: "Overview",
+                toc_data: "What We Collect",
+                toc_camera: "Camera Access",
+                toc_storage: "Local Storage",
+                toc_server: "Server & API",
+                toc_third: "Third Parties",
+                toc_children: "Children",
+                toc_rights: "Your Rights",
+                toc_contact: "Contact",
+                summary_title: "✅ Quick Summary",
+                sum1: "No personal data collected",
+                sum2: "Camera never recorded",
+                sum3: "History stored on-device only",
+                sum4: "No ads, no tracking",
+                sum5: "QR codes never stored on server",
+                s1_title: "Overview",
+                s1_sub: "Who we are and what this policy covers",
+                s1_p1: "QR Forge (\"we\", \"our\", or \"the app\") is a free QR code generator and scanner application. This Privacy Policy explains our data practices across all platforms where QR Forge is available: web browser, iOS app, and Android app.",
+                s1_p2: "We built QR Forge with a <strong>privacy-by-design</strong> philosophy. The entire architecture is stateless on the server side — QR codes are generated in memory and returned to you instantly, without ever being stored on our servers.",
+                s1_p3: "<strong>Short version:</strong> We don't know who you are. We don't track you. We don't sell your data. We genuinely collect nothing that could identify you personally.",
+                s2_title: "What We Collect",
+                s2_sub: "A complete and honest breakdown of all data",
+                col_data: "Data Type", col_collected: "Collected?", col_where: "Stored Where?",
+                row1_label: "Personal identity", row1_val: "❌ Never", row1_note: "N/A",
+                row2_label: "QR content you enter", row2_val: "⚡ Transient", row2_note: "Used to generate QR, then discarded from server immediately",
+                row3_label: "Generated QR images", row3_val: "⚡ Transient", row3_note: "Generated in memory, never saved on server",
+                row4_label: "QR history & settings", row4_val: "✅ Local only", row4_note: "Your device's localStorage / app storage only",
+                row5_label: "Scanned QR content", row5_val: "✅ Local only", row5_note: "Decoded on-device, never sent to server",
+                row6_label: "Camera / video feed", row6_val: "❌ Never recorded", row6_note: "Live feed stays on-device, no recording or transmission",
+                row7_label: "Analytics / tracking", row7_val: "❌ None", row7_note: "No analytics SDK, no event tracking",
+                row8_label: "Advertising data", row8_val: "❌ None", row8_note: "No ads, no advertising identifiers",
+                row9_label: "Server logs (IP address)", row9_val: "⚡ Temporary", row9_note: "Standard web server logs retained for up to 7 days for security, then auto-deleted",
+                s3_title: "Camera Access",
+                s3_sub: "How your camera is used for QR scanning",
+                s3_p1: "QR Forge requests camera access solely for the purpose of scanning QR codes. The camera permission is only activated when you explicitly press the <strong>\"Start Camera\"</strong> button on the Scan page.",
+                s3_b1: "The camera feed is processed entirely on your device using the <code class=\"font-mono bg-base-200 px-1 rounded text-xs\">html5-qrcode</code> library.",
+                s3_b2: "No video is recorded, captured as still images, or transmitted anywhere.",
+                s3_b3: "Camera access stops immediately when you navigate away from the Scan page or press \"Stop Camera\".",
+                s3_b4: "You can revoke camera permission at any time through your device or browser settings.",
+                s3_note: "Note: Camera access is required by Apple App Store and Google Play Store policies to be disclosed in this Privacy Policy.",
+                s4_title: "Local Storage & History",
+                s4_sub: "Data stored on your own device",
+                s4_p1: "QR Forge stores your QR code history locally on your device using browser <code class=\"font-mono bg-base-200 px-1 rounded text-xs\">localStorage</code> (web) or equivalent app storage (iOS/Android). This data <strong>never leaves your device</strong> and is never transmitted to our servers.",
+                s4_p2: "The locally stored data includes: QR type, content, style settings, creation date, and a small thumbnail image of the QR code. Up to 50 history items are stored, using approximately 2–3 MB of local storage.",
+                s4_warn_title: "⚠️ Important Note",
+                s4_warn_body: "Because history is stored locally, it will be lost if you clear your browser data, uninstall the app, or use a different device. We cannot recover lost history as we never have access to it.",
+                s4_p3: "You can delete your local history at any time from within the app by using the \"Clear All\" button on the History page.",
+                s5_title: "Server & API",
+                s5_sub: "How our stateless server works",
+                s5_p1: "When you generate a QR code, your browser sends the content and style options to our server. The server generates the QR image in memory and returns it to your browser immediately. The content is <strong>not logged, not stored, and not retained</strong> in any database.",
+                s5_p2: "Our server infrastructure is stateless by design — it holds no persistent data about users or their QR codes between requests.",
+                s5_flow_title: "// Request lifecycle:",
+                s5_p3: "Standard web server access logs may be retained for up to 7 days for security and abuse prevention, after which they are automatically deleted.",
+                s6_title: "Third-Party Services",
+                s6_sub: "External resources loaded by the app",
+                s6_p1: "QR Forge loads the following external resources. These are CDN-delivered assets; the providers may receive standard access log data (your IP address) when your browser fetches them:",
+                s6_p2: "We do <strong>not</strong> use any analytics services (Google Analytics, Mixpanel, etc.), advertising networks, crash reporting services, or social media tracking pixels.",
+                s7_title: "Children's Privacy",
+                s7_sub: "COPPA / PDPA compliance",
+                s7_p1: "QR Forge does not knowingly collect personal information from children under 13 years of age. Since we collect <strong>no personal information</strong> from any user, this applies equally to all age groups.",
+                s7_p2: "The app contains no age-restricted content. It is safe for use by users of all ages.",
+                s8_title: "Your Rights",
+                s8_sub: "GDPR, PDPA, CCPA and other regulations",
+                s8_p1: "Because QR Forge does not collect personal data, most data subject rights (access, erasure, portability, correction) are automatically satisfied — there is simply no personal data about you for us to process, return, or delete.",
+                s8_p2: "For any locally stored data (your QR history): you have full and exclusive control. You can view, export, or permanently delete it at any time from within the app.",
+                s8_p3: "If you are located in the European Economic Area, Thailand, California, or another jurisdiction with privacy regulations, you can contact us with any questions.",
+                s9_title: "Contact Us",
+                s9_sub: "Questions about this policy",
+                s9_p1: "If you have any questions, concerns, or feedback regarding this Privacy Policy or QR Forge's data practices, please reach out:",
+                s9_p2: "We aim to respond to all privacy-related inquiries within 5 business days.",
+                s9_changes: "We reserve the right to update this Privacy Policy at any time. Material changes will be communicated via an in-app notice.",
+                footer_privacy: "Privacy Policy",
+            },
+            th: {
+                badge_privacy: "ความเป็นส่วนตัวก่อน",
+                badge_no_tracking: "ไม่ติดตาม",
+                badge_local: "เก็บเฉพาะในเครื่อง",
+                hero_pre: "นโยบาย",
+                hero_desc: "QR Forge ออกแบบมาเพื่อความเป็นส่วนตัวอย่างสมบูรณ์ ไม่มีบัญชี ไม่ติดตาม ไม่ส่งข้อมูลไปยังเซิร์ฟเวอร์ใดๆ",
+                effective: "มีผลตั้งแต่:",
+                updated: "อัปเดต:",
+                applies: "ครอบคลุม:",
+                all_platforms: "ทุกแพลตฟอร์ม",
+                toc_title: "สารบัญ",
+                toc_overview: "ภาพรวม",
+                toc_data: "ข้อมูลที่เก็บ",
+                toc_camera: "การใช้กล้อง",
+                toc_storage: "พื้นที่จัดเก็บ",
+                toc_server: "เซิร์ฟเวอร์",
+                toc_third: "บุคคลที่สาม",
+                toc_children: "เด็กและเยาวชน",
+                toc_rights: "สิทธิ์ของคุณ",
+                toc_contact: "ติดต่อเรา",
+                summary_title: "✅ สรุปสั้นๆ",
+                sum1: "ไม่เก็บข้อมูลส่วนตัว",
+                sum2: "ไม่บันทึกภาพจากกล้อง",
+                sum3: "ประวัติเก็บเฉพาะในเครื่องคุณ",
+                sum4: "ไม่มีโฆษณา ไม่ติดตาม",
+                sum5: "QR Code ไม่เคยถูกเก็บบนเซิร์ฟเวอร์",
+                s1_title: "ภาพรวม",
+                s1_sub: "เราคือใครและนโยบายนี้ครอบคลุมอะไรบ้าง",
+                s1_p1: "QR Forge (\"เรา\" หรือ \"แอป\") คือแอปพลิเคชันสร้างและสแกน QR Code ฟรี นโยบายความเป็นส่วนตัวนี้อธิบายวิธีการจัดการข้อมูลบนทุกแพลตฟอร์มที่ QR Forge วางจำหน่าย: เว็บเบราว์เซอร์, iOS และ Android",
+                s1_p2: "เราสร้าง QR Forge ด้วยหลักการ <strong>Privacy by Design</strong> — สถาปัตยกรรมของเซิร์ฟเวอร์เป็น Stateless อย่างสมบูรณ์ QR Code สร้างในหน่วยความจำและส่งกลับทันที โดยไม่เคยถูกจัดเก็บบนเซิร์ฟเวอร์ของเรา",
+                s1_p3: "<strong>สรุปสั้นๆ:</strong> เราไม่รู้ว่าคุณเป็นใคร ไม่ติดตามคุณ ไม่ขายข้อมูลของคุณ เราไม่เก็บข้อมูลใดๆ ที่สามารถระบุตัวตนของคุณได้จริงๆ",
+                s2_title: "ข้อมูลที่เราเก็บ",
+                s2_sub: "การแจกแจงข้อมูลทั้งหมดอย่างครบถ้วนและซื่อสัตย์",
+                col_data: "ประเภทข้อมูล", col_collected: "เก็บหรือไม่?", col_where: "จัดเก็บที่ไหน?",
+                row1_label: "ข้อมูลส่วนตัว", row1_val: "❌ ไม่เคย", row1_note: "ไม่มี",
+                row2_label: "เนื้อหา QR ที่ป้อน", row2_val: "⚡ ชั่วคราว", row2_note: "ใช้สร้าง QR แล้วลบทิ้งทันที",
+                row3_label: "ภาพ QR ที่สร้าง", row3_val: "⚡ ชั่วคราว", row3_note: "สร้างในหน่วยความจำ ไม่บันทึกบนเซิร์ฟเวอร์",
+                row4_label: "ประวัติและการตั้งค่า", row4_val: "✅ เฉพาะในเครื่อง", row4_note: "localStorage / พื้นที่จัดเก็บในอุปกรณ์เท่านั้น",
+                row5_label: "เนื้อหา QR ที่สแกน", row5_val: "✅ เฉพาะในเครื่อง", row5_note: "ถอดรหัสในอุปกรณ์ ไม่ส่งไปเซิร์ฟเวอร์",
+                row6_label: "ภาพจากกล้อง", row6_val: "❌ ไม่บันทึก", row6_note: "วิดีโอสดอยู่ในเครื่องเท่านั้น ไม่บันทึกหรือส่งออก",
+                row7_label: "การวิเคราะห์/ติดตาม", row7_val: "❌ ไม่มี", row7_note: "ไม่มี Analytics SDK ไม่มีการติดตามพฤติกรรม",
+                row8_label: "ข้อมูลโฆษณา", row8_val: "❌ ไม่มี", row8_note: "ไม่มีโฆษณา ไม่มี Advertising ID",
+                row9_label: "Log ของเซิร์ฟเวอร์", row9_val: "⚡ ชั่วคราว", row9_note: "เก็บสูงสุด 7 วันเพื่อความปลอดภัย แล้วลบอัตโนมัติ",
+                s3_title: "การใช้กล้อง",
+                s3_sub: "วิธีที่แอปใช้กล้องเพื่อสแกน QR Code",
+                s3_p1: "QR Forge ขอสิทธิ์เข้าถึงกล้องเพื่อวัตถุประสงค์เดียวคือการสแกน QR Code เท่านั้น สิทธิ์กล้องจะถูกเปิดใช้งานเมื่อคุณกดปุ่ม <strong>\"เริ่มกล้อง\"</strong> เท่านั้น",
+                s3_b1: "ภาพจากกล้องจะถูกประมวลผลในอุปกรณ์ของคุณทั้งหมดโดยใช้ไลบรารี <code class=\"font-mono bg-base-200 px-1 rounded text-xs\">html5-qrcode</code>",
+                s3_b2: "ไม่มีการบันทึกวิดีโอหรือภาพนิ่งใดๆ และไม่มีการส่งข้อมูลไปยังที่ใดทั้งสิ้น",
+                s3_b3: "การเข้าถึงกล้องหยุดทันทีเมื่อคุณออกจากหน้าสแกนหรือกดปุ่ม \"หยุดกล้อง\"",
+                s3_b4: "คุณสามารถเพิกถอนสิทธิ์กล้องได้ทุกเมื่อผ่านการตั้งค่าอุปกรณ์หรือเบราว์เซอร์",
+                s3_note: "หมายเหตุ: Apple App Store และ Google Play Store กำหนดให้แอปที่ใช้กล้องต้องระบุข้อมูลนี้ในนโยบายความเป็นส่วนตัว",
+                s4_title: "พื้นที่จัดเก็บในเครื่องและประวัติ",
+                s4_sub: "ข้อมูลที่จัดเก็บในอุปกรณ์ของคุณเอง",
+                s4_p1: "QR Forge จัดเก็บประวัติ QR Code ของคุณในอุปกรณ์โดยใช้ <code class=\"font-mono bg-base-200 px-1 rounded text-xs\">localStorage</code> ของเบราว์เซอร์ (เว็บ) หรือพื้นที่จัดเก็บของแอป (iOS/Android) ข้อมูลนี้ <strong>ไม่เคยออกจากอุปกรณ์ของคุณ</strong> และไม่ส่งไปยังเซิร์ฟเวอร์ของเรา",
+                s4_p2: "ข้อมูลที่จัดเก็บในเครื่องประกอบด้วย: ประเภท QR, เนื้อหา, การตั้งค่าสไตล์, วันที่สร้าง และภาพย่อขนาดเล็กของ QR Code โดยเก็บสูงสุด 50 รายการ ใช้พื้นที่ประมาณ 2–3 MB",
+                s4_warn_title: "⚠️ หมายเหตุสำคัญ",
+                s4_warn_body: "เนื่องจากประวัติจัดเก็บในเครื่อง ข้อมูลจะหายไปหากคุณล้างข้อมูลเบราว์เซอร์ ถอนการติดตั้งแอป หรือเปลี่ยนอุปกรณ์ เราไม่สามารถกู้คืนข้อมูลที่หายไปได้ เนื่องจากเราไม่เคยมีสิทธิ์เข้าถึงข้อมูลนั้น",
+                s4_p3: "คุณสามารถลบประวัติในเครื่องได้ทุกเมื่อโดยใช้ปุ่ม \"ล้างทั้งหมด\" ในหน้าประวัติ",
+                s5_title: "เซิร์ฟเวอร์และ API",
+                s5_sub: "วิธีการทำงานของเซิร์ฟเวอร์แบบ Stateless",
+                s5_p1: "เมื่อคุณสร้าง QR Code เบราว์เซอร์จะส่งเนื้อหาและตัวเลือกสไตล์ไปยังเซิร์ฟเวอร์ เซิร์ฟเวอร์สร้างภาพ QR ในหน่วยความจำและส่งกลับทันที เนื้อหา<strong>ไม่ได้ถูกบันทึก ไม่ได้จัดเก็บ และไม่ได้เก็บไว้</strong>ในฐานข้อมูลใดๆ",
+                s5_p2: "โครงสร้างพื้นฐานเซิร์ฟเวอร์ของเราเป็นแบบ Stateless โดยการออกแบบ — ไม่มีข้อมูลถาวรเกี่ยวกับผู้ใช้หรือ QR Code ระหว่างคำขอ",
+                s5_flow_title: "// วงจรชีวิตของคำขอ:",
+                s5_p3: "Access Log มาตรฐานของเว็บเซิร์ฟเวอร์อาจถูกเก็บไว้สูงสุด 7 วันเพื่อความปลอดภัย หลังจากนั้นจะถูกลบโดยอัตโนมัติ",
+                s6_title: "บริการของบุคคลที่สาม",
+                s6_sub: "ทรัพยากรภายนอกที่แอปโหลด",
+                s6_p1: "QR Forge โหลดทรัพยากรภายนอกต่อไปนี้ ซึ่งเป็น CDN; ผู้ให้บริการอาจรับข้อมูล Log มาตรฐาน (IP ของคุณ) เมื่อเบราว์เซอร์ดึงข้อมูล:",
+                s6_p2: "เรา<strong>ไม่ได้</strong>ใช้บริการ Analytics ใดๆ (Google Analytics, Mixpanel ฯลฯ), เครือข่ายโฆษณา, บริการรายงานข้อผิดพลาด หรือ Social Media Tracking Pixel",
+                s7_title: "ความเป็นส่วนตัวของเด็ก",
+                s7_sub: "การปฏิบัติตาม COPPA / PDPA",
+                s7_p1: "QR Forge ไม่เก็บข้อมูลส่วนตัวของเด็กอายุต่ำกว่า 13 ปีโดยเจตนา เนื่องจากเราไม่เก็บ<strong>ข้อมูลส่วนตัวใดๆ</strong> จากผู้ใช้คนใด นโยบายนี้จึงใช้กับทุกกลุ่มอายุเท่าเทียมกัน",
+                s7_p2: "แอปไม่มีเนื้อหาที่จำกัดอายุ ปลอดภัยสำหรับผู้ใช้ทุกวัย",
+                s8_title: "สิทธิ์ของคุณ",
+                s8_sub: "GDPR, PDPA, CCPA และกฎหมายอื่นๆ",
+                s8_p1: "เนื่องจาก QR Forge ไม่เก็บข้อมูลส่วนตัว สิทธิ์ของเจ้าของข้อมูลส่วนใหญ่ (การเข้าถึง, การลบ, การโอนย้าย, การแก้ไข) จึงได้รับการตอบสนองโดยอัตโนมัติ — ไม่มีข้อมูลส่วนตัวเกี่ยวกับคุณให้เราประมวลผลหรือส่งคืน",
+                s8_p2: "สำหรับข้อมูลที่จัดเก็บในเครื่อง (ประวัติ QR ของคุณ): คุณมีการควบคุมอย่างเต็มที่และแต่เพียงผู้เดียว คุณสามารถดู, ส่งออก หรือลบออกถาวรได้ทุกเมื่อจากภายในแอป",
+                s8_p3: "หากคุณอยู่ในเขตเศรษฐกิจยุโรป, ประเทศไทย, รัฐแคลิฟอร์เนีย หรือเขตอำนาจศาลอื่นที่มีกฎหมายความเป็นส่วนตัว คุณสามารถติดต่อเราได้พร้อมคำถามใดๆ",
+                s9_title: "ติดต่อเรา",
+                s9_sub: "คำถามเกี่ยวกับนโยบายนี้",
+                s9_p1: "หากคุณมีคำถาม ข้อกังวล หรือความคิดเห็นเกี่ยวกับนโยบายความเป็นส่วนตัวนี้หรือการปฏิบัติข้อมูลของ QR Forge โปรดติดต่อ:",
+                s9_p2: "เราตั้งเป้าตอบคำถามที่เกี่ยวข้องกับความเป็นส่วนตัวภายใน 5 วันทำการ",
+                s9_changes: "เราขอสงวนสิทธิ์ในการอัปเดตนโยบายความเป็นส่วนตัวนี้ได้ทุกเมื่อ การเปลี่ยนแปลงสำคัญจะแจ้งผ่านการแจ้งเตือนในแอป",
+                footer_privacy: "นโยบายความเป็นส่วนตัว",
+            }
+        };
+
+        let currentLang = localStorage.getItem('qrforge_lang') || 'en';
+
+        function applyTranslations(lang) {
+            const t = translations[lang];
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key] !== undefined) el.innerHTML = t[key];
+            });
+            // Update html lang attr
+            document.documentElement.lang = lang === 'th' ? 'th' : 'en';
+            // Update Privacy heading label
+            document.querySelector('h1 span:first-child').innerHTML = t['hero_pre'];
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            localStorage.setItem('qrforge_lang', lang);
+            applyTranslations(lang);
+            document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+            document.getElementById('btn-th').classList.toggle('active', lang === 'th');
+        }
+
+        // Set last updated date
+        document.getElementById('last-updated').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+
+        // Init
+        document.addEventListener('DOMContentLoaded', () => {
+            applyTranslations(currentLang);
+            document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+            document.getElementById('btn-th').classList.toggle('active', currentLang === 'th');
+        });
+
+        // Smooth scroll for TOC links
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            a.addEventListener('click', e => {
+                e.preventDefault();
+                const target = document.querySelector(a.getAttribute('href'));
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+        });
+    </script>
+</body>
+
+</html>
