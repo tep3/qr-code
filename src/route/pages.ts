@@ -69,4 +69,10 @@ export const pageRoutes = new Elysia()
     return new Response(html, {
       headers: { "Content-Type": "text/html; charset=utf-8" },
     });
-  });
+  })
+
+  .get('/privacy', () => {
+    return new Response(Bun.file('./public/page/privacy.html'), {
+      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+    });
+  })
