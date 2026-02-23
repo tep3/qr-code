@@ -417,7 +417,8 @@
 
         // Re-run on HTMX swaps (This is the key fix for navigation)
         // htmx:afterSwap ensures content is in DOM before we try to translate it
-        document.body.addEventListener("htmx:afterSwap", () => {
+        // FIXED: เปลี่ยนจาก document.body เป็น document เพื่อป้องกัน TypeError ตอนโหลดไฟล์ครั้งแรก
+        document.addEventListener("htmx:afterSwap", () => {
           updatePageContent();
         });
       })();
