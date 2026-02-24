@@ -304,11 +304,14 @@
           updatePageContent();
           updateLanguageUI();
 
-          // Close dropdown if exists
-          const elem = document.activeElement;
-          if (elem && elem.tagName === "A") {
-            elem.blur();
-          }
+          // Close all DaisyUI tabindex dropdowns (fix for iOS/WKWebView)
+          document
+            .querySelectorAll(".dropdown-content")
+            .forEach(function (menu) {
+              menu.blur();
+              menu.closest(".dropdown")?.querySelector("[tabindex]")?.blur();
+            });
+          if (document.activeElement) document.activeElement.blur();
         };
 
         function updatePageContent() {
