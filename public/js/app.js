@@ -89,22 +89,11 @@ function saveToHistory() {
     // Truncate
     if (label.length > 50) label = label.substring(0, 50) + "...";
 
-    // Get thumbnail from current preview image (already base64)
+    // Get thumbnail from current preview image (keep original configured size)
     let thumbnail = "";
     const previewImg = document.querySelector("#qr-preview img");
     if (previewImg && previewImg.src.startsWith("data:")) {
-      // Create a small thumbnail (128px) via canvas to save localStorage space
-      try {
-        const canvas = document.createElement("canvas");
-        canvas.width = 128;
-        canvas.height = 128;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(previewImg, 0, 0, 128, 128);
-        thumbnail = canvas.toDataURL("image/png", 0.7);
-      } catch (e) {
-        // Fallback: use original (may be large)
-        thumbnail = previewImg.src;
-      }
+      thumbnail = previewImg.src;
     }
 
     const entry = {
