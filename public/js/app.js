@@ -5,74 +5,122 @@
 
 /**
  * Collect all form data from #qr-form as flat key=value pairs
- * e.g. { type: "url", "content.url": "https://...", "style.fgColor": "#000" }
  */
 function collectFormData() {
-  const form = document.getElementById("qr-form");
+  var form = document.getElementById("qr-form");
   if (!form) return {};
-  const fd = new FormData(form);
-  const data = {};
-  for (const [key, value] of fd.entries()) {
-    data[key] = value;
+  var fd = new FormData(form);
+  var data = {};
+  for (var pair of fd.entries()) {
+    data[pair[0]] = pair[1];
   }
   return data;
 }
 
 /**
- * Download QR code as PNG or SVG via /api/qr/download
+ * Download QR code as PNG or SVG
+ *
+ * Capacitor / WKWebView compatible:
+ *  1. Web Share API  → native share sheet (Save Image on iOS)
+ *  2. Fallback: blob URL + <a download> (desktop browsers)
+ *  3. Last resort: window.open
  */
 function downloadQR(format) {
-  const data = collectFormData();
+  var data = collectFormData();
   data.format = format || "png";
 
-  // Build query string from form data
-  const params = new URLSearchParams();
-  for (const [key, value] of Object.entries(data)) {
-    if (value !== undefined && value !== "") {
-      params.set(key, String(value));
+  var params = new URLSearchParams();
+  for (var key in data) {
+    if (data[key] !== undefined && data[key] !== "") {
+      params.set(key, String(data[key]));
     }
   }
 
-  // Open download URL (browser will handle Content-Disposition: attachment)
-  const url = "/api/qr/download?" + params.toString();
-  const link = document.createElement("a");
-  link.href = url;
-  link.download =
-    "qr-forge-" + Date.now() + "." + (format === "svg" ? "svg" : "png");
+  var url = "/api/qr/download?" + params.toString();
+  var ext = format === "svg" ? "svg" : "png";
+  var filename = "qr-forge-" + Date.now() + "." + ext;
+  var mimeType = format === "svg" ? "image/svg+xml" : "image/png";
+
+  fetch(url)
+    .then(function (res) {
+      if (!res.ok) throw new Error("Server error " + res.status);
+      return res.blob();
+    })
+    .then(function (blob) {
+      // 1) Try Web Share API — works on iOS/iPad/Android Capacitor
+      try {
+        var file = new File([blob], filename, { type: mimeType });
+        if (navigator.canShare && navigator.canShare({ files: [file] })) {
+          navigator
+            .share({ files: [file], title: "QR Code" })
+            .catch(function () {
+              // User cancelled share sheet — try fallback
+              blobDownload(blob, filename);
+            });
+          return;
+        }
+      } catch (e) {
+        // File constructor or canShare not supported
+      }
+
+      // 2) Fallback: blob object URL + <a download>
+      blobDownload(blob, filename);
+    })
+    .catch(function (err) {
+      console.error("Download failed:", err);
+      // 3) Last resort
+      window.open(url, "_blank");
+    });
+}
+
+/** Fallback download via blob URL + hidden <a> */
+function blobDownload(blob, filename) {
+  var blobUrl = URL.createObjectURL(blob);
+  var link = document.createElement("a");
+  link.href = blobUrl;
+  link.download = filename;
+  link.style.display = "none";
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  setTimeout(function () {
+    URL.revokeObjectURL(blobUrl);
+  }, 3000);
 }
 
 /**
- * Save current QR code to localStorage history
+ * Save current QR code to localStorage history.
+ *
+ * Creates a 128x128 thumbnail via off-screen Image + canvas
+ * to keep localStorage usage small (~2-5 KB per entry instead of 100-500 KB).
  */
 function saveToHistory() {
-  const STORAGE_KEY = "qrforge_history";
-  const MAX_HISTORY = 50;
+  var STORAGE_KEY = "qrforge_history";
+  var MAX_HISTORY = 50;
+  var THUMB_SIZE = 128;
 
   try {
-    const data = collectFormData();
-    const type = data.type || "text";
+    var data = collectFormData();
+    var type = data.type || "text";
 
     // Extract content fields (strip "content." prefix)
-    const content = {};
-    for (const [key, value] of Object.entries(data)) {
-      if (key.startsWith("content.") && value) {
-        content[key.replace("content.", "")] = value;
+    var content = {};
+    for (var key in data) {
+      if (key.indexOf("content.") === 0 && data[key]) {
+        content[key.replace("content.", "")] = data[key];
       }
     }
 
     // Extract style fields (strip "style." prefix)
-    const style = {};
-    for (const [key, value] of Object.entries(data)) {
-      if (key.startsWith("style.") && value) {
-        style[key.replace("style.", "")] = value;
+    var style = {};
+    for (var key2 in data) {
+      if (key2.indexOf("style.") === 0 && data[key2]) {
+        style[key2.replace("style.", "")] = data[key2];
       }
     }
 
-    // Build a human-readable label from the content
-    let label = "";
+    // Human-readable label
+    var label = "";
     if (type === "url") label = content.url || "URL";
     else if (type === "text") label = content.text || "Text";
     else if (type === "wifi") label = content.ssid || "WiFi";
@@ -86,17 +134,10 @@ function saveToHistory() {
     else if (type === "line") label = content.lineId || "LINE";
     else if (type === "facebook") label = content.facebookUrl || "Facebook";
     else if (type === "promptpay") label = content.promptpayId || "PromptPay";
-    // Truncate
     if (label.length > 50) label = label.substring(0, 50) + "...";
 
-    // Get thumbnail from current preview image (keep original configured size)
-    let thumbnail = "";
-    const previewImg = document.querySelector("#qr-preview img");
-    if (previewImg && previewImg.src.startsWith("data:")) {
-      thumbnail = previewImg.src;
-    }
-
-    const entry = {
+    // Build entry (thumbnail filled async below)
+    var entry = {
       id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
       type: type,
       content: content,
@@ -105,37 +146,92 @@ function saveToHistory() {
       starred: false,
       createdAt: new Date().toISOString(),
       source: "generated",
-      thumbnail: thumbnail,
+      thumbnail: "",
     };
 
-    // Save
-    var history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-    history.unshift(entry);
-    if (history.length > MAX_HISTORY) history.pop();
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
-
-    // Update history badges
-    updateHistoryBadges(history.length);
-
-    // Visual feedback on the save button
-    var saveBtn = document.getElementById("save-to-history-btn");
-    if (saveBtn) {
-      var originalHTML = saveBtn.innerHTML;
-      saveBtn.innerHTML = "✅ " + (window.t ? window.t("saved") : "Saved!");
-      saveBtn.classList.add("btn-success", "text-white");
-      saveBtn.classList.remove("btn-ghost", "text-base-content/50");
-      saveBtn.disabled = true;
-      setTimeout(function () {
-        saveBtn.innerHTML = originalHTML;
-        saveBtn.classList.remove("btn-success", "text-white");
-        saveBtn.classList.add("btn-ghost", "text-base-content/50");
-        saveBtn.disabled = false;
-      }, 2000);
+    // Helper: persist to localStorage with quota-exceeded fallback
+    function persistEntry(thumbData) {
+      entry.thumbnail = thumbData || "";
+      try {
+        var history = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+        history.unshift(entry);
+        if (history.length > MAX_HISTORY) history.pop();
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(history));
+        updateHistoryBadges(history.length);
+      } catch (storageErr) {
+        console.error("localStorage save failed:", storageErr);
+        // Quota exceeded? retry without thumbnail
+        if (thumbData) {
+          entry.thumbnail = "";
+          try {
+            var h2 = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+            h2.unshift(entry);
+            if (h2.length > MAX_HISTORY) h2.pop();
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(h2));
+            updateHistoryBadges(h2.length);
+          } catch (e2) {
+            console.error("Save without thumbnail also failed:", e2);
+          }
+        }
+      }
     }
+
+    // Get source data URL from preview
+    var previewImg = document.querySelector("#qr-preview img");
+    var srcDataUrl =
+      previewImg && previewImg.src && previewImg.src.indexOf("data:") === 0
+        ? previewImg.src
+        : "";
+
+    if (srcDataUrl) {
+      // Draw into a small off-screen canvas -> tiny base64 thumbnail
+      // Using new Image() ensures it works even in WKWebView
+      var img = new Image();
+      img.onload = function () {
+        try {
+          var canvas = document.createElement("canvas");
+          canvas.width = THUMB_SIZE;
+          canvas.height = THUMB_SIZE;
+          var ctx = canvas.getContext("2d");
+          ctx.fillStyle = "#ffffff";
+          ctx.fillRect(0, 0, THUMB_SIZE, THUMB_SIZE);
+          ctx.drawImage(img, 0, 0, THUMB_SIZE, THUMB_SIZE);
+          persistEntry(canvas.toDataURL("image/png", 0.6));
+        } catch (canvasErr) {
+          console.warn("Canvas thumbnail failed:", canvasErr);
+          persistEntry("");
+        }
+      };
+      img.onerror = function () {
+        console.warn("Image load for thumbnail failed");
+        persistEntry("");
+      };
+      img.src = srcDataUrl;
+    } else {
+      persistEntry("");
+    }
+
+    // Instant button feedback (don't wait for async thumbnail)
+    showSaveButtonFeedback();
   } catch (e) {
     console.error("Failed to save to history", e);
-    alert("Failed to save to history.");
   }
+}
+
+function showSaveButtonFeedback() {
+  var saveBtn = document.getElementById("save-to-history-btn");
+  if (!saveBtn) return;
+  var originalHTML = saveBtn.innerHTML;
+  saveBtn.innerHTML = "✅ " + (window.t ? window.t("saved") : "Saved!");
+  saveBtn.classList.add("btn-success", "text-white");
+  saveBtn.classList.remove("btn-ghost", "text-base-content/50");
+  saveBtn.disabled = true;
+  setTimeout(function () {
+    saveBtn.innerHTML = originalHTML;
+    saveBtn.classList.remove("btn-success", "text-white");
+    saveBtn.classList.add("btn-ghost", "text-base-content/50");
+    saveBtn.disabled = false;
+  }, 2000);
 }
 
 function updateHistoryBadges(count) {
@@ -155,22 +251,20 @@ function updateHistoryBadges(count) {
 
 document.addEventListener("DOMContentLoaded", () => {
   // ==========================================
-  // 1. จัดการ Dropdown ด้วย Toggle Element (เปลี่ยนจาก <details> เป็น Div ธรรมดา)
+  // 1. Dropdown Toggle
   // ==========================================
   const setupDropdowns = () => {
     const toggleBtns = document.querySelectorAll("[data-dropdown-toggle]");
 
-    // เมื่อกดปุ่ม Toggle
     toggleBtns.forEach((btn) => {
       btn.addEventListener("click", (e) => {
         e.preventDefault();
-        e.stopPropagation(); // หยุด Event ไม่ให้ทะลุไปถึง Document ทันที
+        e.stopPropagation();
 
         const targetId = btn.getAttribute("data-dropdown-toggle");
         const targetMenu = document.getElementById(targetId);
 
         if (targetMenu) {
-          // ออปชันเสริม: ปิดเมนูอื่นๆ ที่เปิดอยู่ก่อน (ถ้ามี dropdown หลายอัน)
           document
             .querySelectorAll(".dropdown-menu-content")
             .forEach((menu) => {
@@ -178,44 +272,34 @@ document.addEventListener("DOMContentLoaded", () => {
                 menu.classList.add("hidden");
               }
             });
-
-          // สลับสถานะซ่อน/แสดง ของเมนูที่ต้องการ
           targetMenu.classList.toggle("hidden");
         }
       });
     });
 
-    // ฟังก์ชันดักจับการคลิกทั้งหน้าจอ (Click Outside & Click Inside)
     const handleGlobalClick = (e) => {
-      // หาเมนูทั้งหมดที่กำลังเปิดอยู่ (ไม่มีคลาส hidden)
       const openMenus = document.querySelectorAll(
         ".dropdown-menu-content:not(.hidden)",
       );
-
       openMenus.forEach((menu) => {
         const toggleBtn = document.querySelector(
           `[data-dropdown-toggle="${menu.id}"]`,
         );
-
-        // กรณีที่ 1: ผู้ใช้คลิก "ข้างใน" เมนู (เช่น กดเลือกภาษา Item 1, Item 2)
         const isClickOnMenuItem = e.target.closest("li, a, button");
         if (menu.contains(e.target) && isClickOnMenuItem) {
-          menu.classList.add("hidden"); // ปิดเมนูทันทีเมื่อเลือกเสร็จ
+          menu.classList.add("hidden");
           return;
         }
-
-        // กรณีที่ 2: ผู้ใช้คลิก "พื้นที่ว่างข้างนอก" (Click Outside)
         if (
           !menu.contains(e.target) &&
           toggleBtn &&
           !toggleBtn.contains(e.target)
         ) {
-          menu.classList.add("hidden"); // ปิดเมนู
+          menu.classList.add("hidden");
         }
       });
     };
 
-    // รองรับทั้งคลิกเมาส์ (คอมฯ) และทัชสกรีน (iPad/มือถือ)
     document.addEventListener("click", handleGlobalClick);
     document.addEventListener("touchstart", handleGlobalClick, {
       passive: true,
@@ -223,7 +307,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ==========================================
-  // 2. การจัดการ Mobile Menu (Hamburger Menu)
+  // 2. Mobile Menu
   // ==========================================
   const setupMobileMenu = () => {
     const mobileBtn = document.getElementById("mobile-menu-btn");
@@ -250,7 +334,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ==========================================
-  // 3. การจัดการ Tabs (เปลี่ยนประเภท QR Code)
+  // 3. Tabs
   // ==========================================
   const setupTabs = () => {
     const tabBtns = document.querySelectorAll(".tab-btn");
@@ -262,7 +346,6 @@ document.addEventListener("DOMContentLoaded", () => {
           b.classList.remove("active", "border-blue-500", "text-blue-600");
           b.classList.add("border-transparent", "text-gray-500");
         });
-
         tabContents.forEach((content) => content.classList.add("hidden"));
 
         const targetId = btn.getAttribute("data-tab-target");
@@ -279,7 +362,7 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // ==========================================
-  // 4. การจัดการ Form Submit เพื่อสร้าง QR Code
+  // 4. Form Submit
   // ==========================================
   const setupForms = () => {
     const forms = document.querySelectorAll("form[data-qr-form]");
@@ -289,20 +372,15 @@ document.addEventListener("DOMContentLoaded", () => {
     forms.forEach((form) => {
       form.addEventListener("submit", async (e) => {
         e.preventDefault();
-
         const formData = new FormData(form);
         const data = Object.fromEntries(formData.entries());
         data.type = form.getAttribute("data-qr-type");
-
         try {
           const response = await fetch("/api/generate", {
             method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data),
           });
-
           if (response.ok) {
             const result = await response.json();
             if (qrImage && result.qrImageUrl) {
@@ -312,7 +390,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
           } else {
             console.error("Failed to generate QR Code");
-            alert("เกิดข้อผิดพลาดในการสร้าง QR Code");
           }
         } catch (error) {
           console.error("Error:", error);
@@ -321,7 +398,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
-  // เรียกใช้งานฟังก์ชัน
   setupDropdowns();
   setupMobileMenu();
   setupTabs();
