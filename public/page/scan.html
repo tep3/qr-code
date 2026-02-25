@@ -38,7 +38,7 @@
           class="relative w-full aspect-square sm:aspect-[4/3] bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50">
 
           <!-- The actual video element from library -->
-          <div id="reader-video" class="hidden absolute inset-0 z-10"></div>
+          <div id="reader-video" class="w-full h-full absolute inset-0 z-10" style="display:none;"></div>
 
           <!-- Placeholder / Start UI -->
           <div id="camera-placeholder"
@@ -311,7 +311,7 @@
       }
 
       if (cameraPlaceholder) cameraPlaceholder.classList.add("hidden");
-      if (readerVideo) readerVideo.classList.remove("hidden");
+      if (readerVideo) readerVideo.style.display = "block";
       if (stopBtn) stopBtn.classList.remove("hidden");
 
       if (videoWrapper) {
@@ -386,7 +386,7 @@
     }
 
     function resetScannerUI() {
-      if (readerVideo) readerVideo.classList.add("hidden");
+      if (readerVideo) readerVideo.style.display = "none";
       if (cameraPlaceholder) cameraPlaceholder.classList.remove("hidden");
       if (stopBtn) stopBtn.classList.add("hidden");
 
