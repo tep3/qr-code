@@ -7,6 +7,8 @@ const config: CapacitorConfig = {
   server: {
     url: 'https://qr-code.thaiapp.com',
     cleartext: true
+  }, ios: {
+    packageManager: "cocoapods"
   }
 };
 

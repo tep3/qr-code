@@ -32,7 +32,7 @@
       <!-- Scanner UI (Active) -->
       <div id="scanner-container" class="space-y-6 transition-all duration-300">
 
-        <!-- ===== Native Mode: Capacitor MLKit ===== -->
+        <!-- ===== Native Mode: @capacitor/barcode-scanner ===== -->
         <div id="native-scanner-ui" class="hidden">
           <div class="flex flex-col items-center justify-center py-8">
             <div class="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
@@ -249,91 +249,51 @@
     }
 
     // ============================================================
-    // NATIVE: Capacitor MLKit Barcode Scanner
-    // Uses AVFoundation on iOS — proper autofocus, orientation, etc.
+    // NATIVE: @capacitor/barcode-scanner (Official Plugin)
+    // Uses Apple Vision on iOS — proper autofocus, orientation, etc.
+    // API: scanBarcode(options) => { ScanResult: string }
     // ============================================================
+
+    function getBarcodeScannerPlugin() {
+      var P = window.Capacitor && window.Capacitor.Plugins;
+      if (!P) return null;
+      return P.CapacitorBarcodeScanner || P.BarcodeScanner || null;
+    }
 
     async function nativeScan() {
       try {
-        var BarcodeScanner = window.Capacitor.Plugins.BarcodeScanner;
-        if (!BarcodeScanner) {
-          alert("Barcode scanner plugin not available.");
+        var scanner = getBarcodeScannerPlugin();
+
+        if (!scanner) {
+          var available = window.Capacitor && window.Capacitor.Plugins ? Object.keys(window.Capacitor.Plugins).join(", ") : "none";
+          alert("Barcode scanner plugin not found.\n\nAvailable plugins: " + available + "\n\nPlease run: bunx cap sync ios");
           return;
         }
 
-        // Permission check
-        var perm = await BarcodeScanner.checkPermissions();
-        if (perm.camera !== "granted") {
-          perm = await BarcodeScanner.requestPermissions();
-          if (perm.camera !== "granted") {
-            alert("Camera permission is required to scan QR codes.");
-            return;
-          }
-        }
+        // scanBarcode() opens native fullscreen scanner
+        // hint: 7 = QR_CODE (CapacitorBarcodeScannerTypeHint)
+        var result = await scanner.scanBarcode({
+          hint: 7,
+          cameraDirection: 1
+        });
 
-        // scan() opens a native fullscreen scanner — handles autofocus,
-        // orientation, resolution automatically via AVFoundation
-        var result = await BarcodeScanner.scan({ formats: ["QR_CODE"] });
-
-        if (result && result.barcodes && result.barcodes.length > 0) {
-          var barcode = result.barcodes[0];
-          onScanSuccess(barcode.rawValue || barcode.displayValue);
+        if (result && result.ScanResult) {
+          onScanSuccess(result.ScanResult);
         }
       } catch (err) {
-        // User cancelled scan = no error shown
-        if (err && err.message && err.message.toLowerCase().indexOf("cancel") === -1) {
+        // User cancelled = no error shown
+        var msg = err && err.message ? err.message.toLowerCase() : "";
+        if (msg.indexOf("cancel") === -1 && msg.indexOf("user") === -1) {
           console.error("Native scan error:", err);
           alert("Scan failed: " + (err.message || "Unknown error"));
         }
       }
     }
 
+    // @capacitor/barcode-scanner doesn't support file scanning
+    // Always fall back to web-based file scanning
     async function nativeScanFromFile(file) {
-      try {
-        var BarcodeScanner = window.Capacitor.Plugins.BarcodeScanner;
-        var Filesystem = window.Capacitor.Plugins.Filesystem;
-
-        if (!BarcodeScanner || !BarcodeScanner.readBarcodesFromImage || !Filesystem) {
-          // Plugin missing — fall back to web scan
-          webScanFromFile(file);
-          return;
-        }
-
-        // Read file as base64 → write to cache → scan from path
-        var reader = new FileReader();
-        reader.onerror = function () { webScanFromFile(file); };
-        reader.onload = async function (ev) {
-          try {
-            var base64Data = ev.target.result.split(",")[1];
-            var writeResult = await Filesystem.writeFile({
-              path: "qr-scan-temp.png",
-              data: base64Data,
-              directory: "CACHE"
-            });
-
-            var scanResult = await BarcodeScanner.readBarcodesFromImage({
-              formats: ["QR_CODE"],
-              path: writeResult.uri
-            });
-
-            if (scanResult && scanResult.barcodes && scanResult.barcodes.length > 0) {
-              var barcode = scanResult.barcodes[0];
-              onScanSuccess(barcode.rawValue || barcode.displayValue);
-              return;
-            }
-
-            alert(window.t ? window.t("err_no_qr") : "No QR code found in this image.");
-            if (fileInput) fileInput.value = "";
-          } catch (innerErr) {
-            console.warn("Native file scan failed:", innerErr);
-            webScanFromFile(file);
-          }
-        };
-        reader.readAsDataURL(file);
-      } catch (err) {
-        console.warn("nativeScanFromFile error:", err);
-        webScanFromFile(file);
-      }
+      webScanFromFile(file);
     }
 
     // ============================================================
