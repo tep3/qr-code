@@ -2,7 +2,10 @@
 <html lang="en" data-theme="silk">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
     <title>QR Forge — {{title}}</title>
 
     <link
@@ -12,7 +15,7 @@
     />
 
     <!-- PWA / Service Worker -->
-    <link rel="manifest" href="/manifest.json" />
+    <!-- <link rel="manifest" href="/manifest.json" />
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
@@ -26,7 +29,7 @@
             });
         });
       }
-    </script>
+    </script> -->
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -500,6 +503,7 @@
     <!-- NAVBAR -->
     <nav
       class="sticky top-0 z-50 bg-base-100/80 backdrop-blur-lg border-b border-base-200"
+      style="padding-top: env(safe-area-inset-top, 0px)"
     >
       <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
