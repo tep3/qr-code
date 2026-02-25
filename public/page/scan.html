@@ -8,7 +8,7 @@
         <path stroke-linecap="round" stroke-linejoin="round"
           d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.131A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.2-2.85.59-4.171" />
       </svg>
-      <span data-i18n="scan_badge">AI Powered & Secure</span>
+      <span data-i18n="scan_badge">AI Powered &amp; Secure</span>
     </div>
     <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-base-content">
       <span data-i18n="scan_title">Scan</span> <span
@@ -21,7 +21,6 @@
 
   <!-- Main Card -->
   <div class="bg-base-100 rounded-[2rem] shadow-xl border border-base-200 overflow-hidden relative">
-    <!-- Decorative background blobs -->
     <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none">
     </div>
     <div
@@ -31,22 +30,13 @@
     <div class="p-6 sm:p-8 relative z-10">
 
       <!-- Scanner UI (Active) -->
-      <div id="scanner-container" class="space-y-8 transition-all duration-300">
+      <div id="scanner-container" class="space-y-6 transition-all duration-300">
 
-        <!-- Video Area -->
-        <div id="video-wrapper"
-          class="relative w-full bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50"
-          style="aspect-ratio: 4/3;">
-
-          <!-- The actual video element from library -->
-          <div id="reader-video" class="w-full h-full absolute inset-0 z-10" style="display:none;"></div>
-
-          <!-- Placeholder / Start UI -->
-          <div id="camera-placeholder"
-            class="text-center p-6 z-0 flex flex-col items-center justify-center h-full w-full">
-            <div
-              class="w-20 h-20 bg-base-100 shadow-md text-primary rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- ===== Native Mode: Capacitor MLKit ===== -->
+        <div id="native-scanner-ui" class="hidden">
+          <div class="flex flex-col items-center justify-center py-8">
+            <div class="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
+              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                   d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
                 </path>
@@ -54,24 +44,56 @@
                   d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
               </svg>
             </div>
-            <h3 class="text-lg font-bold text-base-content mb-1" data-i18n="camera_access">Camera Access</h3>
-            <p class="text-sm text-base-content/50 mb-6 max-w-[200px]" data-i18n="camera_start_help">Click below to
-              start scanning via your webcam.</p>
-            <button id="start-camera-btn"
-              class="btn btn-primary rounded-full px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all">
-              <span data-i18n="btn_start_camera">Start Camera</span>
+            <button id="native-scan-btn"
+              class="btn btn-primary btn-lg rounded-full px-10 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all gap-2 mb-4">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                </path>
+              </svg>
+              <span data-i18n="btn_start_camera">Scan with Camera</span>
             </button>
+            <p class="text-sm text-base-content/40" data-i18n="native_scan_help">Opens native camera scanner with
+              autofocus</p>
           </div>
-
-          <!-- Stop Button (Overlay) -->
-          <button id="stop-camera-btn"
-            class="btn btn-circle btn-error btn-sm absolute top-4 right-4 hidden z-30 shadow-lg transform hover:scale-110 transition-transform">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
-          </button>
         </div>
 
+        <!-- ===== Web Mode: html5-qrcode fallback ===== -->
+        <div id="web-scanner-ui">
+          <div id="video-wrapper"
+            class="relative w-full bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50"
+            style="aspect-ratio: 4/3;">
+            <div id="reader-video" class="w-full h-full absolute inset-0 z-10" style="display:none;"></div>
+            <div id="camera-placeholder"
+              class="text-center p-6 z-0 flex flex-col items-center justify-center h-full w-full">
+              <div
+                class="w-20 h-20 bg-base-100 shadow-md text-primary rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
+                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                  </path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                </svg>
+              </div>
+              <h3 class="text-lg font-bold text-base-content mb-1" data-i18n="camera_access">Camera Access</h3>
+              <p class="text-sm text-base-content/50 mb-6 max-w-[200px]" data-i18n="camera_start_help">Click below to
+                start scanning via your webcam.</p>
+              <button id="start-camera-btn"
+                class="btn btn-primary rounded-full px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all">
+                <span data-i18n="btn_start_camera">Start Camera</span>
+              </button>
+            </div>
+            <button id="stop-camera-btn"
+              class="btn btn-circle btn-error btn-sm absolute top-4 right-4 hidden z-30 shadow-lg transform hover:scale-110 transition-transform">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- Divider -->
         <div class="relative flex py-2 items-center">
           <div class="flex-grow border-t border-base-300"></div>
           <span class="flex-shrink-0 mx-4 text-base-content/30 text-xs font-bold uppercase tracking-widest"
@@ -79,7 +101,7 @@
           <div class="flex-grow border-t border-base-300"></div>
         </div>
 
-        <!-- Drag & Drop File Upload Area -->
+        <!-- File Upload Area -->
         <div class="w-full">
           <label for="qr-input-file"
             class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-base-300 rounded-2xl cursor-pointer bg-base-100 hover:bg-base-200/50 hover:border-primary transition-all group relative overflow-hidden">
@@ -126,9 +148,7 @@
           <div class="relative group">
             <div
               class="break-all font-mono text-sm md:text-base text-base-content bg-base-100 p-5 rounded-xl border border-base-200 min-h-[6rem] flex items-center shadow-sm"
-              id="scanned-text">
-              <!-- Result text injected here -->
-            </div>
+              id="scanned-text"></div>
           </div>
         </div>
 
@@ -142,7 +162,6 @@
             </svg>
             <span data-i18n="btn_copy">Copy Content</span>
           </button>
-
           <a id="open-link-btn" href="#" target="_blank"
             class="btn btn-primary h-12 rounded-xl normal-case text-base font-medium hidden shadow-lg shadow-primary/20">
             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -174,21 +193,17 @@
   </p>
 </div>
 
-<!-- Scripts -->
 <style>
-  /* Hide library's dashboard/text UI */
   #reader-video__dashboard_section {
     display: none !important;
   }
 
-  /* Video fills wrapper without cropping */
   #reader-video video {
     width: 100% !important;
     height: 100% !important;
     object-fit: contain !important;
   }
 
-  /* Landscape: switch to 16:9 ratio */
   @media (orientation: landscape) {
     #video-wrapper {
       aspect-ratio: 16/9 !important;
@@ -196,61 +211,20 @@
     }
   }
 </style>
+
 <script>
   (function () {
-    // 1. Dynamic Library Loading (with error handling for Capacitor)
-    function loadHtml5Qrcode(callback) {
-      if (typeof Html5Qrcode !== "undefined") {
-        callback();
-        return;
-      }
+    // ============================================================
+    // Detect: Capacitor native vs Web browser
+    // ============================================================
+    var isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
 
-      // Try loading from local bundle first (Capacitor offline),
-      // then fall back to CDN
-      var sources = [
-        "/js/html5-qrcode.min.js",
-        "https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js",
-        "https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js",
-      ];
-      var idx = 0;
-
-      function tryNext() {
-        if (idx >= sources.length) {
-          console.error("Failed to load html5-qrcode from all sources");
-          // Show user-friendly error
-          var placeholder = document.getElementById("camera-placeholder");
-          if (placeholder) {
-            var h3 = placeholder.querySelector("h3");
-            var p = placeholder.querySelector("p");
-            if (h3) h3.textContent = "Scanner Unavailable";
-            if (p) p.textContent = "Could not load scanner library. Please check your internet connection.";
-            var btn = document.getElementById("start-camera-btn");
-            if (btn) btn.disabled = true;
-          }
-          return;
-        }
-        var script = document.createElement("script");
-        script.src = sources[idx];
-        script.onload = function () {
-          if (typeof Html5Qrcode !== "undefined") {
-            callback();
-          } else {
-            idx++;
-            tryNext();
-          }
-        };
-        script.onerror = function () {
-          idx++;
-          tryNext();
-        };
-        document.head.appendChild(script);
-      }
-      tryNext();
-    }
-
-    // UI Variables
+    // UI Elements
     var scannerContainer = document.getElementById("scanner-container");
     var resultContainer = document.getElementById("result-container");
+    var nativeScannerUI = document.getElementById("native-scanner-ui");
+    var webScannerUI = document.getElementById("web-scanner-ui");
+    var nativeScanBtn = document.getElementById("native-scan-btn");
     var videoWrapper = document.getElementById("video-wrapper");
     var readerVideo = document.getElementById("reader-video");
     var cameraPlaceholder = document.getElementById("camera-placeholder");
@@ -265,200 +239,287 @@
     var html5QrCode = null;
     var currentResult = "";
 
-    function initScanner() {
+    // Show correct UI
+    if (isNative) {
+      if (nativeScannerUI) nativeScannerUI.classList.remove("hidden");
+      if (webScannerUI) webScannerUI.classList.add("hidden");
+    } else {
+      if (nativeScannerUI) nativeScannerUI.classList.add("hidden");
+      if (webScannerUI) webScannerUI.classList.remove("hidden");
+    }
+
+    // ============================================================
+    // NATIVE: Capacitor MLKit Barcode Scanner
+    // Uses AVFoundation on iOS — proper autofocus, orientation, etc.
+    // ============================================================
+
+    async function nativeScan() {
+      try {
+        var BarcodeScanner = window.Capacitor.Plugins.BarcodeScanner;
+        if (!BarcodeScanner) {
+          alert("Barcode scanner plugin not available.");
+          return;
+        }
+
+        // Permission check
+        var perm = await BarcodeScanner.checkPermissions();
+        if (perm.camera !== "granted") {
+          perm = await BarcodeScanner.requestPermissions();
+          if (perm.camera !== "granted") {
+            alert("Camera permission is required to scan QR codes.");
+            return;
+          }
+        }
+
+        // scan() opens a native fullscreen scanner — handles autofocus,
+        // orientation, resolution automatically via AVFoundation
+        var result = await BarcodeScanner.scan({ formats: ["QR_CODE"] });
+
+        if (result && result.barcodes && result.barcodes.length > 0) {
+          var barcode = result.barcodes[0];
+          onScanSuccess(barcode.rawValue || barcode.displayValue);
+        }
+      } catch (err) {
+        // User cancelled scan = no error shown
+        if (err && err.message && err.message.toLowerCase().indexOf("cancel") === -1) {
+          console.error("Native scan error:", err);
+          alert("Scan failed: " + (err.message || "Unknown error"));
+        }
+      }
+    }
+
+    async function nativeScanFromFile(file) {
+      try {
+        var BarcodeScanner = window.Capacitor.Plugins.BarcodeScanner;
+        var Filesystem = window.Capacitor.Plugins.Filesystem;
+
+        if (!BarcodeScanner || !BarcodeScanner.readBarcodesFromImage || !Filesystem) {
+          // Plugin missing — fall back to web scan
+          webScanFromFile(file);
+          return;
+        }
+
+        // Read file as base64 → write to cache → scan from path
+        var reader = new FileReader();
+        reader.onerror = function () { webScanFromFile(file); };
+        reader.onload = async function (ev) {
+          try {
+            var base64Data = ev.target.result.split(",")[1];
+            var writeResult = await Filesystem.writeFile({
+              path: "qr-scan-temp.png",
+              data: base64Data,
+              directory: "CACHE"
+            });
+
+            var scanResult = await BarcodeScanner.readBarcodesFromImage({
+              formats: ["QR_CODE"],
+              path: writeResult.uri
+            });
+
+            if (scanResult && scanResult.barcodes && scanResult.barcodes.length > 0) {
+              var barcode = scanResult.barcodes[0];
+              onScanSuccess(barcode.rawValue || barcode.displayValue);
+              return;
+            }
+
+            alert(window.t ? window.t("err_no_qr") : "No QR code found in this image.");
+            if (fileInput) fileInput.value = "";
+          } catch (innerErr) {
+            console.warn("Native file scan failed:", innerErr);
+            webScanFromFile(file);
+          }
+        };
+        reader.readAsDataURL(file);
+      } catch (err) {
+        console.warn("nativeScanFromFile error:", err);
+        webScanFromFile(file);
+      }
+    }
+
+    // ============================================================
+    // WEB: html5-qrcode fallback (for browsers)
+    // ============================================================
+
+    function loadHtml5Qrcode(callback) {
+      if (typeof Html5Qrcode !== "undefined") { callback(); return; }
+      var sources = [
+        "/js/html5-qrcode.min.js",
+        "https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js",
+        "https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"
+      ];
+      var idx = 0;
+      function tryNext() {
+        if (idx >= sources.length) { console.error("Failed to load html5-qrcode"); return; }
+        var s = document.createElement("script");
+        s.src = sources[idx];
+        s.onload = callback;
+        s.onerror = function () { idx++; tryNext(); };
+        document.head.appendChild(s);
+      }
+      tryNext();
+    }
+
+    function initWebScanner() {
       if (!document.getElementById("reader-video")) return;
       html5QrCode = new Html5Qrcode("reader-video");
       window.qrScannerInstance = html5QrCode;
     }
 
-    // --- Responsive qrbox size (fits container, not fixed 250px) ---
-    function getQrboxSize() {
-      var container = document.getElementById("video-wrapper");
-      if (!container) return { width: 250, height: 250 };
-      var w = container.clientWidth;
-      var h = container.clientHeight;
-      var minDim = Math.min(w, h);
-      // Use 60% of the smaller dimension, clamped between 150-350
-      var size = Math.max(150, Math.min(350, Math.floor(minDim * 0.6)));
-      return { width: size, height: size };
-    }
-
-    // --- Actions ---
-
-    function onScanSuccess(decodedText) {
-      currentResult = decodedText;
-      stopCamera();
-
-      if (scannerContainer) scannerContainer.classList.add("hidden");
-      if (resultContainer) resultContainer.classList.remove("hidden");
-
-      if (scannedTextEl) scannedTextEl.textContent = decodedText;
-
-      // URL Detection
-      var isUrl = false;
-      try {
-        new URL(decodedText);
-        isUrl = true;
-      } catch (_) {
-        isUrl = decodedText.startsWith("http://") || decodedText.startsWith("https://");
-      }
-
-      if (isUrl) {
-        if (openLinkBtn) {
-          openLinkBtn.href = decodedText;
-          openLinkBtn.classList.remove("hidden");
-        }
-        if (copyBtn && copyBtn.parentElement) copyBtn.parentElement.classList.add("sm:grid-cols-2");
-      } else {
-        if (openLinkBtn) openLinkBtn.classList.add("hidden");
-        if (copyBtn && copyBtn.parentElement) {
-          copyBtn.parentElement.classList.remove("sm:grid-cols-2");
-          copyBtn.parentElement.classList.add("grid-cols-1");
-        }
-      }
-
-      saveToHistory(decodedText, isUrl);
-    }
-
-    function startCamera() {
-      if (!html5QrCode) {
-        alert("Scanner not ready. Please wait or reload the page.");
-        return;
-      }
-
+    function startWebCamera() {
+      if (!html5QrCode) { alert("Scanner not ready. Please wait or reload."); return; }
       if (cameraPlaceholder) cameraPlaceholder.classList.add("hidden");
       if (readerVideo) readerVideo.style.display = "block";
       if (stopBtn) stopBtn.classList.remove("hidden");
-
       if (videoWrapper) {
         videoWrapper.classList.remove("border-dashed", "border-base-300");
         videoWrapper.classList.add("border-transparent");
       }
 
-      var scanConfig = {
-        fps: 15,
-        // No qrbox — scan the entire video frame for maximum reliability
-        // Our custom scan-overlay provides visual guide without affecting scan area
-        experimentalFeatures: {
-          useBarCodeDetectorIfSupported: true
-        },
-        videoConstraints: {
-          facingMode: "environment",
-          width: { ideal: 1280 },
-          height: { ideal: 720 }
-        }
-      };
-
-      // Try rear camera first, fallback to front camera
       html5QrCode
-        .start(
-          { facingMode: "environment" },
-          scanConfig,
-          onScanSuccess,
-          function () { /* scanning… */ }
-        )
-        .catch(function (envErr) {
-          console.warn("Rear camera failed, trying front camera:", envErr);
-          var fallbackConfig = {
-            fps: 15,
-            experimentalFeatures: {
-              useBarCodeDetectorIfSupported: true
-            }
-          };
-          html5QrCode
-            .start(
-              { facingMode: "user" },
-              fallbackConfig,
-              onScanSuccess,
-              function () { /* scanning… */ }
-            )
-            .catch(function (userErr) {
-              console.error("All cameras failed:", userErr);
-              alert(
-                "Could not access camera.\n\n" +
-                "Please check:\n" +
-                "• Camera permission is granted\n" +
-                "• No other app is using the camera\n" +
-                "• Try uploading an image instead"
-              );
-              stopCamera();
+        .start({ facingMode: "environment" }, {
+          fps: 15,
+          experimentalFeatures: { useBarCodeDetectorIfSupported: true },
+          videoConstraints: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } }
+        }, onScanSuccess, function () { })
+        .catch(function () {
+          html5QrCode.start({ facingMode: "user" }, { fps: 15 }, onScanSuccess, function () { })
+            .catch(function () {
+              alert("Could not access camera.");
+              stopWebCamera();
             });
         });
     }
 
-    function stopCamera() {
+    function stopWebCamera() {
       if (html5QrCode && html5QrCode.isScanning) {
-        html5QrCode
-          .stop()
-          .then(function () {
-            resetScannerUI();
-          })
-          .catch(function (err) {
-            console.error("Failed to stop camera", err);
-          });
-      } else {
-        resetScannerUI();
-      }
+        html5QrCode.stop().then(resetWebUI).catch(resetWebUI);
+      } else { resetWebUI(); }
     }
 
-    function resetScannerUI() {
+    function resetWebUI() {
       if (readerVideo) readerVideo.style.display = "none";
       if (cameraPlaceholder) cameraPlaceholder.classList.remove("hidden");
       if (stopBtn) stopBtn.classList.add("hidden");
-
-      // Reset wrapper style
       if (videoWrapper) {
         videoWrapper.classList.add("border-dashed", "border-base-300");
         videoWrapper.classList.remove("border-transparent");
       }
     }
 
+    function webScanFromFile(file) {
+      if (!html5QrCode) {
+        loadHtml5Qrcode(function () { initWebScanner(); doWebFileScan(file); });
+        return;
+      }
+      doWebFileScan(file);
+    }
+
+    function doWebFileScan(file) {
+      var wasHidden = readerVideo && readerVideo.style.display === "none";
+      if (wasHidden) { readerVideo.style.display = "block"; readerVideo.style.opacity = "0"; readerVideo.style.pointerEvents = "none"; }
+
+      html5QrCode.scanFile(file, false)
+        .then(function (text) { if (wasHidden) hideRV(); onScanSuccess(text); })
+        .catch(function () {
+          scanViaCanvas(file, function (text) { if (wasHidden) hideRV(); onScanSuccess(text); },
+            function () {
+              if (wasHidden) hideRV();
+              alert(window.t ? window.t("err_no_qr") : "No QR code found in this image.");
+              if (fileInput) fileInput.value = "";
+            });
+        });
+    }
+
+    function hideRV() {
+      if (readerVideo) { readerVideo.style.display = "none"; readerVideo.style.opacity = ""; readerVideo.style.pointerEvents = ""; }
+    }
+
+    function scanViaCanvas(file, onOk, onFail) {
+      var r = new FileReader();
+      r.onerror = onFail;
+      r.onload = function (ev) {
+        var img = new Image();
+        img.onerror = onFail;
+        img.onload = function () {
+          try {
+            var c = document.createElement("canvas");
+            var mx = 1500, w = img.width, h = img.height;
+            if (w > mx || h > mx) { var s = mx / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
+            c.width = w; c.height = h;
+            c.getContext("2d").drawImage(img, 0, 0, w, h);
+            c.toBlob(function (blob) {
+              if (!blob) { onFail(); return; }
+              try { var f = new File([blob], "s.png", { type: "image/png" }); html5QrCode.scanFile(f, false).then(onOk).catch(onFail); }
+              catch (e) { blob.name = "s.png"; html5QrCode.scanFile(blob, false).then(onOk).catch(onFail); }
+            }, "image/png");
+          } catch (e) { onFail(); }
+        };
+        img.src = ev.target.result;
+      };
+      r.readAsDataURL(file);
+    }
+
+    // ============================================================
+    // SHARED: Result handling, history, events
+    // ============================================================
+
+    function onScanSuccess(decodedText) {
+      if (!decodedText) return;
+      currentResult = decodedText;
+      if (!isNative) stopWebCamera();
+
+      if (scannerContainer) scannerContainer.classList.add("hidden");
+      if (resultContainer) resultContainer.classList.remove("hidden");
+      if (scannedTextEl) scannedTextEl.textContent = decodedText;
+
+      var isUrl = false;
+      try { new URL(decodedText); isUrl = true; } catch (_) {
+        isUrl = decodedText.startsWith("http://") || decodedText.startsWith("https://");
+      }
+
+      if (isUrl) {
+        if (openLinkBtn) { openLinkBtn.href = decodedText; openLinkBtn.classList.remove("hidden"); }
+      } else {
+        if (openLinkBtn) openLinkBtn.classList.add("hidden");
+      }
+
+      saveToHistory(decodedText, isUrl);
+    }
+
     function saveToHistory(text, isUrl) {
-      // Original Logic maintained
       var entry = {
         id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
         type: isUrl ? "url" : "text",
         content: isUrl ? { url: text } : { text: text },
         style: {},
         label: text.substring(0, 50) + (text.length > 50 ? "..." : ""),
-        starred: false,
-        createdAt: new Date().toISOString(),
-        source: "scanned",
-        thumbnail: "",
+        starred: false, createdAt: new Date().toISOString(), source: "scanned", thumbnail: ""
       };
-
       try {
         var history = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
         history.unshift(entry);
         if (history.length > 50) history.pop();
         localStorage.setItem("qrforge_history", JSON.stringify(history));
-
-        // Update badges if they exist outside this component
-        var count = history.length;
         ["history-badge", "history-badge-mobile"].forEach(function (id) {
           var el = document.getElementById(id);
-          if (el) {
-            el.textContent = count;
-            el.classList.remove("hidden");
-          }
+          if (el) { el.textContent = history.length; el.classList.remove("hidden"); }
         });
-      } catch (e) {
-        console.error("Failed to save scan to history", e);
-      }
+      } catch (e) { console.error("Failed to save history", e); }
     }
 
-    // --- Event Listeners (Guarded) ---
+    // ============================================================
+    // Event Listeners
+    // ============================================================
 
-    // Ensure we don't attach listeners to null elements
-    // The TypeError usually happens here if elements aren't found
-    if (startBtn) startBtn.addEventListener("click", startCamera);
-    if (stopBtn) stopBtn.addEventListener("click", stopCamera);
+    if (nativeScanBtn) nativeScanBtn.addEventListener("click", nativeScan);
+    if (startBtn) startBtn.addEventListener("click", startWebCamera);
+    if (stopBtn) stopBtn.addEventListener("click", stopWebCamera);
 
     if (scanAgainBtn) {
       scanAgainBtn.addEventListener("click", function () {
         if (resultContainer) resultContainer.classList.add("hidden");
         if (scannerContainer) scannerContainer.classList.remove("hidden");
-        if (fileInput) fileInput.value = ""; // Clear file
+        if (fileInput) fileInput.value = "";
         currentResult = "";
       });
     }
@@ -466,186 +527,45 @@
     if (copyBtn) {
       copyBtn.addEventListener("click", function () {
         if (!currentResult) return;
-
-        // Modern copy visual feedback
         navigator.clipboard.writeText(currentResult).then(function () {
-          var originalHTML = copyBtn.innerHTML;
-          var originalClasses = copyBtn.className;
-
-          copyBtn.innerHTML = `
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
-            ${window.t ? window.t('copied') : 'Copied!'}
-          `;
+          var orig = copyBtn.innerHTML, cls = copyBtn.className;
+          copyBtn.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' + (window.t ? window.t("copied") : "Copied!");
           copyBtn.classList.add("btn-success", "text-white");
           copyBtn.classList.remove("btn-outline", "text-base-content");
-
-          setTimeout(function () {
-            copyBtn.innerHTML = originalHTML;
-            copyBtn.className = originalClasses;
-          }, 2000);
+          setTimeout(function () { copyBtn.innerHTML = orig; copyBtn.className = cls; }, 2000);
         });
       });
     }
 
+    // File input — uses native plugin on Capacitor, html5-qrcode on web
     if (fileInput) {
       fileInput.addEventListener("change", function (e) {
         if (e.target.files.length === 0) return;
-
-        var imageFile = e.target.files[0];
-
-        // Relaxed type check — iOS HEIC photos may have empty or non-standard type
-        if (imageFile.type && !imageFile.type.startsWith("image/") && !imageFile.type.startsWith("application/octet")) {
-          alert(window.t ? window.t('err_no_qr') : "Please select an image file.");
+        var f = e.target.files[0];
+        if (f.type && !f.type.startsWith("image/") && !f.type.startsWith("application/octet")) {
+          alert("Please select an image file.");
           fileInput.value = "";
           return;
         }
-
-        // Wait for library if not ready yet
-        if (!html5QrCode) {
-          alert("Scanner is still loading. Please try again in a moment.");
-          fileInput.value = "";
-          return;
-        }
-
-        // Ensure reader-video element is briefly visible (library needs dimensions)
-        var wasHidden = readerVideo && readerVideo.style.display === "none";
-        if (wasHidden) {
-          readerVideo.style.display = "block";
-          readerVideo.style.opacity = "0";
-          readerVideo.style.pointerEvents = "none";
-        }
-
-        // Primary: try scanFile directly
-        html5QrCode
-          .scanFile(imageFile, /* showImage= */ false)
-          .then(function (decodedText) {
-            if (wasHidden) hideReaderVideo();
-            onScanSuccess(decodedText);
-          })
-          .catch(function (err) {
-            console.warn("scanFile direct failed:", err);
-            // Fallback: re-encode via canvas (fixes WKWebView File quirks)
-            scanViaCanvas(imageFile, function (decodedText) {
-              if (wasHidden) hideReaderVideo();
-              onScanSuccess(decodedText);
-            }, function () {
-              if (wasHidden) hideReaderVideo();
-              alert(window.t ? window.t('err_no_qr') : "No QR code found in this image. Please try another one.");
-              fileInput.value = "";
-            });
-          });
+        if (isNative) { nativeScanFromFile(f); }
+        else { webScanFromFile(f); }
       });
     }
 
-    function hideReaderVideo() {
-      if (readerVideo) {
-        readerVideo.style.display = "none";
-        readerVideo.style.opacity = "";
-        readerVideo.style.pointerEvents = "";
-      }
-    }
+    // Init web scanner only in browser
+    if (!isNative) { loadHtml5Qrcode(initWebScanner); }
 
-    /** Fallback: load image into canvas, export as PNG blob, retry scanFile */
-    function scanViaCanvas(file, onSuccess, onFail) {
-      var reader = new FileReader();
-      reader.onerror = onFail;
-      reader.onload = function (ev) {
-        var img = new Image();
-        img.onerror = onFail;
-        img.onload = function () {
-          try {
-            var canvas = document.createElement("canvas");
-            // Limit size to prevent memory issues on iOS
-            var maxDim = 1500;
-            var w = img.width;
-            var h = img.height;
-            if (w > maxDim || h > maxDim) {
-              var scale = maxDim / Math.max(w, h);
-              w = Math.round(w * scale);
-              h = Math.round(h * scale);
-            }
-            canvas.width = w;
-            canvas.height = h;
-            var ctx = canvas.getContext("2d");
-            ctx.drawImage(img, 0, 0, w, h);
-
-            // Try canvas.toBlob (modern) or toDataURL fallback
-            if (canvas.toBlob) {
-              canvas.toBlob(function (blob) {
-                if (!blob) { onFail(); return; }
-                try {
-                  var newFile = new File([blob], "scan.png", { type: "image/png" });
-                  retryScanFile(newFile, onSuccess, onFail);
-                } catch (fileErr) {
-                  // File constructor not supported — use Blob directly
-                  blob.name = "scan.png";
-                  retryScanFile(blob, onSuccess, onFail);
-                }
-              }, "image/png");
-            } else {
-              // Very old WebView — use dataURL approach
-              var dataUrl = canvas.toDataURL("image/png");
-              var binary = atob(dataUrl.split(",")[1]);
-              var array = new Uint8Array(binary.length);
-              for (var i = 0; i < binary.length; i++) {
-                array[i] = binary.charCodeAt(i);
-              }
-              var blob = new Blob([array], { type: "image/png" });
-              blob.name = "scan.png";
-              retryScanFile(blob, onSuccess, onFail);
-            }
-          } catch (canvasErr) {
-            console.error("Canvas processing failed:", canvasErr);
-            onFail();
-          }
-        };
-        img.src = ev.target.result;
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function retryScanFile(fileOrBlob, onSuccess, onFail) {
-      html5QrCode
-        .scanFile(fileOrBlob, false)
-        .then(function (text) {
-          onSuccess(text);
-        })
-        .catch(function (err2) {
-          console.warn("scanFile retry also failed:", err2);
-          onFail();
-        });
-    }
-
-    // Start Library Load
-    loadHtml5Qrcode(initScanner);
   })();
 
-  // HTMX Cleanup Handler (Fixed for Multiple Instances)
+  // HTMX Cleanup
   (function () {
-    // 1. Remove previous listener if it exists (using global reference)
-    if (window.qrScanCleanup) {
-      document.body.removeEventListener("htmx:beforeRequest", window.qrScanCleanup);
-    }
-
-    // 2. Define new handler
-    function handleBeforeRequest(e) {
+    if (window.qrScanCleanup) document.body.removeEventListener("htmx:beforeRequest", window.qrScanCleanup);
+    function h() {
       if (window.qrScannerInstance && window.qrScannerInstance.isScanning) {
-        window.qrScannerInstance
-          .stop()
-          .then(function () {
-            window.qrScannerInstance.clear();
-          })
-          .catch(function (e) {
-            console.log(e);
-          });
+        window.qrScannerInstance.stop().then(function () { window.qrScannerInstance.clear(); }).catch(function () { });
       }
     }
-
-    // 3. Attach new listener
-    document.body.addEventListener("htmx:beforeRequest", handleBeforeRequest);
-
-    // 4. Store reference globally so we can remove it next time
-    window.qrScanCleanup = handleBeforeRequest;
+    document.body.addEventListener("htmx:beforeRequest", h);
+    window.qrScanCleanup = h;
   })();
 </script>
-</div>
