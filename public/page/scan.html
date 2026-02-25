@@ -35,7 +35,8 @@
 
         <!-- Video Area -->
         <div id="video-wrapper"
-          class="relative w-full aspect-square sm:aspect-[4/3] bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50">
+          class="relative w-full bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50"
+          style="aspect-ratio: 4/3;">
 
           <!-- The actual video element from library -->
           <div id="reader-video" class="w-full h-full absolute inset-0 z-10" style="display:none;"></div>
@@ -175,9 +176,24 @@
 
 <!-- Scripts -->
 <style>
-  /* Hide library's dashboard/text UI — keep scan region box */
+  /* Hide library's dashboard/text UI */
   #reader-video__dashboard_section {
     display: none !important;
+  }
+
+  /* Make library video fill the wrapper */
+  #reader-video video {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+
+  /* Landscape: switch to 16:9 ratio */
+  @media (orientation: landscape) {
+    #video-wrapper {
+      aspect-ratio: 16/9 !important;
+      max-height: 70vh;
+    }
   }
 </style>
 <script>
@@ -473,59 +489,131 @@
 
     if (fileInput) {
       fileInput.addEventListener("change", function (e) {
-        if (e.target.files.length === 0 || !html5QrCode) return;
+        if (e.target.files.length === 0) return;
 
         var imageFile = e.target.files[0];
 
-        // Validate file type
-        if (!imageFile.type.startsWith("image/")) {
+        // Relaxed type check — iOS HEIC photos may have empty or non-standard type
+        if (imageFile.type && !imageFile.type.startsWith("image/") && !imageFile.type.startsWith("application/octet")) {
           alert(window.t ? window.t('err_no_qr') : "Please select an image file.");
           fileInput.value = "";
           return;
         }
 
+        // Wait for library if not ready yet
+        if (!html5QrCode) {
+          alert("Scanner is still loading. Please try again in a moment.");
+          fileInput.value = "";
+          return;
+        }
+
+        // Ensure reader-video element is briefly visible (library needs dimensions)
+        var wasHidden = readerVideo && readerVideo.style.display === "none";
+        if (wasHidden) {
+          readerVideo.style.display = "block";
+          readerVideo.style.opacity = "0";
+          readerVideo.style.pointerEvents = "none";
+        }
+
+        // Primary: try scanFile directly
         html5QrCode
-          .scanFile(imageFile, /* showImage= */ true)
+          .scanFile(imageFile, /* showImage= */ false)
           .then(function (decodedText) {
+            if (wasHidden) hideReaderVideo();
             onScanSuccess(decodedText);
           })
           .catch(function (err) {
-            console.warn("scanFile failed, trying with scanFileV2:", err);
-            // Fallback: read as data URL and try again
-            // (fixes some Capacitor/WKWebView file handling quirks)
-            var reader = new FileReader();
-            reader.onload = function (ev) {
-              var img = new Image();
-              img.onload = function () {
-                // Create canvas and scan from that
-                var canvas = document.createElement("canvas");
-                canvas.width = img.width;
-                canvas.height = img.height;
-                var ctx = canvas.getContext("2d");
-                ctx.drawImage(img, 0, 0);
-                canvas.toBlob(function (blob) {
-                  if (!blob) {
-                    alert(window.t ? window.t('err_no_qr') : "No QR code found in this image. Please try another one.");
-                    fileInput.value = "";
-                    return;
-                  }
-                  var newFile = new File([blob], "scan.png", { type: "image/png" });
-                  html5QrCode
-                    .scanFile(newFile, true)
-                    .then(function (text) {
-                      onScanSuccess(text);
-                    })
-                    .catch(function () {
-                      alert(window.t ? window.t('err_no_qr') : "No QR code found in this image. Please try another one.");
-                      fileInput.value = "";
-                    });
-                }, "image/png");
-              };
-              img.src = ev.target.result;
-            };
-            reader.readAsDataURL(imageFile);
+            console.warn("scanFile direct failed:", err);
+            // Fallback: re-encode via canvas (fixes WKWebView File quirks)
+            scanViaCanvas(imageFile, function (decodedText) {
+              if (wasHidden) hideReaderVideo();
+              onScanSuccess(decodedText);
+            }, function () {
+              if (wasHidden) hideReaderVideo();
+              alert(window.t ? window.t('err_no_qr') : "No QR code found in this image. Please try another one.");
+              fileInput.value = "";
+            });
           });
       });
+    }
+
+    function hideReaderVideo() {
+      if (readerVideo) {
+        readerVideo.style.display = "none";
+        readerVideo.style.opacity = "";
+        readerVideo.style.pointerEvents = "";
+      }
+    }
+
+    /** Fallback: load image into canvas, export as PNG blob, retry scanFile */
+    function scanViaCanvas(file, onSuccess, onFail) {
+      var reader = new FileReader();
+      reader.onerror = onFail;
+      reader.onload = function (ev) {
+        var img = new Image();
+        img.onerror = onFail;
+        img.onload = function () {
+          try {
+            var canvas = document.createElement("canvas");
+            // Limit size to prevent memory issues on iOS
+            var maxDim = 1500;
+            var w = img.width;
+            var h = img.height;
+            if (w > maxDim || h > maxDim) {
+              var scale = maxDim / Math.max(w, h);
+              w = Math.round(w * scale);
+              h = Math.round(h * scale);
+            }
+            canvas.width = w;
+            canvas.height = h;
+            var ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0, w, h);
+
+            // Try canvas.toBlob (modern) or toDataURL fallback
+            if (canvas.toBlob) {
+              canvas.toBlob(function (blob) {
+                if (!blob) { onFail(); return; }
+                try {
+                  var newFile = new File([blob], "scan.png", { type: "image/png" });
+                  retryScanFile(newFile, onSuccess, onFail);
+                } catch (fileErr) {
+                  // File constructor not supported — use Blob directly
+                  blob.name = "scan.png";
+                  retryScanFile(blob, onSuccess, onFail);
+                }
+              }, "image/png");
+            } else {
+              // Very old WebView — use dataURL approach
+              var dataUrl = canvas.toDataURL("image/png");
+              var binary = atob(dataUrl.split(",")[1]);
+              var array = new Uint8Array(binary.length);
+              for (var i = 0; i < binary.length; i++) {
+                array[i] = binary.charCodeAt(i);
+              }
+              var blob = new Blob([array], { type: "image/png" });
+              blob.name = "scan.png";
+              retryScanFile(blob, onSuccess, onFail);
+            }
+          } catch (canvasErr) {
+            console.error("Canvas processing failed:", canvasErr);
+            onFail();
+          }
+        };
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function retryScanFile(fileOrBlob, onSuccess, onFail) {
+      html5QrCode
+        .scanFile(fileOrBlob, false)
+        .then(function (text) {
+          onSuccess(text);
+        })
+        .catch(function (err2) {
+          console.warn("scanFile retry also failed:", err2);
+          onFail();
+        });
     }
 
     // Start Library Load
