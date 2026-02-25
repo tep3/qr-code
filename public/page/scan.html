@@ -38,9 +38,7 @@
           class="relative w-full aspect-square sm:aspect-[4/3] bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50">
 
           <!-- The actual video element from library -->
-          <div id="reader-video" class="w-full h-full hidden absolute inset-0 z-10" style="overflow:hidden;">
-            <!-- html5-qrcode injects video here; no object-cover to avoid scan misalignment -->
-          </div>
+          <div id="reader-video" class="hidden absolute inset-0 z-10"></div>
 
           <!-- Scanner Overlay (Green Line) - Only visible when scanning -->
           <div id="scan-overlay" class="hidden absolute inset-0 z-20 pointer-events-none">
@@ -191,6 +189,12 @@
 </div>
 
 <!-- Scripts -->
+<style>
+  /* Hide library's dashboard/text UI — keep scan region box */
+  #reader-video__dashboard_section {
+    display: none !important;
+  }
+</style>
 <script>
   (function () {
     // 1. Dynamic Library Loading (with error handling for Capacitor)
@@ -334,12 +338,11 @@
 
       var scanConfig = {
         fps: 15,
-        qrbox: getQrboxSize(),
-        // Use native BarcodeDetector API on iOS — much more reliable in WKWebView
+        // No qrbox — scan the entire video frame for maximum reliability
+        // Our custom scan-overlay provides visual guide without affecting scan area
         experimentalFeatures: {
           useBarCodeDetectorIfSupported: true
         },
-        // Request higher resolution for better detection
         videoConstraints: {
           facingMode: "environment",
           width: { ideal: 1280 },
@@ -347,7 +350,7 @@
         }
       };
 
-      // Try rear camera first, fallback to front camera (iPad etc.)
+      // Try rear camera first, fallback to front camera
       html5QrCode
         .start(
           { facingMode: "environment" },
@@ -357,10 +360,8 @@
         )
         .catch(function (envErr) {
           console.warn("Rear camera failed, trying front camera:", envErr);
-          // Remove videoConstraints facingMode for fallback
           var fallbackConfig = {
             fps: 15,
-            qrbox: getQrboxSize(),
             experimentalFeatures: {
               useBarCodeDetectorIfSupported: true
             }
