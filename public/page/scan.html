@@ -249,9 +249,7 @@
     }
 
     // ============================================================
-    // NATIVE: @capacitor/barcode-scanner (Official Plugin)
-    // Uses Apple Vision on iOS — proper autofocus, orientation, etc.
-    // API: scanBarcode(options) => { ScanResult: string }
+    // NATIVE: @capacitor/barcode-scanner
     // ============================================================
 
     function getBarcodeScannerPlugin() {
@@ -265,27 +263,32 @@
         var scanner = getBarcodeScannerPlugin();
 
         if (!scanner) {
-          var available = window.Capacitor && window.Capacitor.Plugins ? Object.keys(window.Capacitor.Plugins).join(", ") : "none";
-          alert("Barcode scanner plugin not found.\n\nAvailable plugins: " + available + "\n\nPlease run: bunx cap sync ios");
+          alert("Error: Barcode scanner plugin is missing or not synced.");
           return;
         }
 
-        // --- แก้ไขตรงนี้ ---
-        // scanBarcode() จะเปิดกล้องสแกนทันที 
-        // เมื่อไม่ได้ใส่ Parameter ใดๆ ตัวปลั๊กอินจะใช้ค่า Default (กล้องหลัง + สแกนได้ทุกรูปแบบ)
-        // ซึ่งช่วยป้องกัน Error 'Scanning parameters are invalid' บนอุปกรณ์ iOS บางรุ่น
-        var result = await scanner.scanBarcode();
+        // 1. บาง Plugin ต้องสั่งขอ Permission ชัดเจนก่อนใช้งาน
+        if (scanner.requestPermissions) {
+          await scanner.requestPermissions();
+        } else if (scanner.checkPermission) {
+          await scanner.checkPermission({ force: true });
+        }
 
+        // 2. เราส่ง Object ว่างๆ {} ไปด้วย เพื่อป้องกัน iOS ฝั่ง Native ค้าง หากมันตรวจจับ Parameter ว่าง (Null/Undefined)
+        var result = await scanner.scanBarcode({});
+
+        // 3. จัดการผลลัพธ์ (รองรับทั้งชื่อตัวแปร ScanResult และ text)
         if (result && result.ScanResult) {
           onScanSuccess(result.ScanResult);
+        } else if (result && result.text) {
+          onScanSuccess(result.text);
         }
+
       } catch (err) {
-        // User cancelled = no error shown
-        var msg = err && err.message ? err.message.toLowerCase() : "";
-        if (msg.indexOf("cancel") === -1 && msg.indexOf("user") === -1) {
-          console.error("Native scan error:", err);
-          alert("Scan failed: " + (err.message || "Unknown error"));
-        }
+        // --- เปลี่ยนให้เด้ง Error โชว์ทุกกรณี ---
+        // ไม่มีการซ่อน Error เพื่อให้คุณเห็นชัดๆ ว่าติดตรงไหน
+        var msg = err && err.message ? err.message : JSON.stringify(err);
+        alert("Scan Error: " + msg);
       }
     }
 
@@ -325,7 +328,7 @@
     }
 
     function startWebCamera() {
-      if (!html5QrCode) { alert("Scanner not ready. Please wait or reload."); return; }
+      if (!html5QrCode) { alert("Web Scanner not ready. Please wait or reload."); return; }
       if (cameraPlaceholder) cameraPlaceholder.classList.add("hidden");
       if (readerVideo) readerVideo.style.display = "block";
       if (stopBtn) stopBtn.classList.remove("hidden");
@@ -340,10 +343,10 @@
           experimentalFeatures: { useBarCodeDetectorIfSupported: true },
           videoConstraints: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } }
         }, onScanSuccess, function () { })
-        .catch(function () {
+        .catch(function (err) {
           html5QrCode.start({ facingMode: "user" }, { fps: 15 }, onScanSuccess, function () { })
-            .catch(function () {
-              alert("Could not access camera.");
+            .catch(function (err2) {
+              alert("Could not access camera: " + (err2.message || err2));
               stopWebCamera();
             });
         });
@@ -470,8 +473,17 @@
     // Event Listeners
     // ============================================================
 
-    if (nativeScanBtn) nativeScanBtn.addEventListener("click", nativeScan);
-    if (startBtn) startBtn.addEventListener("click", startWebCamera);
+    // เพิ่ม try catch ป้องกัน error ลับหลังตอนกดปุ่ม
+    if (nativeScanBtn) {
+      nativeScanBtn.addEventListener("click", function () {
+        try { nativeScan(); } catch (e) { alert("Btn Error: " + e); }
+      });
+    }
+    if (startBtn) {
+      startBtn.addEventListener("click", function () {
+        try { startWebCamera(); } catch (e) { alert("Btn Error: " + e); }
+      });
+    }
     if (stopBtn) stopBtn.addEventListener("click", stopWebCamera);
 
     if (scanAgainBtn) {
