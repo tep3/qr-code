@@ -270,12 +270,11 @@
           return;
         }
 
-        // scanBarcode() opens native fullscreen scanner
-        // hint: 7 = QR_CODE (CapacitorBarcodeScannerTypeHint)
-        var result = await scanner.scanBarcode({
-          hint: 7,
-          cameraDirection: 1
-        });
+        // --- แก้ไขตรงนี้ ---
+        // scanBarcode() จะเปิดกล้องสแกนทันที 
+        // เมื่อไม่ได้ใส่ Parameter ใดๆ ตัวปลั๊กอินจะใช้ค่า Default (กล้องหลัง + สแกนได้ทุกรูปแบบ)
+        // ซึ่งช่วยป้องกัน Error 'Scanning parameters are invalid' บนอุปกรณ์ iOS บางรุ่น
+        var result = await scanner.scanBarcode();
 
         if (result && result.ScanResult) {
           onScanSuccess(result.ScanResult);
@@ -452,7 +451,7 @@
         type: isUrl ? "url" : "text",
         content: isUrl ? { url: text } : { text: text },
         style: {},
-        label: text.substring(0, 50) + (text.length > 50 ? "..." : ""),
+        label: text.substring(0, 50) + (text.length > 50 ? "..."),
         starred: false, createdAt: new Date().toISOString(), source: "scanned", thumbnail: ""
       };
       try {
