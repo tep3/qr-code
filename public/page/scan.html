@@ -113,6 +113,43 @@
             class="relative w-full bg-base-200 rounded-2xl sm:rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/40 active:border-primary/60"
             style="aspect-ratio: 4/3"
           >
+            <!-- Permission Denied Message -->
+            <div
+              id="permission-denied"
+              class="hidden absolute inset-0 z-30 bg-base-100 flex flex-col items-center justify-center p-6 text-center"
+            >
+              <div
+                class="w-16 h-16 bg-error/10 text-error rounded-2xl flex items-center justify-center mb-4"
+              >
+                <svg
+                  class="w-8 h-8"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
+                  />
+                </svg>
+              </div>
+              <h4 class="font-semibold text-base-content mb-2">
+                Camera Access Denied
+              </h4>
+              <p class="text-sm text-base-content/50 mb-4">
+                Please allow camera access in your browser settings to scan QR
+                codes.
+              </p>
+              <button
+                onclick="location.reload()"
+                class="btn btn-outline btn-sm"
+              >
+                Try Again
+              </button>
+            </div>
+
             <!-- Scanning Frame Overlay -->
             <div
               id="scanning-frame"
@@ -222,7 +259,7 @@
             <!-- Stop Button -->
             <button
               id="stop-camera-btn"
-              class="btn btn-circle btn-error btn-sm absolute top-3 right-3 sm:top-4 sm:right-4 hidden z-30 shadow-lg hover:scale-110 transition-transform border-2 border-white/20"
+              class="btn btn-circle btn-error btn-sm absolute top-3 right-3 sm:top-4 sm:right-4 hidden z-40 shadow-lg hover:scale-110 transition-transform border-2 border-white/20"
               aria-label="Stop camera"
             >
               <svg
@@ -569,7 +606,9 @@
   /* Hide html5-qrcode UI elements */
   #reader-video__dashboard_section,
   #reader-video__dashboard_section_csr,
-  #reader-video__header_message {
+  #reader-video__header_message,
+  #reader-video__scan_region,
+  #reader-video__scan_region_image {
     display: none !important;
   }
 
@@ -625,6 +664,7 @@
     var readerVideo = document.getElementById("reader-video");
     var cameraPlaceholder = document.getElementById("camera-placeholder");
     var scanningFrame = document.getElementById("scanning-frame");
+    var permissionDenied = document.getElementById("permission-denied");
     var startBtn = document.getElementById("start-camera-btn");
     var stopBtn = document.getElementById("stop-camera-btn");
     var fileInput = document.getElementById("qr-input-file");
@@ -638,6 +678,7 @@
 
     var html5QrCode = null;
     var currentResult = "";
+    var isScanning = false;
 
     // Show correct UI based on platform
     if (isNative) {
@@ -649,9 +690,21 @@
     }
 
     // ============================================================
+    // Check Camera Support
+    // ============================================================
+    function checkCameraSupport() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        showToast("Your browser doesn't support camera access", "error");
+        startBtn?.classList.add("btn-disabled");
+        startBtn && (startBtn.disabled = true);
+        return false;
+      }
+      return true;
+    }
+
+    // ============================================================
     // NATIVE: @capacitor/barcode-scanner
     // ============================================================
-
     function getBarcodeScannerPlugin() {
       var P = window.Capacitor?.Plugins;
       return P?.CapacitorBarcodeScanner || P?.BarcodeScanner || null;
@@ -690,29 +743,34 @@
     }
 
     // ============================================================
-    // WEB: html5-qrcode fallback
+    // WEB: html5-qrcode
     // ============================================================
-
     function loadHtml5Qrcode(callback) {
       if (typeof Html5Qrcode !== "undefined") {
         callback();
         return;
       }
+
+      showToast("Loading scanner...", "info");
+
       var sources = [
         "/js/html5-qrcode.min.js",
         "https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js",
         "https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js",
       ];
       var idx = 0;
+
       function tryNext() {
         if (idx >= sources.length) {
-          console.error("Failed to load html5-qrcode");
-          showToast("Failed to load scanner", "error");
+          showToast("Failed to load scanner library", "error");
           return;
         }
         var s = document.createElement("script");
         s.src = sources[idx];
-        s.onload = callback;
+        s.onload = function () {
+          showToast("Scanner ready!", "success");
+          callback();
+        };
         s.onerror = function () {
           idx++;
           tryNext();
@@ -727,16 +785,47 @@
       try {
         html5QrCode = new Html5Qrcode("reader-video");
         window.qrScannerInstance = html5QrCode;
+        console.log("html5-qrcode initialized");
       } catch (e) {
         console.error("Failed to init scanner:", e);
+        showToast("Failed to initialize scanner", "error");
       }
     }
 
     async function startWebCamera() {
+      if (!checkCameraSupport()) return;
+
       if (!html5QrCode) {
-        showToast("Scanner not ready", "error");
+        // Try to initialize if not already done
+        loadHtml5Qrcode(function () {
+          initWebScanner();
+          if (html5QrCode) doStartCamera();
+        });
         return;
       }
+
+      doStartCamera();
+    }
+
+    async function doStartCamera() {
+      if (isScanning) return;
+
+      try {
+        // First check permission
+        const permission = await navigator.permissions.query({
+          name: "camera",
+        });
+        if (permission.state === "denied") {
+          permissionDenied?.classList.remove("hidden");
+          return;
+        }
+      } catch (e) {
+        // Some browsers don't support permissions API, continue anyway
+      }
+
+      isScanning = true;
+      startBtn && (startBtn.disabled = true);
+      startBtn?.classList.add("loading");
 
       // Update UI
       cameraPlaceholder?.classList.add("hidden");
@@ -751,8 +840,9 @@
         await html5QrCode.start(
           { facingMode: "environment" },
           {
-            fps: 15,
+            fps: 10,
             qrbox: { width: 200, height: 200 },
+            aspectRatio: 1.0,
             experimentalFeatures: { useBarCodeDetectorIfSupported: true },
             videoConstraints: {
               facingMode: "environment",
@@ -761,29 +851,64 @@
             },
           },
           onScanSuccess,
-          () => {}, // onScanFailure - silent
+          (errorMessage) => {
+            // Scan failure callback - silent for continuous scanning
+            // console.log("Scan error:", errorMessage);
+          },
         );
+
+        console.log("Camera started successfully");
       } catch (err) {
+        console.error("Camera start error:", err);
+
         // Try front camera as fallback
         try {
           await html5QrCode.start(
             { facingMode: "user" },
-            { fps: 15, qrbox: { width: 200, height: 200 } },
+            {
+              fps: 10,
+              qrbox: { width: 200, height: 200 },
+              aspectRatio: 1.0,
+            },
             onScanSuccess,
             () => {},
           );
         } catch (err2) {
-          showToast("Camera access denied", "error");
+          console.error("Front camera also failed:", err2);
+
+          if (
+            err2.name === "NotAllowedError" ||
+            err2.message?.includes("Permission")
+          ) {
+            permissionDenied?.classList.remove("hidden");
+            showToast("Camera permission denied", "error");
+          } else if (err2.name === "NotFoundError") {
+            showToast("No camera found on this device", "error");
+          } else {
+            showToast(
+              "Could not access camera: " + (err2.message || err2),
+              "error",
+            );
+          }
+
           stopWebCamera();
         }
+      } finally {
+        startBtn && (startBtn.disabled = false);
+        startBtn?.classList.remove("loading");
       }
     }
 
     async function stopWebCamera() {
+      isScanning = false;
+
       if (html5QrCode?.isScanning) {
         try {
           await html5QrCode.stop();
-        } catch (e) {}
+          console.log("Camera stopped");
+        } catch (e) {
+          console.error("Error stopping camera:", e);
+        }
       }
       resetWebUI();
     }
@@ -793,6 +918,7 @@
       cameraPlaceholder?.classList.remove("hidden");
       stopBtn?.classList.add("hidden");
       scanningFrame?.classList.add("hidden");
+      permissionDenied?.classList.add("hidden");
 
       videoWrapper?.classList.add("border-dashed", "border-base-300");
       videoWrapper?.classList.remove("border-transparent", "shadow-2xl");
@@ -802,7 +928,7 @@
       if (!html5QrCode) {
         loadHtml5Qrcode(function () {
           initWebScanner();
-          doWebFileScan(file);
+          setTimeout(() => doWebFileScan(file), 100);
         });
         return;
       }
@@ -810,19 +936,20 @@
     }
 
     async function doWebFileScan(file) {
-      // Show loading state
       videoWrapper?.classList.add("opacity-50", "pointer-events-none");
 
       try {
         const text = await html5QrCode.scanFile(file, false);
         onScanSuccess(text);
       } catch (err) {
-        // Try canvas fallback for large images
         try {
           const text = await scanViaCanvas(file);
           onScanSuccess(text);
         } catch (err2) {
-          showToast(window.t?.("err_no_qr") || "No QR code found", "error");
+          showToast(
+            window.t?.("err_no_qr") || "No QR code found in image",
+            "error",
+          );
           fileInput.value = "";
         }
       } finally {
@@ -868,21 +995,17 @@
     // ============================================================
     // SHARED: Result handling
     // ============================================================
-
     function onScanSuccess(decodedText) {
       if (!decodedText) return;
       currentResult = decodedText;
 
       if (!isNative) stopWebCamera();
 
-      // Switch views
       scannerContainer?.classList.add("hidden");
       resultContainer?.classList.remove("hidden");
 
-      // Display result
       if (scannedTextEl) {
         scannedTextEl.textContent = decodedText;
-        // Auto-scroll to top for long content
         scannedTextEl.scrollLeft = 0;
       }
 
@@ -893,9 +1016,7 @@
 
       try {
         const url = new URL(decodedText);
-        isUrl = true;
-        // Check if it's actually a URL
-        if (!/^https?:$/.test(url.protocol)) isUrl = false;
+        isUrl = /^https?:$/.test(url.protocol);
       } catch (_) {
         isUrl = /^https?:\/\//.test(decodedText);
       }
@@ -906,7 +1027,6 @@
       isPhone =
         /^tel:/.test(decodedText) || /^\+?[\d\s-()]{7,}$/.test(decodedText);
 
-      // Update UI based on type
       if (isUrl) {
         resultTypeBadge.textContent = "URL";
         resultTypeBadge.className = "badge badge-sm badge-primary";
@@ -938,7 +1058,6 @@
 
       saveToHistory(decodedText, isUrl);
 
-      // Haptic feedback if available
       if (window.navigator.vibrate) {
         window.navigator.vibrate(50);
       }
@@ -962,10 +1081,10 @@
         var history = JSON.parse(
           localStorage.getItem("qrforge_history") || "[]",
         );
-        // Avoid duplicates at the top
         if (
-          (history.length > 0 && history[0].content?.url === text) ||
-          history[0].content?.text === text
+          history.length > 0 &&
+          (history[0].content?.url === text ||
+            history[0].content?.text === text)
         ) {
           return;
         }
@@ -973,7 +1092,6 @@
         if (history.length > 50) history = history.slice(0, 50);
         localStorage.setItem("qrforge_history", JSON.stringify(history));
 
-        // Update badges
         ["history-badge", "history-badge-mobile"].forEach(function (id) {
           var el = document.getElementById(id);
           if (el) {
@@ -989,7 +1107,6 @@
     // ============================================================
     // Event Listeners
     // ============================================================
-
     nativeScanBtn?.addEventListener("click", nativeScan);
     startBtn?.addEventListener("click", startWebCamera);
     stopBtn?.addEventListener("click", stopWebCamera);
@@ -999,11 +1116,9 @@
       scannerContainer?.classList.remove("hidden");
       fileInput.value = "";
       currentResult = "";
-      // Reset scroll
       window.scrollTo({ top: 0, behavior: "smooth" });
     });
 
-    // Copy functionality
     function doCopy() {
       if (!currentResult) return;
 
@@ -1012,7 +1127,6 @@
         .then(function () {
           showToast(window.t?.("copied") || "Copied!", "success");
 
-          // Visual feedback on button
           var originalHTML = copyBtn.innerHTML;
           copyBtn.innerHTML =
             '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Copied!';
@@ -1035,7 +1149,6 @@
     copyBtn?.addEventListener("click", doCopy);
     quickCopyBtn?.addEventListener("click", doCopy);
 
-    // Share functionality (Web Share API)
     shareBtn?.addEventListener("click", async function () {
       if (!currentResult) return;
 
@@ -1053,7 +1166,6 @@
       }
     });
 
-    // File input
     fileInput?.addEventListener("change", function (e) {
       if (e.target.files.length === 0) return;
       var f = e.target.files[0];
@@ -1071,7 +1183,7 @@
       }
     });
 
-    // Drag and drop support
+    // Drag and drop
     var dropZone = fileInput?.closest("label");
     if (dropZone) {
       ["dragenter", "dragover", "dragleave", "drop"].forEach((eventName) => {
@@ -1105,23 +1217,23 @@
       });
     }
 
-    // Toast notification helper
+    // Toast helper
     function showToast(message, type = "success") {
       if (window.showToast) {
         window.showToast(message, type);
       } else {
-        // Fallback
-        alert(message);
+        console.log(`[${type}]`, message);
       }
     }
 
-    // Init web scanner
+    // Initialize
     if (!isNative) {
-      loadHtml5Qrcode(initWebScanner);
+      // Pre-load scanner library
+      setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
     }
   })();
 
-  // HTMX Cleanup
+  // Cleanup
   (function () {
     function cleanup() {
       if (window.qrScannerInstance?.isScanning) {
