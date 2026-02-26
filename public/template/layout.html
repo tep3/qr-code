@@ -1,21 +1,17 @@
 <!doctype html>
 <html lang="en" data-theme="silk">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
-    <title>QR Forge — {{title}}</title>
 
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚒️</text></svg>"
-      type="image/svg+xml"
-    />
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>QR Forge — {{title}}</title>
 
-    <!-- PWA / Service Worker -->
-    <!-- <link rel="manifest" href="/manifest.json" />
+  <link rel="icon"
+    href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2280%22>⚒️</text></svg>"
+    type="image/svg+xml" />
+
+  <!-- PWA / Service Worker -->
+  <!-- <link rel="manifest" href="/manifest.json" />
     <script>
       if ("serviceWorker" in navigator) {
         window.addEventListener("load", () => {
@@ -31,724 +27,637 @@
       }
     </script> -->
 
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Outfit:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+Thai:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet" />
 
-    <!-- Tailwind + DaisyUI -->
-    <link
-      href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css"
-      rel="stylesheet"
-      type="text/css"
-    />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ["Outfit", "Noto Sans Thai", "sans-serif"],
-              serif: ["DM Serif Display", "Noto Sans Thai", "serif"],
-              mono: ["Space Mono", "monospace"],
-            },
+  <!-- Tailwind + DaisyUI -->
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.12.10/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ["Outfit", "Noto Sans Thai", "sans-serif"],
+            serif: ["DM Serif Display", "Noto Sans Thai", "serif"],
+            mono: ["Space Mono", "monospace"],
           },
         },
+      },
+    };
+  </script>
+
+  <!-- HTMX -->
+  <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" crossorigin="anonymous"></script>
+
+  <!-- i18n Script -->
+  <script>
+    (function () {
+      const translations = {
+        en: {
+          nav_generate: "Generate",
+          nav_scan: "Scan",
+          nav_history: "History",
+          footer_desc: "Free & Open QR Tool",
+          footer_sub: "No accounts · No tracking · 100% free",
+
+          // Home
+          home_badge: "Free · No signup · Works offline",
+          home_title_pre: "Craft your",
+          home_title_post: "QR Code",
+          home_desc:
+            "Generate beautiful QR codes for links, WiFi, contacts and more — in seconds.",
+          label_encode: "What do you want to encode?",
+          tab_url: "URL",
+          tab_text: "Text",
+          tab_wifi: "WiFi",
+          tab_vcard: "vCard",
+          tab_email: "Email",
+          tab_phone: "Phone",
+          tab_sms: "SMS",
+          tab_line: "LINE",
+          tab_facebook: "Facebook",
+          tab_promptpay: "PromptPay",
+          label_promptpay_id: "PromptPay ID",
+          ph_promptpay_id: "08X-XXX-XXXX or Tax ID",
+          help_promptpay_id: "Mobile number or Tax ID / E-Wallet ID",
+          label_promptpay_amount: "Amount (Optional)",
+          help_promptpay_amount:
+            "Leave empty for transfer without fixed amount",
+          promptpay_currency: "THB",
+          promptpay_formats_title: "Supported ID formats:",
+          promptpay_fmt_mobile:
+            'Mobile: <span class="font-mono">08X-XXX-XXXX</span>',
+          promptpay_fmt_natid:
+            'National ID: <span class="font-mono">X-XXXX-XXXXX-XX-X</span> (13 digits)',
+          promptpay_fmt_taxid:
+            'Tax ID: <span class="font-mono">XXXXXXXXXXXXX</span> (13 digits)',
+          label_content: "Content",
+          label_website_url: "Website URL",
+          ph_website_url: "https://example.com",
+          help_website_url: "Enter the full URL including https://",
+          summary_style: "Customize Style",
+          summary_style_desc: "Colors, size, label, logo & more",
+          btn_generate: "Generate QR Code",
+
+          // Style Options
+          style_fg: "Foreground",
+          style_bg: "Background",
+          style_dot: "Dot Style",
+          style_ec: "Error Correction",
+          style_size: "Size",
+          style_margin: "Margin",
+          style_quiet_zone: "Quiet zone:",
+          style_modules: "modules",
+          label_text_opt: "Label Text (Optional)",
+          label_size: "Size",
+          label_pos: "Position",
+          label_pos_top: "Top",
+          label_pos_bottom: "Bottom",
+          label_color: "Text Color",
+          label_color_help: "Matches QR color by default",
+          border_frame: "Border / Frame",
+          border_color: "Border Color",
+
+          // Preview
+          preview_title: "Preview",
+          preview_placeholder: "Your QR code will appear here",
+          preview_help: "Fill in the content and hit Generate",
+          badge_private: "Private",
+          badge_instant: "Instant",
+          badge_free: "100% Free",
+
+          // Scan
+          scan_badge: "AI Powered & Secure",
+          scan_title: "Scan",
+          scan_desc:
+            "Point your camera at a QR code or upload an image to decode instantly.",
+          camera_access: "Camera Access",
+          camera_start_help: "Click below to start scanning via your webcam.",
+          btn_start_camera: "Start Camera",
+          or_upload: "OR Upload Image",
+          upload_help: "Click to upload",
+          upload_help_sub: "or drag and drop",
+          scan_success: "Success!",
+          scan_success_desc: "Content successfully decoded.",
+          result_content: "Result Content",
+          btn_copy: "Copy Content",
+          btn_open: "Open Link",
+          btn_back_scan: "Back to Scanner",
+          scan_footer:
+            "Secure Client-Side Processing. No data is sent to servers.",
+          copied: "Copied!",
+          err_no_qr:
+            "No QR code found in this image. Please try another one.",
+
+          // History
+          history_title: "History",
+          history_desc:
+            "Your recently generated QR codes (saved locally on your device)",
+          btn_clear_all: "Clear All",
+          empty_title: "No QR Codes Yet",
+          empty_desc:
+            "You haven't generated any QR codes. Head back to the home page to create your first one!",
+          btn_create_first: "Create QR Code",
+          confirm_delete:
+            "Are you sure you want to delete this QR code from history?",
+          confirm_clear:
+            "Are you sure you want to clear ALL history? This cannot be undone.",
+          btn_save_history: "Save to History",
+          saved: "Saved!",
+        },
+        th: {
+          nav_generate: "สร้าง QR",
+          nav_scan: "สแกน",
+          nav_history: "ประวัติ",
+          footer_desc: "เครื่องมือ QR ฟรี & โอเพนซอร์ส",
+          footer_sub: "ไม่มีบัญชี · ไม่มีการติดตาม · ฟรี 100%",
+
+          // Home
+          home_badge: "ฟรี · ไม่ต้องสมัคร · ใช้งานออฟไลน์ได้",
+          home_title_pre: "สร้าง",
+          home_title_post: "QR Code",
+          home_desc:
+            "สร้าง QR Code ที่สวยงามสำหรับลิงก์, WiFi, ผู้ติดต่อ และอื่นๆ — ได้ในไม่กี่วินาที",
+          label_encode: "คุณต้องการสร้าง QR จากอะไร?",
+          tab_url: "ลิงก์",
+          tab_text: "ข้อความ",
+          tab_wifi: "WiFi",
+          tab_vcard: "นามบัตร",
+          tab_email: "อีเมล",
+          tab_phone: "โทรศัพท์",
+          tab_sms: "SMS",
+          tab_line: "LINE",
+          tab_facebook: "Facebook",
+          tab_promptpay: "PromptPay",
+          label_promptpay_id: "หมายเลข PromptPay",
+          ph_promptpay_id: "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
+          help_promptpay_id:
+            "เบอร์มือถือ, เลขประจำตัวผู้เสียภาษี หรือ E-Wallet",
+          label_promptpay_amount: "จำนวนเงิน (ไม่บังคับ)",
+          help_promptpay_amount: "เว้นว่างไว้สำหรับโอนเงินไม่ระบุจำนวน",
+          promptpay_currency: "บาท",
+          promptpay_formats_title: "รูปแบบ ID ที่รองรับ:",
+          promptpay_fmt_mobile:
+            'เบอร์มือถือ: <span class="font-mono">08X-XXX-XXXX</span>',
+          promptpay_fmt_natid:
+            'เลขบัตรประชาชน: <span class="font-mono">X-XXXX-XXXXX-XX-X</span> (13 หลัก)',
+          promptpay_fmt_taxid:
+            'เลขประจำตัวผู้เสียภาษี: <span class="font-mono">XXXXXXXXXXXXX</span> (13 หลัก)',
+          label_content: "เนื้อหา",
+          label_website_url: "ลิงก์เว็บไซต์",
+          ph_website_url: "https://example.com",
+          help_website_url: "ใส่ URL เต็มรูปแบบรวมถึง https://",
+          summary_style: "ปรับแต่งสไตล์",
+          summary_style_desc: "สี, ขนาด, โลโก้ และอื่นๆ",
+          btn_generate: "สร้าง QR Code",
+
+          // Style Options
+          style_fg: "สีหลัก",
+          style_bg: "สีพื้นหลัง",
+          style_dot: "รูปแบบจุด",
+          style_ec: "การแก้ไขข้อผิดพลาด",
+          style_size: "ขนาด",
+          style_margin: "ขอบระยะห่าง",
+          style_quiet_zone: "พื้นที่ว่าง:",
+          style_modules: "หน่วย",
+          label_text_opt: "ข้อความบน QR (ไม่บังคับ)",
+          label_size: "ขนาด",
+          label_pos: "ตำแหน่ง",
+          label_pos_top: "บน",
+          label_pos_bottom: "ล่าง",
+          label_color: "สีข้อความ",
+          label_color_help: "ใช้สีเดียวกับ QR โดยค่าเริ่มต้น",
+          border_frame: "กรอบ / เฟรม",
+          border_color: "สีกรอบ",
+
+          // Preview
+          preview_title: "ตัวอย่าง",
+          preview_placeholder: "QR Code ของคุณจะปรากฏที่นี่",
+          preview_help: "กรอกข้อมูลแล้วกดปุ่มสร้าง",
+          badge_private: "ส่วนตัว",
+          badge_instant: "ทันที",
+          badge_free: "ฟรี 100%",
+
+          // Scan
+          scan_badge: "ปลอดภัย & ใช้ AI",
+          scan_title: "สแกน",
+          scan_desc:
+            "ส่องกล้องไปที่ QR code หรืออัปโหลดรูปภาพเพื่ออ่านค่าทันที",
+          camera_access: "การเข้าถึงกล้อง",
+          camera_start_help: "คลิกด้านล่างเพื่อเริ่มสแกนผ่านกล้อง",
+          btn_start_camera: "เริ่มเปิดกล้อง",
+          or_upload: "หรือ อัปโหลดรูปภาพ",
+          upload_help: "คลิกเพื่ออัปโหลด",
+          upload_help_sub: "หรือลากไฟล์มาวาง",
+          scan_success: "สำเร็จ!",
+          scan_success_desc: "อ่านข้อมูลเรียบร้อยแล้ว",
+          result_content: "ข้อมูลที่ได้",
+          btn_copy: "คัดลอกข้อมูล",
+          btn_open: "เปิดลิงก์",
+          btn_back_scan: "กลับไปสแกน",
+          scan_footer:
+            "ประมวลผลบนเครื่องของคุณอย่างปลอดภัย ไม่มีการส่งข้อมูลขึ้น Server",
+          copied: "คัดลอกแล้ว!",
+          err_no_qr: "ไม่พบ QR code ในรูปภาพนี้ กรุณาลองใหม่อีกครั้ง",
+
+          // History
+          history_title: "ประวัติ",
+          history_desc: "QR codes ที่คุณสร้างล่าสุด (บันทึกในเครื่องของคุณ)",
+          btn_clear_all: "ล้างทั้งหมด",
+          empty_title: "ยังไม่มีประวัติ",
+          empty_desc:
+            "คุณยังไม่ได้สร้าง QR code เลย กลับไปที่หน้าหลักเพื่อเริ่มสร้าง!",
+          btn_create_first: "สร้าง QR Code",
+          confirm_delete: "คุณแน่ใจหรือไม่ที่จะลบ QR code นี้จากประวัติ?",
+          confirm_clear:
+            "คุณแน่ใจหรือไม่ที่จะล้างประวัติทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้",
+          btn_save_history: "บันทึกประวัติ",
+          saved: "บันทึกแล้ว!",
+        },
       };
-    </script>
 
-    <!-- HTMX -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js"
-      crossorigin="anonymous"
-    ></script>
+      window.t = function (key) {
+        const lang = localStorage.getItem("qrforge_lang") || "en";
+        return translations[lang][key] || key;
+      };
 
-    <!-- i18n Script -->
-    <script>
-      (function () {
-        const translations = {
-          en: {
-            nav_generate: "Generate",
-            nav_scan: "Scan",
-            nav_history: "History",
-            footer_desc: "Free & Open QR Tool",
-            footer_sub: "No accounts · No tracking · 100% free",
+      window.currentLang = function () {
+        return localStorage.getItem("qrforge_lang") || "en";
+      };
 
-            // Home
-            home_badge: "Free · No signup · Works offline",
-            home_title_pre: "Craft your",
-            home_title_post: "QR Code",
-            home_desc:
-              "Generate beautiful QR codes for links, WiFi, contacts and more — in seconds.",
-            label_encode: "What do you want to encode?",
-            tab_url: "URL",
-            tab_text: "Text",
-            tab_wifi: "WiFi",
-            tab_vcard: "vCard",
-            tab_email: "Email",
-            tab_phone: "Phone",
-            tab_sms: "SMS",
-            tab_line: "LINE",
-            tab_facebook: "Facebook",
-            tab_promptpay: "PromptPay",
-            label_promptpay_id: "PromptPay ID",
-            ph_promptpay_id: "08X-XXX-XXXX or Tax ID",
-            help_promptpay_id: "Mobile number or Tax ID / E-Wallet ID",
-            label_promptpay_amount: "Amount (Optional)",
-            help_promptpay_amount:
-              "Leave empty for transfer without fixed amount",
-            promptpay_currency: "THB",
-            promptpay_formats_title: "Supported ID formats:",
-            promptpay_fmt_mobile:
-              'Mobile: <span class="font-mono">08X-XXX-XXXX</span>',
-            promptpay_fmt_natid:
-              'National ID: <span class="font-mono">X-XXXX-XXXXX-XX-X</span> (13 digits)',
-            promptpay_fmt_taxid:
-              'Tax ID: <span class="font-mono">XXXXXXXXXXXXX</span> (13 digits)',
-            label_content: "Content",
-            label_website_url: "Website URL",
-            ph_website_url: "https://example.com",
-            help_website_url: "Enter the full URL including https://",
-            summary_style: "Customize Style",
-            summary_style_desc: "Colors, size, label, logo & more",
-            btn_generate: "Generate QR Code",
+      window.setLanguage = function (lang) {
+        localStorage.setItem("qrforge_lang", lang);
+        updatePageContent();
+        updateLanguageUI();
 
-            // Style Options
-            style_fg: "Foreground",
-            style_bg: "Background",
-            style_dot: "Dot Style",
-            style_ec: "Error Correction",
-            style_size: "Size",
-            style_margin: "Margin",
-            style_quiet_zone: "Quiet zone:",
-            style_modules: "modules",
-            label_text_opt: "Label Text (Optional)",
-            label_size: "Size",
-            label_pos: "Position",
-            label_pos_top: "Top",
-            label_pos_bottom: "Bottom",
-            label_color: "Text Color",
-            label_color_help: "Matches QR color by default",
-            border_frame: "Border / Frame",
-            border_color: "Border Color",
-
-            // Preview
-            preview_title: "Preview",
-            preview_placeholder: "Your QR code will appear here",
-            preview_help: "Fill in the content and hit Generate",
-            badge_private: "Private",
-            badge_instant: "Instant",
-            badge_free: "100% Free",
-
-            // Scan
-            scan_badge: "AI Powered & Secure",
-            scan_title: "Scan",
-            scan_desc:
-              "Point your camera at a QR code or upload an image to decode instantly.",
-            camera_access: "Camera Access",
-            camera_start_help: "Click below to start scanning via your webcam.",
-            btn_start_camera: "Start Camera",
-            or_upload: "OR Upload Image",
-            upload_help: "Click to upload",
-            upload_help_sub: "or drag and drop",
-            scan_success: "Success!",
-            scan_success_desc: "Content successfully decoded.",
-            result_content: "Result Content",
-            btn_copy: "Copy Content",
-            btn_open: "Open Link",
-            btn_back_scan: "Back to Scanner",
-            scan_footer:
-              "Secure Client-Side Processing. No data is sent to servers.",
-            copied: "Copied!",
-            err_no_qr:
-              "No QR code found in this image. Please try another one.",
-
-            // History
-            history_title: "History",
-            history_desc:
-              "Your recently generated QR codes (saved locally on your device)",
-            btn_clear_all: "Clear All",
-            empty_title: "No QR Codes Yet",
-            empty_desc:
-              "You haven't generated any QR codes. Head back to the home page to create your first one!",
-            btn_create_first: "Create QR Code",
-            confirm_delete:
-              "Are you sure you want to delete this QR code from history?",
-            confirm_clear:
-              "Are you sure you want to clear ALL history? This cannot be undone.",
-            btn_save_history: "Save to History",
-            saved: "Saved!",
-          },
-          th: {
-            nav_generate: "สร้าง QR",
-            nav_scan: "สแกน",
-            nav_history: "ประวัติ",
-            footer_desc: "เครื่องมือ QR ฟรี & โอเพนซอร์ส",
-            footer_sub: "ไม่มีบัญชี · ไม่มีการติดตาม · ฟรี 100%",
-
-            // Home
-            home_badge: "ฟรี · ไม่ต้องสมัคร · ใช้งานออฟไลน์ได้",
-            home_title_pre: "สร้าง",
-            home_title_post: "QR Code",
-            home_desc:
-              "สร้าง QR Code ที่สวยงามสำหรับลิงก์, WiFi, ผู้ติดต่อ และอื่นๆ — ได้ในไม่กี่วินาที",
-            label_encode: "คุณต้องการสร้าง QR จากอะไร?",
-            tab_url: "ลิงก์",
-            tab_text: "ข้อความ",
-            tab_wifi: "WiFi",
-            tab_vcard: "นามบัตร",
-            tab_email: "อีเมล",
-            tab_phone: "โทรศัพท์",
-            tab_sms: "SMS",
-            tab_line: "LINE",
-            tab_facebook: "Facebook",
-            tab_promptpay: "PromptPay",
-            label_promptpay_id: "หมายเลข PromptPay",
-            ph_promptpay_id: "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
-            help_promptpay_id:
-              "เบอร์มือถือ, เลขประจำตัวผู้เสียภาษี หรือ E-Wallet",
-            label_promptpay_amount: "จำนวนเงิน (ไม่บังคับ)",
-            help_promptpay_amount: "เว้นว่างไว้สำหรับโอนเงินไม่ระบุจำนวน",
-            promptpay_currency: "บาท",
-            promptpay_formats_title: "รูปแบบ ID ที่รองรับ:",
-            promptpay_fmt_mobile:
-              'เบอร์มือถือ: <span class="font-mono">08X-XXX-XXXX</span>',
-            promptpay_fmt_natid:
-              'เลขบัตรประชาชน: <span class="font-mono">X-XXXX-XXXXX-XX-X</span> (13 หลัก)',
-            promptpay_fmt_taxid:
-              'เลขประจำตัวผู้เสียภาษี: <span class="font-mono">XXXXXXXXXXXXX</span> (13 หลัก)',
-            label_content: "เนื้อหา",
-            label_website_url: "ลิงก์เว็บไซต์",
-            ph_website_url: "https://example.com",
-            help_website_url: "ใส่ URL เต็มรูปแบบรวมถึง https://",
-            summary_style: "ปรับแต่งสไตล์",
-            summary_style_desc: "สี, ขนาด, โลโก้ และอื่นๆ",
-            btn_generate: "สร้าง QR Code",
-
-            // Style Options
-            style_fg: "สีหลัก",
-            style_bg: "สีพื้นหลัง",
-            style_dot: "รูปแบบจุด",
-            style_ec: "การแก้ไขข้อผิดพลาด",
-            style_size: "ขนาด",
-            style_margin: "ขอบระยะห่าง",
-            style_quiet_zone: "พื้นที่ว่าง:",
-            style_modules: "หน่วย",
-            label_text_opt: "ข้อความบน QR (ไม่บังคับ)",
-            label_size: "ขนาด",
-            label_pos: "ตำแหน่ง",
-            label_pos_top: "บน",
-            label_pos_bottom: "ล่าง",
-            label_color: "สีข้อความ",
-            label_color_help: "ใช้สีเดียวกับ QR โดยค่าเริ่มต้น",
-            border_frame: "กรอบ / เฟรม",
-            border_color: "สีกรอบ",
-
-            // Preview
-            preview_title: "ตัวอย่าง",
-            preview_placeholder: "QR Code ของคุณจะปรากฏที่นี่",
-            preview_help: "กรอกข้อมูลแล้วกดปุ่มสร้าง",
-            badge_private: "ส่วนตัว",
-            badge_instant: "ทันที",
-            badge_free: "ฟรี 100%",
-
-            // Scan
-            scan_badge: "ปลอดภัย & ใช้ AI",
-            scan_title: "สแกน",
-            scan_desc:
-              "ส่องกล้องไปที่ QR code หรืออัปโหลดรูปภาพเพื่ออ่านค่าทันที",
-            camera_access: "การเข้าถึงกล้อง",
-            camera_start_help: "คลิกด้านล่างเพื่อเริ่มสแกนผ่านกล้อง",
-            btn_start_camera: "เริ่มเปิดกล้อง",
-            or_upload: "หรือ อัปโหลดรูปภาพ",
-            upload_help: "คลิกเพื่ออัปโหลด",
-            upload_help_sub: "หรือลากไฟล์มาวาง",
-            scan_success: "สำเร็จ!",
-            scan_success_desc: "อ่านข้อมูลเรียบร้อยแล้ว",
-            result_content: "ข้อมูลที่ได้",
-            btn_copy: "คัดลอกข้อมูล",
-            btn_open: "เปิดลิงก์",
-            btn_back_scan: "กลับไปสแกน",
-            scan_footer:
-              "ประมวลผลบนเครื่องของคุณอย่างปลอดภัย ไม่มีการส่งข้อมูลขึ้น Server",
-            copied: "คัดลอกแล้ว!",
-            err_no_qr: "ไม่พบ QR code ในรูปภาพนี้ กรุณาลองใหม่อีกครั้ง",
-
-            // History
-            history_title: "ประวัติ",
-            history_desc: "QR codes ที่คุณสร้างล่าสุด (บันทึกในเครื่องของคุณ)",
-            btn_clear_all: "ล้างทั้งหมด",
-            empty_title: "ยังไม่มีประวัติ",
-            empty_desc:
-              "คุณยังไม่ได้สร้าง QR code เลย กลับไปที่หน้าหลักเพื่อเริ่มสร้าง!",
-            btn_create_first: "สร้าง QR Code",
-            confirm_delete: "คุณแน่ใจหรือไม่ที่จะลบ QR code นี้จากประวัติ?",
-            confirm_clear:
-              "คุณแน่ใจหรือไม่ที่จะล้างประวัติทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้",
-            btn_save_history: "บันทึกประวัติ",
-            saved: "บันทึกแล้ว!",
-          },
-        };
-
-        window.t = function (key) {
-          const lang = localStorage.getItem("qrforge_lang") || "en";
-          return translations[lang][key] || key;
-        };
-
-        window.currentLang = function () {
-          return localStorage.getItem("qrforge_lang") || "en";
-        };
-
-        window.setLanguage = function (lang) {
-          localStorage.setItem("qrforge_lang", lang);
-          updatePageContent();
-          updateLanguageUI();
-
-          // Close all DaisyUI tabindex dropdowns (fix for iOS/WKWebView)
-          document
-            .querySelectorAll(".dropdown-content")
-            .forEach(function (menu) {
-              menu.blur();
-              menu.closest(".dropdown")?.querySelector("[tabindex]")?.blur();
-            });
-          if (document.activeElement) document.activeElement.blur();
-        };
-
-        function updatePageContent() {
-          const lang = window.currentLang();
-          const data = translations[lang];
-
-          // 1. Update elements with data-i18n (Static content)
-          document.querySelectorAll("[data-i18n]").forEach((el) => {
-            const key = el.getAttribute("data-i18n");
-            if (data[key]) {
-              if (el.tagName === "INPUT" && el.getAttribute("placeholder")) {
-                el.placeholder = data[key];
-              } else if (data[key].includes("<")) {
-                el.innerHTML = data[key];
-              } else {
-                el.innerText = data[key];
-              }
-            }
+        // Close all DaisyUI tabindex dropdowns (fix for iOS/WKWebView)
+        document
+          .querySelectorAll(".dropdown-content")
+          .forEach(function (menu) {
+            menu.blur();
+            menu.closest(".dropdown")?.querySelector("[tabindex]")?.blur();
           });
+        if (document.activeElement) document.activeElement.blur();
+      };
 
-          // 1b. Update placeholders via data-i18n-ph
-          document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
-            const key = el.getAttribute("data-i18n-ph");
-            if (data[key]) {
+      function updatePageContent() {
+        const lang = window.currentLang();
+        const data = translations[lang];
+
+        // 1. Update elements with data-i18n (Static content)
+        document.querySelectorAll("[data-i18n]").forEach((el) => {
+          const key = el.getAttribute("data-i18n");
+          if (data[key]) {
+            if (el.tagName === "INPUT" && el.getAttribute("placeholder")) {
               el.placeholder = data[key];
+            } else if (data[key].includes("<")) {
+              el.innerHTML = data[key];
+            } else {
+              el.innerText = data[key];
             }
-          });
-
-          // 2. Dynamic Fallbacks (Best effort for dynamic forms/labels)
-          if (lang === "th") {
-            const dynamicMaps = {
-              "Network Name (SSID)": "ชื่อเครือข่าย (SSID)",
-              Password: "รหัสผ่าน",
-              Encryption: "การเข้ารหัส",
-              "Hidden Network": "เครือข่ายซ่อน",
-              "First Name": "ชื่อจริง",
-              "Last Name": "นามสกุล",
-              Organization: "องค์กร",
-              "Job Title": "ตำแหน่งงาน",
-              "Mobile Phone": "เบอร์มือถือ",
-              "Work Phone": "เบอร์ที่ทำงาน",
-              Email: "อีเมล",
-              Website: "เว็บไซต์",
-              Street: "ถนน/ซอย",
-              City: "เมือง/เขต",
-              Zipcode: "รหัสไปรษณีย์",
-              Country: "ประเทศ",
-              Subject: "หัวข้อ",
-              Message: "ข้อความ",
-              "Phone Number": "เบอร์โทรศัพท์",
-              "Facebook URL": "ลิงก์ Facebook",
-              "Enter text": "กรอกข้อความ",
-              "Enter phone number": "กรอกเบอร์โทรศัพท์",
-              "PromptPay ID": "หมายเลข PromptPay",
-              "Amount (Optional)": "จำนวนเงิน (ไม่บังคับ)",
-              "Mobile number, National ID, or Tax ID":
-                "เบอร์มือถือ, เลขประจำตัว หรือ เลขประจำตัวผู้เสียภาษี",
-              "Mobile number or Tax ID / E-Wallet ID":
-                "เบอร์มือถือ, เลขประจำตัวผู้เสียภาษี หรือ E-Wallet",
-              "Leave empty for transfer without fixed amount":
-                "เว้นว่างไว้สำหรับโอนเงินไม่ระบุจำนวน",
-              "08X-XXX-XXXX or 1-XXXX-XXXXX-XX-X":
-                "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
-              "08X-XXX-XXXX or Tax ID":
-                "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
-              "Enter email": "กรอกอีเมล",
-              THB: "บาท",
-            };
-
-            // Translate Labels
-            document
-              .querySelectorAll(
-                "label span.label-text, span.label-text-alt, option",
-              )
-              .forEach((el) => {
-                const txt = el.innerText.trim();
-                if (dynamicMaps[txt]) el.innerText = dynamicMaps[txt];
-              });
-
-            // Translate Placeholders
-            document
-              .querySelectorAll("input[placeholder], textarea[placeholder]")
-              .forEach((el) => {
-                const ph = el.getAttribute("placeholder");
-                if (ph && dynamicMaps[ph])
-                  el.setAttribute("placeholder", dynamicMaps[ph]);
-              });
           }
-        }
-
-        function updateLanguageUI() {
-          const lang = window.currentLang();
-          // Update Icons / Text in Dropdown Button
-          const desktopIcon = document.getElementById("lang-icon-desktop");
-          if (desktopIcon) desktopIcon.innerText = lang === "en" ? "🇬🇧" : "🇹🇭";
-
-          const mobileIcon = document.getElementById("lang-icon-mobile");
-          if (mobileIcon) mobileIcon.innerText = lang === "en" ? "🇬🇧" : "🇹🇭";
-        }
-
-        // Initialize on load
-        document.addEventListener("DOMContentLoaded", () => {
-          updatePageContent();
-          updateLanguageUI();
         });
 
-        // Re-run on HTMX swaps (This is the key fix for navigation)
-        // htmx:afterSwap ensures content is in DOM before we try to translate it
-        // FIXED: เปลี่ยนจาก document.body เป็น document เพื่อป้องกัน TypeError ตอนโหลดไฟล์ครั้งแรก
-        document.addEventListener("htmx:afterSwap", () => {
-          updatePageContent();
+        // 1b. Update placeholders via data-i18n-ph
+        document.querySelectorAll("[data-i18n-ph]").forEach((el) => {
+          const key = el.getAttribute("data-i18n-ph");
+          if (data[key]) {
+            el.placeholder = data[key];
+          }
         });
-      })();
-    </script>
 
-    <style>
-      .nav-link {
-        position: relative;
-        transition: color 0.2s ease;
-      }
-      .nav-link::after {
-        content: "";
-        position: absolute;
-        bottom: -4px;
-        left: 50%;
-        width: 0;
-        height: 2px;
-        background: oklch(var(--p));
-        border-radius: 1px;
-        transition:
-          width 0.25s ease,
-          left 0.25s ease;
-      }
-      .nav-link:hover::after,
-      .nav-link.active::after {
-        width: 100%;
-        left: 0;
-      }
-      .nav-link:hover,
-      .nav-link.active {
-        color: oklch(var(--p));
-      }
+        // 2. Dynamic Fallbacks (Best effort for dynamic forms/labels)
+        if (lang === "th") {
+          const dynamicMaps = {
+            "Network Name (SSID)": "ชื่อเครือข่าย (SSID)",
+            Password: "รหัสผ่าน",
+            Encryption: "การเข้ารหัส",
+            "Hidden Network": "เครือข่ายซ่อน",
+            "First Name": "ชื่อจริง",
+            "Last Name": "นามสกุล",
+            Organization: "องค์กร",
+            "Job Title": "ตำแหน่งงาน",
+            "Mobile Phone": "เบอร์มือถือ",
+            "Work Phone": "เบอร์ที่ทำงาน",
+            Email: "อีเมล",
+            Website: "เว็บไซต์",
+            Street: "ถนน/ซอย",
+            City: "เมือง/เขต",
+            Zipcode: "รหัสไปรษณีย์",
+            Country: "ประเทศ",
+            Subject: "หัวข้อ",
+            Message: "ข้อความ",
+            "Phone Number": "เบอร์โทรศัพท์",
+            "Facebook URL": "ลิงก์ Facebook",
+            "Enter text": "กรอกข้อความ",
+            "Enter phone number": "กรอกเบอร์โทรศัพท์",
+            "PromptPay ID": "หมายเลข PromptPay",
+            "Amount (Optional)": "จำนวนเงิน (ไม่บังคับ)",
+            "Mobile number, National ID, or Tax ID":
+              "เบอร์มือถือ, เลขประจำตัว หรือ เลขประจำตัวผู้เสียภาษี",
+            "Mobile number or Tax ID / E-Wallet ID":
+              "เบอร์มือถือ, เลขประจำตัวผู้เสียภาษี หรือ E-Wallet",
+            "Leave empty for transfer without fixed amount":
+              "เว้นว่างไว้สำหรับโอนเงินไม่ระบุจำนวน",
+            "08X-XXX-XXXX or 1-XXXX-XXXXX-XX-X":
+              "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
+            "08X-XXX-XXXX or Tax ID":
+              "08X-XXX-XXXX หรือ เลขประจำตัวผู้เสียภาษี",
+            "Enter email": "กรอกอีเมล",
+            THB: "บาท",
+          };
 
-      .htmx-indicator {
-        display: none;
-      }
-      .htmx-request .htmx-indicator,
-      .htmx-request.htmx-indicator {
-        display: inline-flex;
-      }
+          // Translate Labels
+          document
+            .querySelectorAll(
+              "label span.label-text, span.label-text-alt, option",
+            )
+            .forEach((el) => {
+              const txt = el.innerText.trim();
+              if (dynamicMaps[txt]) el.innerText = dynamicMaps[txt];
+            });
 
-      @keyframes fadeUp {
-        from {
-          opacity: 0;
-          transform: translateY(16px);
+          // Translate Placeholders
+          document
+            .querySelectorAll("input[placeholder], textarea[placeholder]")
+            .forEach((el) => {
+              const ph = el.getAttribute("placeholder");
+              if (ph && dynamicMaps[ph])
+                el.setAttribute("placeholder", dynamicMaps[ph]);
+            });
         }
-        to {
-          opacity: 1;
-          transform: translateY(0);
-        }
       }
-      .animate-fade-up {
-        animation: fadeUp 0.5s ease-out both;
-      }
-      .delay-1 {
-        animation-delay: 0.08s;
-      }
-      .delay-2 {
-        animation-delay: 0.16s;
-      }
-      .delay-3 {
-        animation-delay: 0.24s;
-      }
-      .delay-4 {
-        animation-delay: 0.32s;
-      }
-      #form-fields > * {
-        animation: fadeUp 0.2s ease-out both;
-      }
-    </style>
 
-    <link rel="stylesheet" href="/css/custom.css" />
-  </head>
+      function updateLanguageUI() {
+        const lang = window.currentLang();
+        // Update Icons / Text in Dropdown Button
+        const desktopIcon = document.getElementById("lang-icon-desktop");
+        if (desktopIcon) desktopIcon.innerText = lang === "en" ? "🇬🇧" : "🇹🇭";
 
-  <body class="min-h-screen font-sans bg-base-100 text-base-content">
-    <!-- NAVBAR -->
-    <nav
-      class="sticky top-0 z-50 bg-base-100/80 backdrop-blur-lg border-b border-base-200"
-      style="padding-top: env(safe-area-inset-top, 0px)"
-    >
-      <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
-          <a
-            href="/"
-            hx-get="/"
-            hx-select="#main-content"
-            hx-target="#main-content"
-            hx-push-url="true"
-            class="flex items-center gap-2.5 group"
-          >
-            <span
-              class="text-2xl transition-transform group-hover:rotate-12 duration-300"
-              >⚒️</span
-            >
-            <span class="text-xl font-serif tracking-tight">
-              <span class="text-primary">QR</span> Forge
-            </span>
+        const mobileIcon = document.getElementById("lang-icon-mobile");
+        if (mobileIcon) mobileIcon.innerText = lang === "en" ? "🇬🇧" : "🇹🇭";
+      }
+
+      // Initialize on load
+      document.addEventListener("DOMContentLoaded", () => {
+        updatePageContent();
+        updateLanguageUI();
+      });
+
+      // Re-run on HTMX swaps (This is the key fix for navigation)
+      // htmx:afterSwap ensures content is in DOM before we try to translate it
+      // FIXED: เปลี่ยนจาก document.body เป็น document เพื่อป้องกัน TypeError ตอนโหลดไฟล์ครั้งแรก
+      document.addEventListener("htmx:afterSwap", () => {
+        updatePageContent();
+      });
+    })();
+  </script>
+
+  <style>
+    .nav-link {
+      position: relative;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link::after {
+      content: "";
+      position: absolute;
+      bottom: -4px;
+      left: 50%;
+      width: 0;
+      height: 2px;
+      background: oklch(var(--p));
+      border-radius: 1px;
+      transition:
+        width 0.25s ease,
+        left 0.25s ease;
+    }
+
+    .nav-link:hover::after,
+    .nav-link.active::after {
+      width: 100%;
+      left: 0;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: oklch(var(--p));
+    }
+
+    .htmx-indicator {
+      display: none;
+    }
+
+    .htmx-request .htmx-indicator,
+    .htmx-request.htmx-indicator {
+      display: inline-flex;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .animate-fade-up {
+      animation: fadeUp 0.5s ease-out both;
+    }
+
+    .delay-1 {
+      animation-delay: 0.08s;
+    }
+
+    .delay-2 {
+      animation-delay: 0.16s;
+    }
+
+    .delay-3 {
+      animation-delay: 0.24s;
+    }
+
+    .delay-4 {
+      animation-delay: 0.32s;
+    }
+
+    #form-fields>* {
+      animation: fadeUp 0.2s ease-out both;
+    }
+  </style>
+
+  <link rel="stylesheet" href="/css/custom.css" />
+</head>
+
+<body class="min-h-screen font-sans bg-base-100 text-base-content">
+  <!-- NAVBAR -->
+  <nav class="sticky top-0 z-50 bg-base-100/80 backdrop-blur-lg border-b border-base-200"
+    style="padding-top: env(safe-area-inset-top, 0px)">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16">
+        <a href="/" hx-get="/" hx-select="#main-content" hx-target="#main-content" hx-push-url="true"
+          class="flex items-center gap-2.5 group">
+          <span class="text-2xl transition-transform group-hover:rotate-12 duration-300">⚒️</span>
+          <span class="text-xl font-serif tracking-tight">
+            <span class="text-primary">QR</span> Forge
+          </span>
+        </a>
+
+        <!-- Desktop Links -->
+        <div class="hidden sm:flex items-center gap-6">
+          <a href="/" hx-get="/" hx-select="#main-content" hx-target="#main-content" hx-push-url="true"
+            class="nav-link text-sm font-medium {{navGenerate}}" data-i18n="nav_generate">Generate</a>
+          <a href="/scan" hx-get="/scan" hx-select="#main-content" hx-target="#main-content" hx-push-url="true"
+            class="nav-link text-sm font-medium {{navScan}}" data-i18n="nav_scan">Scan</a>
+          <a href="/history" hx-get="/history" hx-select="#main-content" hx-target="#main-content" hx-push-url="true"
+            class="nav-link text-sm font-medium {{navHistory}}">
+            <span data-i18n="nav_history">History</span>
+            <span id="history-badge" class="ml-1 badge badge-xs badge-primary font-bold hidden"></span>
           </a>
 
-          <!-- Desktop Links -->
-          <div class="hidden sm:flex items-center gap-6">
-            <a
-              href="/"
-              hx-get="/"
-              hx-select="#main-content"
-              hx-target="#main-content"
-              hx-push-url="true"
-              class="nav-link text-sm font-medium {{navGenerate}}"
-              data-i18n="nav_generate"
-              >Generate</a
-            >
-            <a
-              href="/scan"
-              hx-get="/scan"
-              hx-select="#main-content"
-              hx-target="#main-content"
-              hx-push-url="true"
-              class="nav-link text-sm font-medium {{navScan}}"
-              data-i18n="nav_scan"
-              >Scan</a
-            >
-            <a
-              href="/history"
-              hx-get="/history"
-              hx-select="#main-content"
-              hx-target="#main-content"
-              hx-push-url="true"
-              class="nav-link text-sm font-medium {{navHistory}}"
-            >
-              <span data-i18n="nav_history">History</span>
-              <span
-                id="history-badge"
-                class="ml-1 badge badge-xs badge-primary font-bold hidden"
-              ></span>
-            </a>
-
-            <!-- Modern Language Switcher (Desktop) -->
-            <div class="dropdown dropdown-end ml-2">
-              <div
-                tabindex="0"
-                role="button"
-                class="btn btn-ghost btn-circle btn-sm border border-base-200/50 hover:bg-base-200"
-              >
-                <span id="lang-icon-desktop" class="text-lg">🇬🇧</span>
-              </div>
-              <ul
-                tabindex="0"
-                class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-40 mt-2 border border-base-200"
-              >
-                <li>
-                  <a onclick="setLanguage('en')" class="gap-3"
-                    ><span class="text-lg">🇬🇧</span> English</a
-                  >
-                </li>
-                <li>
-                  <a onclick="setLanguage('th')" class="gap-3"
-                    ><span class="text-lg">🇹🇭</span> ไทย</a
-                  >
-                </li>
-              </ul>
+          <!-- Modern Language Switcher (Desktop) -->
+          <div class="dropdown dropdown-end ml-2">
+            <div tabindex="0" role="button"
+              class="btn btn-ghost btn-circle btn-sm border border-base-200/50 hover:bg-base-200">
+              <span id="lang-icon-desktop" class="text-lg">🇬🇧</span>
             </div>
+            <ul tabindex="0"
+              class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-40 mt-2 border border-base-200">
+              <li>
+                <a onclick="setLanguage('en')" class="gap-3"><span class="text-lg">🇬🇧</span> English</a>
+              </li>
+              <li>
+                <a onclick="setLanguage('th')" class="gap-3"><span class="text-lg">🇹🇭</span> ไทย</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <!-- Mobile Toggle & Lang -->
+        <div class="sm:hidden flex items-center gap-2">
+          <!-- Modern Language Switcher (Mobile) -->
+          <div class="dropdown dropdown-end">
+            <div tabindex="0" role="button" class="btn btn-ghost btn-circle btn-xs border border-base-200/50">
+              <span id="lang-icon-mobile" class="text-base">🇬🇧</span>
+            </div>
+            <ul tabindex="0"
+              class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-36 mt-2 border border-base-200">
+              <li>
+                <a onclick="setLanguage('en')" class="gap-3">🇬🇧 English</a>
+              </li>
+              <li><a onclick="setLanguage('th')" class="gap-3">🇹🇭 ไทย</a></li>
+            </ul>
           </div>
 
-          <!-- Mobile Toggle & Lang -->
-          <div class="sm:hidden flex items-center gap-2">
-            <!-- Modern Language Switcher (Mobile) -->
-            <div class="dropdown dropdown-end">
-              <div
-                tabindex="0"
-                role="button"
-                class="btn btn-ghost btn-circle btn-xs border border-base-200/50"
-              >
-                <span id="lang-icon-mobile" class="text-base">🇬🇧</span>
-              </div>
-              <ul
-                tabindex="0"
-                class="dropdown-content z-[1] menu p-2 shadow-lg bg-base-100 rounded-box w-36 mt-2 border border-base-200"
-              >
-                <li>
-                  <a onclick="setLanguage('en')" class="gap-3">🇬🇧 English</a>
-                </li>
-                <li><a onclick="setLanguage('th')" class="gap-3">🇹🇭 ไทย</a></li>
-              </ul>
-            </div>
-
-            <button
-              onclick="
+          <button onclick="
                 document
                   .getElementById('mobile-menu')
                   .classList.toggle('hidden')
-              "
-              class="btn btn-ghost btn-sm btn-square"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                />
-              </svg>
-            </button>
-          </div>
+              " class="btn btn-ghost btn-sm btn-square">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+            </svg>
+          </button>
         </div>
       </div>
+    </div>
 
-      <!-- Mobile Menu Links -->
-      <div
-        id="mobile-menu"
-        class="hidden sm:hidden bg-base-100 border-t border-base-200"
-      >
-        <div class="px-4 py-3 space-y-1">
-          <a
-            href="/"
-            hx-get="/"
-            hx-select="#main-content"
-            hx-target="#main-content"
-            hx-push-url="true"
-            onclick="
+    <!-- Mobile Menu Links -->
+    <div id="mobile-menu" class="hidden sm:hidden bg-base-100 border-t border-base-200">
+      <div class="px-4 py-3 space-y-1">
+        <a href="/" hx-get="/" hx-select="#main-content" hx-target="#main-content" hx-push-url="true" onclick="
               document.getElementById('mobile-menu').classList.add('hidden')
             "
-            class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navGenerate}}"
-            >🎨 <span data-i18n="nav_generate">Generate</span></a
-          >
-          <a
-            href="/scan"
-            hx-get="/scan"
-            hx-select="#main-content"
-            hx-target="#main-content"
-            hx-push-url="true"
-            onclick="
+          class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navGenerate}}">🎨
+          <span data-i18n="nav_generate">Generate</span></a>
+        <a href="/scan" hx-get="/scan" hx-select="#main-content" hx-target="#main-content" hx-push-url="true" onclick="
+              document.getElementById('mobile-menu').classList.add('hidden')
+            " class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navScan}}">📷
+          <span data-i18n="nav_scan">Scan</span></a>
+        <a href="/history" hx-get="/history" hx-select="#main-content" hx-target="#main-content" hx-push-url="true"
+          onclick="
               document.getElementById('mobile-menu').classList.add('hidden')
             "
-            class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navScan}}"
-            >📷 <span data-i18n="nav_scan">Scan</span></a
-          >
-          <a
-            href="/history"
-            hx-get="/history"
-            hx-select="#main-content"
-            hx-target="#main-content"
-            hx-push-url="true"
-            onclick="
-              document.getElementById('mobile-menu').classList.add('hidden')
-            "
-            class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navHistory}}"
-          >
-            📋 <span data-i18n="nav_history">History</span>
-            <span
-              id="history-badge-mobile"
-              class="ml-1 badge badge-xs badge-primary font-bold hidden"
-            ></span>
-          </a>
-        </div>
+          class="mobile-nav-link block px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-base-200 {{navHistory}}">
+          📋 <span data-i18n="nav_history">History</span>
+          <span id="history-badge-mobile" class="ml-1 badge badge-xs badge-primary font-bold hidden"></span>
+        </a>
       </div>
-    </nav>
+    </div>
+  </nav>
 
-    <!-- MAIN -->
-    <main id="main-content" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-      {{content}}
-    </main>
+  <!-- MAIN -->
+  <main id="main-content" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    {{content}}
+  </main>
 
-    <!-- FOOTER -->
-    <footer class="border-t border-base-200 mt-20">
-      <div
-        class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-base-content/40"
-      >
-        <p>
-          <span class="font-serif text-base-content/60">QR Forge</span> —
-          <span data-i18n="footer_desc">Free & Open QR Tool</span>
-        </p>
-        <p class="font-mono text-xs tracking-wide" data-i18n="footer_sub">
-          No accounts · No tracking · 100% free
-        </p>
-      </div>
-    </footer>
+  <!-- FOOTER -->
+  <footer class="border-t border-base-200 mt-20">
+    <div
+      class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-sm text-base-content/40">
+      <p>
+        <span class="font-serif text-base-content/60">QR Forge</span> —
+        <span data-i18n="footer_desc">Free & Open QR Tool</span>
+      </p>
+      <p class="font-mono text-xs tracking-wide" data-i18n="footer_sub">
+        No accounts · No tracking · 100% free
+      </p>
+    </div>
+  </footer>
 
-    <script>
-      (function () {
-        // อัปเดตตัวเลขแจ้งเตือนประวัติตอนโหลดหน้าแรก
-        try {
-          var h = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
-          if (h.length > 0) {
-            ["history-badge", "history-badge-mobile"].forEach(function (id) {
-              var el = document.getElementById(id);
-              if (el) {
-                el.textContent = h.length;
-                el.classList.remove("hidden");
-              }
-            });
-          }
-        } catch (e) {}
-      })();
-
-      // Use document instead of document.body to prevent null reference errors
-      document.addEventListener("htmx:afterSwap", function (event) {
-        if (event.detail.target.id === "main-content") {
-          const path = window.location.pathname;
-
-          // เปลี่ยนสถานะของเมนู Desktop
-          document.querySelectorAll(".nav-link").forEach((link) => {
-            if (link.getAttribute("href") === path) {
-              link.classList.add("active");
-            } else {
-              link.classList.remove("active");
-            }
-          });
-
-          // เปลี่ยนสถานะของเมนู Mobile
-          document.querySelectorAll(".mobile-nav-link").forEach((link) => {
-            if (link.getAttribute("href") === path) {
-              link.classList.add("bg-base-200");
-            } else {
-              link.classList.remove("bg-base-200");
+  <script>
+    (function () {
+      // อัปเดตตัวเลขแจ้งเตือนประวัติตอนโหลดหน้าแรก
+      try {
+        var h = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
+        if (h.length > 0) {
+          ["history-badge", "history-badge-mobile"].forEach(function (id) {
+            var el = document.getElementById(id);
+            if (el) {
+              el.textContent = h.length;
+              el.classList.remove("hidden");
             }
           });
         }
-      });
-    </script>
-    <script src="/js/app.js" defer></script>
-  </body>
+      } catch (e) { }
+    })();
+
+    // Use document instead of document.body to prevent null reference errors
+    document.addEventListener("htmx:afterSwap", function (event) {
+      if (event.detail.target.id === "main-content") {
+        const path = window.location.pathname;
+
+        // เปลี่ยนสถานะของเมนู Desktop
+        document.querySelectorAll(".nav-link").forEach((link) => {
+          if (link.getAttribute("href") === path) {
+            link.classList.add("active");
+          } else {
+            link.classList.remove("active");
+          }
+        });
+
+        // เปลี่ยนสถานะของเมนู Mobile
+        document.querySelectorAll(".mobile-nav-link").forEach((link) => {
+          if (link.getAttribute("href") === path) {
+            link.classList.add("bg-base-200");
+          } else {
+            link.classList.remove("bg-base-200");
+          }
+        });
+      }
+    });
+  </script>
+  <script src="/js/app.js" defer></script>
+  <script src="/js/html5-qrcode.min.js" defer></script>
+</body>
+
 </html>
