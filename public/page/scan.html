@@ -1,93 +1,183 @@
 <div class="w-full max-w-2xl mx-auto animate-fade-up">
-
   <!-- Header Section -->
   <div class="text-center mb-8">
     <div
-      class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase mb-4 shadow-sm">
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round"
-          d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.131A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.2-2.85.59-4.171" />
+      class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase mb-4 shadow-sm"
+    >
+      <svg
+        class="w-4 h-4"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.131A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.2-2.85.59-4.171"
+        />
       </svg>
       <span data-i18n="scan_badge">AI Powered &amp; Secure</span>
     </div>
-    <h1 class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-base-content">
-      <span data-i18n="scan_title">t Scan</span> <span
-        class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">QR Code</span>
+    <h1
+      class="text-4xl md:text-5xl font-extrabold mb-3 tracking-tight text-base-content"
+    >
+      <span data-i18n="scan_title">t Scan</span>
+      <span
+        class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
+        >QR Code</span
+      >
     </h1>
-    <p class="text-base-content/60 text-lg max-w-md mx-auto leading-relaxed font-light" data-i18n="scan_desc">
+    <p
+      class="text-base-content/60 text-lg max-w-md mx-auto leading-relaxed font-light"
+      data-i18n="scan_desc"
+    >
       Point your camera at a QR code or upload an image to decode instantly.
     </p>
   </div>
 
   <!-- Main Card -->
-  <div class="bg-base-100 rounded-[2rem] shadow-xl border border-base-200 overflow-hidden relative">
-    <div class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none">
-    </div>
+  <div
+    class="bg-base-100 rounded-[2rem] shadow-xl border border-base-200 overflow-hidden relative"
+  >
     <div
-      class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-secondary/5 rounded-full blur-3xl pointer-events-none">
-    </div>
+      class="absolute top-0 right-0 -mt-10 -mr-10 w-40 h-40 bg-primary/5 rounded-full blur-3xl pointer-events-none"
+    ></div>
+    <div
+      class="absolute bottom-0 left-0 -mb-10 -ml-10 w-40 h-40 bg-secondary/5 rounded-full blur-3xl pointer-events-none"
+    ></div>
 
     <div class="p-6 sm:p-8 relative z-10">
-
       <!-- Scanner UI (Active) -->
       <div id="scanner-container" class="space-y-6 transition-all duration-300">
-
         <!-- ===== Native Mode: @capacitor/barcode-scanner ===== -->
         <div id="native-scanner-ui" class="hidden">
           <div class="flex flex-col items-center justify-center py-8">
-            <div class="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6">
-              <svg class="w-12 h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                </path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+            <div
+              class="w-24 h-24 bg-primary/10 text-primary rounded-full flex items-center justify-center mb-6"
+            >
+              <svg
+                class="w-12 h-12"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                ></path>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                ></path>
               </svg>
             </div>
-            <button id="native-scan-btn"
-              class="btn btn-primary btn-lg rounded-full px-10 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all gap-2 mb-4">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                </path>
+            <button
+              id="native-scan-btn"
+              class="btn btn-primary btn-lg rounded-full px-10 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all gap-2 mb-4"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                ></path>
               </svg>
               <span data-i18n="btn_start_camera">Scan with Camera</span>
             </button>
-            <p class="text-sm text-base-content/40" data-i18n="native_scan_help">Opens native camera scanner with
-              autofocus</p>
+            <p
+              class="text-sm text-base-content/40"
+              data-i18n="native_scan_help"
+            >
+              Opens native camera scanner with autofocus
+            </p>
           </div>
         </div>
 
         <!-- ===== Web Mode: html5-qrcode fallback ===== -->
         <div id="web-scanner-ui">
-          <div id="video-wrapper"
+          <div
+            id="video-wrapper"
             class="relative w-full bg-base-200 rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/50"
-            style="aspect-ratio: 4/3;">
-            <div id="reader-video" class="w-full h-full absolute inset-0 z-10" style="display:none;"></div>
-            <div id="camera-placeholder"
-              class="text-center p-6 z-0 flex flex-col items-center justify-center h-full w-full">
+            style="aspect-ratio: 4/3"
+          >
+            <div
+              id="reader-video"
+              class="w-full h-full absolute inset-0 z-10"
+              style="display: none"
+            ></div>
+            <div
+              id="camera-placeholder"
+              class="text-center p-6 z-0 flex flex-col items-center justify-center h-full w-full"
+            >
               <div
-                class="w-20 h-20 bg-base-100 shadow-md text-primary rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300">
-                <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                  </path>
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                class="w-20 h-20 bg-base-100 shadow-md text-primary rounded-full flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300"
+              >
+                <svg
+                  class="w-10 h-10"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
+                  ></path>
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="1.5"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
+                  ></path>
                 </svg>
               </div>
-              <h3 class="text-lg font-bold text-base-content mb-1" data-i18n="camera_access">Camera Access</h3>
-              <p class="text-sm text-base-content/50 mb-6 max-w-[200px]" data-i18n="camera_start_help">Click below to
-                start scanning via your webcam.</p>
-              <button id="start-camera-btn"
-                class="btn btn-primary rounded-full px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all">
+              <h3
+                class="text-lg font-bold text-base-content mb-1"
+                data-i18n="camera_access"
+              >
+                Camera Access
+              </h3>
+              <p
+                class="text-sm text-base-content/50 mb-6 max-w-[200px]"
+                data-i18n="camera_start_help"
+              >
+                Click below to start scanning via your webcam.
+              </p>
+              <button
+                id="start-camera-btn"
+                class="btn btn-primary rounded-full px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all"
+              >
                 <span data-i18n="btn_start_camera">Start Camera</span>
               </button>
             </div>
-            <button id="stop-camera-btn"
-              class="btn btn-circle btn-error btn-sm absolute top-4 right-4 hidden z-30 shadow-lg transform hover:scale-110 transition-transform">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+            <button
+              id="stop-camera-btn"
+              class="btn btn-circle btn-error btn-sm absolute top-4 right-4 hidden z-30 shadow-lg transform hover:scale-110 transition-transform"
+            >
+              <svg
+                class="w-5 h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                ></path>
               </svg>
             </button>
           </div>
@@ -96,99 +186,187 @@
         <!-- Divider -->
         <div class="relative flex py-2 items-center">
           <div class="flex-grow border-t border-base-300"></div>
-          <span class="flex-shrink-0 mx-4 text-base-content/30 text-xs font-bold uppercase tracking-widest"
-            data-i18n="or_upload">OR Upload Image</span>
+          <span
+            class="flex-shrink-0 mx-4 text-base-content/30 text-xs font-bold uppercase tracking-widest"
+            data-i18n="or_upload"
+            >OR Upload Image</span
+          >
           <div class="flex-grow border-t border-base-300"></div>
         </div>
 
         <!-- File Upload Area -->
         <div class="w-full">
-          <label for="qr-input-file"
-            class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-base-300 rounded-2xl cursor-pointer bg-base-100 hover:bg-base-200/50 hover:border-primary transition-all group relative overflow-hidden">
-            <div class="flex flex-col items-center justify-center pt-5 pb-6 relative z-10">
-              <svg class="w-8 h-8 mb-3 text-base-content/40 group-hover:text-primary transition-colors" fill="none"
-                stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
-                </path>
+          <label
+            for="qr-input-file"
+            class="flex flex-col items-center justify-center w-full h-32 border-2 border-dashed border-base-300 rounded-2xl cursor-pointer bg-base-100 hover:bg-base-200/50 hover:border-primary transition-all group relative overflow-hidden"
+          >
+            <div
+              class="flex flex-col items-center justify-center pt-5 pb-6 relative z-10"
+            >
+              <svg
+                class="w-8 h-8 mb-3 text-base-content/40 group-hover:text-primary transition-colors"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                ></path>
               </svg>
-              <p class="mb-1 text-sm text-base-content/70"><span class="font-semibold text-primary"
-                  data-i18n="upload_help">Click to upload</span> <span data-i18n="upload_help_sub">or drag and
-                  drop</span></p>
+              <p class="mb-1 text-sm text-base-content/70">
+                <span class="font-semibold text-primary" data-i18n="upload_help"
+                  >Click to upload</span
+                >
+                <span data-i18n="upload_help_sub">or drag and drop</span>
+              </p>
               <p class="text-xs text-base-content/40">SVG, PNG, JPG or GIF</p>
             </div>
-            <input type="file" id="qr-input-file" accept="image/*" class="hidden" />
-            <div class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <input
+              type="file"
+              id="qr-input-file"
+              accept="image/*"
+              class="hidden"
+            />
+            <div
+              class="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity"
+            ></div>
           </label>
         </div>
       </div>
 
       <!-- Result UI (Hidden by default) -->
-      <div id="result-container" class="hidden space-y-8 animate-[fade-up_0.5s_ease-out]">
+      <div
+        id="result-container"
+        class="hidden space-y-8 animate-[fade-up_0.5s_ease-out]"
+      >
         <div class="text-center pt-4">
           <div class="relative inline-block">
             <div
-              class="w-20 h-20 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-4 animate-[bounce_1s_ease-in-out_1]">
-              <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+              class="w-20 h-20 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto mb-4 animate-[bounce_1s_ease-in-out_1]"
+            >
+              <svg
+                class="w-10 h-10"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 13l4 4L19 7"
+                ></path>
               </svg>
             </div>
-            <div class="absolute inset-0 rounded-full bg-success/20 animate-ping opacity-20"></div>
+            <div
+              class="absolute inset-0 rounded-full bg-success/20 animate-ping opacity-20"
+            ></div>
           </div>
-          <h3 class="text-3xl font-bold mb-2 text-base-content" data-i18n="scan_success">Success!</h3>
-          <p class="text-base-content/50" data-i18n="scan_success_desc">Content successfully decoded.</p>
+          <h3
+            class="text-3xl font-bold mb-2 text-base-content"
+            data-i18n="scan_success"
+          >
+            Success!
+          </h3>
+          <p class="text-base-content/50" data-i18n="scan_success_desc">
+            Content successfully decoded.
+          </p>
         </div>
 
-        <div class="bg-base-200/50 rounded-2xl p-6 border border-base-200 shadow-inner">
+        <div
+          class="bg-base-200/50 rounded-2xl p-6 border border-base-200 shadow-inner"
+        >
           <div class="flex justify-between items-center mb-3">
-            <label class="text-xs uppercase tracking-widest text-base-content/50 font-bold"
-              data-i18n="result_content">Result Content</label>
+            <label
+              class="text-xs uppercase tracking-widest text-base-content/50 font-bold"
+              data-i18n="result_content"
+              >Result Content</label
+            >
             <span class="badge badge-sm badge-neutral">Text</span>
           </div>
           <div class="relative group">
             <div
               class="break-all font-mono text-sm md:text-base text-base-content bg-base-100 p-5 rounded-xl border border-base-200 min-h-[6rem] flex items-center shadow-sm"
-              id="scanned-text"></div>
+              id="scanned-text"
+            ></div>
           </div>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <button id="copy-btn"
-            class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-400 text-base-content h-12 rounded-xl normal-case text-base font-medium">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
-              </path>
+          <button
+            id="copy-btn"
+            class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-400 text-base-content h-12 rounded-xl normal-case text-base font-medium"
+          >
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
+              ></path>
             </svg>
             <span data-i18n="btn_copy">Copy Content</span>
           </button>
-          <a id="open-link-btn" href="#" target="_blank"
-            class="btn btn-primary h-12 rounded-xl normal-case text-base font-medium hidden shadow-lg shadow-primary/20">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+          <a
+            id="open-link-btn"
+            href="#"
+            target="_blank"
+            class="btn btn-primary h-12 rounded-xl normal-case text-base font-medium hidden shadow-lg shadow-primary/20"
+          >
+            <svg
+              class="w-5 h-5 mr-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+              ></path>
             </svg>
             <span data-i18n="btn_open">Open Link</span>
           </a>
         </div>
 
         <div class="text-center pt-2">
-          <button id="scan-again-btn"
-            class="btn btn-ghost text-base-content/50 hover:text-base-content hover:bg-transparent -ml-2 group">
-            <svg class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform" fill="none"
-              stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
-              </path>
+          <button
+            id="scan-again-btn"
+            class="btn btn-ghost text-base-content/50 hover:text-base-content hover:bg-transparent -ml-2 group"
+          >
+            <svg
+              class="w-4 h-4 mr-1 transform group-hover:-translate-x-1 transition-transform"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              ></path>
             </svg>
             <span data-i18n="btn_back_scan">Back to Scanner</span>
           </button>
         </div>
       </div>
-
     </div>
   </div>
 
-  <p class="text-center text-xs text-base-content/30 mt-8 font-medium" data-i18n="scan_footer">
+  <p
+    class="text-center text-xs text-base-content/30 mt-8 font-medium"
+    data-i18n="scan_footer"
+  >
     Secure Client-Side Processing. No data is sent to servers.
   </p>
 </div>
@@ -217,7 +395,11 @@
     // ============================================================
     // Detect: Capacitor native vs Web browser
     // ============================================================
-    var isNative = !!(window.Capacitor && window.Capacitor.isNativePlatform && window.Capacitor.isNativePlatform());
+    var isNative = !!(
+      window.Capacitor &&
+      window.Capacitor.isNativePlatform &&
+      window.Capacitor.isNativePlatform()
+    );
 
     // UI Elements
     var scannerContainer = document.getElementById("scanner-container");
@@ -283,7 +465,6 @@
         } else if (result && result.text) {
           onScanSuccess(result.text);
         }
-
       } catch (err) {
         // --- เปลี่ยนให้เด้ง Error โชว์ทุกกรณี ---
         // ไม่มีการซ่อน Error เพื่อให้คุณเห็นชัดๆ ว่าติดตรงไหน
@@ -303,19 +484,28 @@
     // ============================================================
 
     function loadHtml5Qrcode(callback) {
-      if (typeof Html5Qrcode !== "undefined") { callback(); return; }
+      if (typeof Html5Qrcode !== "undefined") {
+        callback();
+        return;
+      }
       var sources = [
         "/js/html5-qrcode.min.js",
         "https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js",
-        "https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"
+        "https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js",
       ];
       var idx = 0;
       function tryNext() {
-        if (idx >= sources.length) { console.error("Failed to load html5-qrcode"); return; }
+        if (idx >= sources.length) {
+          console.error("Failed to load html5-qrcode");
+          return;
+        }
         var s = document.createElement("script");
         s.src = sources[idx];
         s.onload = callback;
-        s.onerror = function () { idx++; tryNext(); };
+        s.onerror = function () {
+          idx++;
+          tryNext();
+        };
         document.head.appendChild(s);
       }
       tryNext();
@@ -328,7 +518,10 @@
     }
 
     function startWebCamera() {
-      if (!html5QrCode) { alert("Web Scanner not ready. Please wait or reload."); return; }
+      if (!html5QrCode) {
+        alert("Web Scanner not ready. Please wait or reload.");
+        return;
+      }
       if (cameraPlaceholder) cameraPlaceholder.classList.add("hidden");
       if (readerVideo) readerVideo.style.display = "block";
       if (stopBtn) stopBtn.classList.remove("hidden");
@@ -338,13 +531,28 @@
       }
 
       html5QrCode
-        .start({ facingMode: "environment" }, {
-          fps: 15,
-          experimentalFeatures: { useBarCodeDetectorIfSupported: true },
-          videoConstraints: { facingMode: "environment", width: { ideal: 1280 }, height: { ideal: 720 } }
-        }, onScanSuccess, function () { })
+        .start(
+          { facingMode: "environment" },
+          {
+            fps: 15,
+            experimentalFeatures: { useBarCodeDetectorIfSupported: true },
+            videoConstraints: {
+              facingMode: "environment",
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+            },
+          },
+          onScanSuccess,
+          function () {},
+        )
         .catch(function (err) {
-          html5QrCode.start({ facingMode: "user" }, { fps: 15 }, onScanSuccess, function () { })
+          html5QrCode
+            .start(
+              { facingMode: "user" },
+              { fps: 15 },
+              onScanSuccess,
+              function () {},
+            )
             .catch(function (err2) {
               alert("Could not access camera: " + (err2.message || err2));
               stopWebCamera();
@@ -355,7 +563,9 @@
     function stopWebCamera() {
       if (html5QrCode && html5QrCode.isScanning) {
         html5QrCode.stop().then(resetWebUI).catch(resetWebUI);
-      } else { resetWebUI(); }
+      } else {
+        resetWebUI();
+      }
     }
 
     function resetWebUI() {
@@ -370,7 +580,10 @@
 
     function webScanFromFile(file) {
       if (!html5QrCode) {
-        loadHtml5Qrcode(function () { initWebScanner(); doWebFileScan(file); });
+        loadHtml5Qrcode(function () {
+          initWebScanner();
+          doWebFileScan(file);
+        });
         return;
       }
       doWebFileScan(file);
@@ -378,22 +591,44 @@
 
     function doWebFileScan(file) {
       var wasHidden = readerVideo && readerVideo.style.display === "none";
-      if (wasHidden) { readerVideo.style.display = "block"; readerVideo.style.opacity = "0"; readerVideo.style.pointerEvents = "none"; }
+      if (wasHidden) {
+        readerVideo.style.display = "block";
+        readerVideo.style.opacity = "0";
+        readerVideo.style.pointerEvents = "none";
+      }
 
-      html5QrCode.scanFile(file, false)
-        .then(function (text) { if (wasHidden) hideRV(); onScanSuccess(text); })
+      html5QrCode
+        .scanFile(file, false)
+        .then(function (text) {
+          if (wasHidden) hideRV();
+          onScanSuccess(text);
+        })
         .catch(function () {
-          scanViaCanvas(file, function (text) { if (wasHidden) hideRV(); onScanSuccess(text); },
+          scanViaCanvas(
+            file,
+            function (text) {
+              if (wasHidden) hideRV();
+              onScanSuccess(text);
+            },
             function () {
               if (wasHidden) hideRV();
-              alert(window.t ? window.t("err_no_qr") : "No QR code found in this image.");
+              alert(
+                window.t
+                  ? window.t("err_no_qr")
+                  : "No QR code found in this image.",
+              );
               if (fileInput) fileInput.value = "";
-            });
+            },
+          );
         });
     }
 
     function hideRV() {
-      if (readerVideo) { readerVideo.style.display = "none"; readerVideo.style.opacity = ""; readerVideo.style.pointerEvents = ""; }
+      if (readerVideo) {
+        readerVideo.style.display = "none";
+        readerVideo.style.opacity = "";
+        readerVideo.style.pointerEvents = "";
+      }
     }
 
     function scanViaCanvas(file, onOk, onFail) {
@@ -405,16 +640,33 @@
         img.onload = function () {
           try {
             var c = document.createElement("canvas");
-            var mx = 1500, w = img.width, h = img.height;
-            if (w > mx || h > mx) { var s = mx / Math.max(w, h); w = Math.round(w * s); h = Math.round(h * s); }
-            c.width = w; c.height = h;
+            var mx = 1500,
+              w = img.width,
+              h = img.height;
+            if (w > mx || h > mx) {
+              var s = mx / Math.max(w, h);
+              w = Math.round(w * s);
+              h = Math.round(h * s);
+            }
+            c.width = w;
+            c.height = h;
             c.getContext("2d").drawImage(img, 0, 0, w, h);
             c.toBlob(function (blob) {
-              if (!blob) { onFail(); return; }
-              try { var f = new File([blob], "s.png", { type: "image/png" }); html5QrCode.scanFile(f, false).then(onOk).catch(onFail); }
-              catch (e) { blob.name = "s.png"; html5QrCode.scanFile(blob, false).then(onOk).catch(onFail); }
+              if (!blob) {
+                onFail();
+                return;
+              }
+              try {
+                var f = new File([blob], "s.png", { type: "image/png" });
+                html5QrCode.scanFile(f, false).then(onOk).catch(onFail);
+              } catch (e) {
+                blob.name = "s.png";
+                html5QrCode.scanFile(blob, false).then(onOk).catch(onFail);
+              }
             }, "image/png");
-          } catch (e) { onFail(); }
+          } catch (e) {
+            onFail();
+          }
         };
         img.src = ev.target.result;
       };
@@ -435,12 +687,20 @@
       if (scannedTextEl) scannedTextEl.textContent = decodedText;
 
       var isUrl = false;
-      try { new URL(decodedText); isUrl = true; } catch (_) {
-        isUrl = decodedText.startsWith("http://") || decodedText.startsWith("https://");
+      try {
+        new URL(decodedText);
+        isUrl = true;
+      } catch (_) {
+        isUrl =
+          decodedText.startsWith("http://") ||
+          decodedText.startsWith("https://");
       }
 
       if (isUrl) {
-        if (openLinkBtn) { openLinkBtn.href = decodedText; openLinkBtn.classList.remove("hidden"); }
+        if (openLinkBtn) {
+          openLinkBtn.href = decodedText;
+          openLinkBtn.classList.remove("hidden");
+        }
       } else {
         if (openLinkBtn) openLinkBtn.classList.add("hidden");
       }
@@ -450,23 +710,34 @@
 
     function saveToHistory(text, isUrl) {
       var entry = {
-        id: Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
+        id:
+          Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
         type: isUrl ? "url" : "text",
         content: isUrl ? { url: text } : { text: text },
         style: {},
-        label: text.substring(0, 50) + (text.length > 50 ? "..."),
-        starred: false, createdAt: new Date().toISOString(), source: "scanned", thumbnail: ""
+        label: text.substring(0, 50) + (text.length > 50 ? "..." : ""),
+        starred: false,
+        createdAt: new Date().toISOString(),
+        source: "scanned",
+        thumbnail: "",
       };
       try {
-        var history = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
+        var history = JSON.parse(
+          localStorage.getItem("qrforge_history") || "[]",
+        );
         history.unshift(entry);
         if (history.length > 50) history.pop();
         localStorage.setItem("qrforge_history", JSON.stringify(history));
         ["history-badge", "history-badge-mobile"].forEach(function (id) {
           var el = document.getElementById(id);
-          if (el) { el.textContent = history.length; el.classList.remove("hidden"); }
+          if (el) {
+            el.textContent = history.length;
+            el.classList.remove("hidden");
+          }
         });
-      } catch (e) { console.error("Failed to save history", e); }
+      } catch (e) {
+        console.error("Failed to save history", e);
+      }
     }
 
     // ============================================================
@@ -476,12 +747,20 @@
     // เพิ่ม try catch ป้องกัน error ลับหลังตอนกดปุ่ม
     if (nativeScanBtn) {
       nativeScanBtn.addEventListener("click", function () {
-        try { nativeScan(); } catch (e) { alert("Btn Error: " + e); }
+        try {
+          nativeScan();
+        } catch (e) {
+          alert("Btn Error: " + e);
+        }
       });
     }
     if (startBtn) {
       startBtn.addEventListener("click", function () {
-        try { startWebCamera(); } catch (e) { alert("Btn Error: " + e); }
+        try {
+          startWebCamera();
+        } catch (e) {
+          alert("Btn Error: " + e);
+        }
       });
     }
     if (stopBtn) stopBtn.addEventListener("click", stopWebCamera);
@@ -499,11 +778,17 @@
       copyBtn.addEventListener("click", function () {
         if (!currentResult) return;
         navigator.clipboard.writeText(currentResult).then(function () {
-          var orig = copyBtn.innerHTML, cls = copyBtn.className;
-          copyBtn.innerHTML = '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' + (window.t ? window.t("copied") : "Copied!");
+          var orig = copyBtn.innerHTML,
+            cls = copyBtn.className;
+          copyBtn.innerHTML =
+            '<svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>' +
+            (window.t ? window.t("copied") : "Copied!");
           copyBtn.classList.add("btn-success", "text-white");
           copyBtn.classList.remove("btn-outline", "text-base-content");
-          setTimeout(function () { copyBtn.innerHTML = orig; copyBtn.className = cls; }, 2000);
+          setTimeout(function () {
+            copyBtn.innerHTML = orig;
+            copyBtn.className = cls;
+          }, 2000);
         });
       });
     }
@@ -513,27 +798,44 @@
       fileInput.addEventListener("change", function (e) {
         if (e.target.files.length === 0) return;
         var f = e.target.files[0];
-        if (f.type && !f.type.startsWith("image/") && !f.type.startsWith("application/octet")) {
+        if (
+          f.type &&
+          !f.type.startsWith("image/") &&
+          !f.type.startsWith("application/octet")
+        ) {
           alert("Please select an image file.");
           fileInput.value = "";
           return;
         }
-        if (isNative) { nativeScanFromFile(f); }
-        else { webScanFromFile(f); }
+        if (isNative) {
+          nativeScanFromFile(f);
+        } else {
+          webScanFromFile(f);
+        }
       });
     }
 
     // Init web scanner only in browser
-    if (!isNative) { loadHtml5Qrcode(initWebScanner); }
-
+    if (!isNative) {
+      loadHtml5Qrcode(initWebScanner);
+    }
   })();
 
   // HTMX Cleanup
   (function () {
-    if (window.qrScanCleanup) document.body.removeEventListener("htmx:beforeRequest", window.qrScanCleanup);
+    if (window.qrScanCleanup)
+      document.body.removeEventListener(
+        "htmx:beforeRequest",
+        window.qrScanCleanup,
+      );
     function h() {
       if (window.qrScannerInstance && window.qrScannerInstance.isScanning) {
-        window.qrScannerInstance.stop().then(function () { window.qrScannerInstance.clear(); }).catch(function () { });
+        window.qrScannerInstance
+          .stop()
+          .then(function () {
+            window.qrScannerInstance.clear();
+          })
+          .catch(function () {});
       }
     }
     document.body.addEventListener("htmx:beforeRequest", h);
