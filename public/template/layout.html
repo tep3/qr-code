@@ -718,6 +718,21 @@
       .safe-bottom {
         padding-bottom: env(safe-area-inset-bottom, 0px);
       }
+
+      /* Touch manipulation for better mobile responsiveness */
+      .touch-manipulation {
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      /* Ensure minimum touch target size (44x44px WCAG guideline) */
+      .min-h-\[2\.75rem\] {
+        min-height: 2.75rem; /* 44px */
+      }
+
+      .min-w-\[2\.75rem\] {
+        min-width: 2.75rem; /* 44px */
+      }
     </style>
 
     <link rel="stylesheet" href="/css/custom.css" />
