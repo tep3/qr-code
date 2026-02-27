@@ -796,6 +796,68 @@
             </p>
           </div>
         </div>
+
+        <!-- Action Buttons (Show after generate) -->
+        <div id="qr-actions" class="hidden mt-4 grid grid-cols-2 gap-2">
+          <button
+            onclick="downloadQR('png')"
+            class="btn btn-outline btn-sm rounded-lg"
+          >
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
+            </svg>
+            PNG
+          </button>
+          <button
+            onclick="downloadQR('svg')"
+            class="btn btn-outline btn-sm rounded-lg"
+          >
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+              />
+            </svg>
+            SVG
+          </button>
+          <button
+            id="save-to-history-btn"
+            onclick="saveToHistory()"
+            class="btn btn-ghost btn-sm rounded-lg col-span-2 text-base-content/50"
+          >
+            <svg
+              class="w-4 h-4 mr-1"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+              />
+            </svg>
+            <span data-i18n="btn_save_history">Save to History</span>
+          </button>
+        </div>
       </div>
 
       <div class="animate-fade-up delay-3 grid grid-cols-3 gap-2">
@@ -901,6 +963,9 @@
       activeLabel.classList.add("text-primary", "font-semibold");
     }
     document.getElementById("qr-type").value = clickedBtn.dataset.type;
+
+    // Reset preview when switching tabs
+    document.getElementById("qr-actions")?.classList.add("hidden");
   }
 
   // Handle PromptPay Tab separately (Client-Side Rendering)
@@ -958,4 +1023,36 @@
         if (box) box.classList.add("selected");
       });
     });
+
+  // ─── Show QR Actions after successful generation ───────────
+  document.addEventListener("htmx:afterSwap", function (evt) {
+    if (evt.detail.target.id === "qr-preview") {
+      // Check if we got a valid QR image
+      var preview = document.getElementById("qr-preview");
+      var hasImage = preview?.querySelector("img") !== null;
+
+      if (hasImage) {
+        document.getElementById("qr-actions")?.classList.remove("hidden");
+        window.showToast("QR Code generated successfully!", "success", 2000);
+      }
+    }
+  });
+
+  // ─── Form validation before submit ─────────────────────────
+  document.getElementById("qr-form")?.addEventListener("submit", function (e) {
+    var type = document.getElementById("qr-type").value;
+    var hasContent = false;
+
+    // Check if any content field has value
+    var contentInputs = this.querySelectorAll('input[name^="content."]');
+    contentInputs.forEach(function (input) {
+      if (input.value.trim()) hasContent = true;
+    });
+
+    if (!hasContent) {
+      e.preventDefault();
+      window.showToast("Please fill in the content fields", "warning");
+      return false;
+    }
+  });
 </script>

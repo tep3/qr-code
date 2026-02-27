@@ -579,12 +579,6 @@
   </div>
 </div>
 
-<!-- Toast Notification Container -->
-<div
-  id="toast-container"
-  class="fixed top-4 right-4 z-[100] flex flex-col gap-3 pointer-events-none sm:top-6 sm:right-6"
-></div>
-
 <style>
   /* Scanning animation */
   @keyframes scan {
@@ -595,55 +589,6 @@
     50% {
       top: 100%;
     }
-  }
-
-  /* Toast Animations */
-  @keyframes slideInRight {
-    from {
-      opacity: 0;
-      transform: translateX(100%) scale(0.9);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
-  }
-
-  @keyframes slideOutRight {
-    from {
-      opacity: 1;
-      transform: translateX(0) scale(1);
-    }
-    to {
-      opacity: 0;
-      transform: translateX(100%) scale(0.9);
-    }
-  }
-
-  @keyframes progress {
-    from {
-      width: 100%;
-    }
-    to {
-      width: 0%;
-    }
-  }
-
-  /* Toast Styles */
-  .toast-notification {
-    pointer-events: auto;
-    animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
-      forwards;
-    max-width: calc(100vw - 2rem);
-    width: 380px;
-  }
-
-  .toast-notification.hiding {
-    animation: slideOutRight 0.3s ease-in forwards;
-  }
-
-  .toast-notification .progress-bar {
-    animation: progress linear forwards;
   }
 
   /* Custom scrollbar for result text */
@@ -695,131 +640,10 @@
     .animate-\[scan_2s_ease-in-out_infinite\] {
       animation: none !important;
     }
-    .toast-notification {
-      animation: none;
-      opacity: 1;
-    }
-  }
-
-  /* Mobile toast adjustments */
-  @media (max-width: 640px) {
-    #toast-container {
-      left: 1rem;
-      right: 1rem;
-    }
-    .toast-notification {
-      width: 100%;
-      max-width: 100%;
-    }
   }
 </style>
 
 <script>
-  // ============================================================
-  // Toast Notification System
-  // ============================================================
-  (function () {
-    // Create global showToast function
-    window.showToast = function (message, type = "success", duration = 4000) {
-      const container = document.getElementById("toast-container");
-      if (!container) return;
-
-      // Create toast element
-      const toast = document.createElement("div");
-      toast.className =
-        "toast-notification relative overflow-hidden rounded-2xl shadow-2xl border backdrop-blur-md";
-
-      // Type configurations
-      const configs = {
-        success: {
-          bg: "bg-success/10",
-          border: "border-success/20",
-          icon: "text-success",
-          iconSvg:
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />',
-          progress: "bg-success/30",
-        },
-        error: {
-          bg: "bg-error/10",
-          border: "border-error/20",
-          icon: "text-error",
-          iconSvg:
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" />',
-          progress: "bg-error/30",
-        },
-        warning: {
-          bg: "bg-warning/10",
-          border: "border-warning/20",
-          icon: "text-warning",
-          iconSvg:
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />',
-          progress: "bg-warning/30",
-        },
-        info: {
-          bg: "bg-info/10",
-          border: "border-info/20",
-          icon: "text-info",
-          iconSvg:
-            '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />',
-          progress: "bg-info/30",
-        },
-      };
-
-      const config = configs[type] || configs.success;
-
-      toast.innerHTML = `
-        <div class="flex items-start gap-4 p-4 ${config.bg} ${config.border}">
-          <div class="flex-shrink-0 w-10 h-10 rounded-xl bg-base-100/80 flex items-center justify-center ${config.icon} shadow-sm">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              ${config.iconSvg}
-            </svg>
-          </div>
-          <div class="flex-1 min-w-0 pt-1">
-            <p class="text-sm font-medium text-base-content leading-relaxed">${message}</p>
-          </div>
-          <button class="close-toast flex-shrink-0 w-8 h-8 rounded-lg flex items-center justify-center text-base-content/40 hover:text-base-content hover:bg-base-200/50 transition-colors">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
-        <div class="progress-bar h-1 ${config.progress}" style="animation-duration: ${duration}ms;"></div>
-      `;
-
-      // Add close functionality
-      const closeBtn = toast.querySelector(".close-toast");
-      closeBtn.addEventListener("click", () => hideToast(toast));
-
-      container.appendChild(toast);
-
-      // Auto remove after duration
-      const autoRemove = setTimeout(() => hideToast(toast), duration);
-
-      // Pause on hover
-      const progressBar = toast.querySelector(".progress-bar");
-      toast.addEventListener("mouseenter", () => {
-        progressBar.style.animationPlayState = "paused";
-        clearTimeout(autoRemove);
-      });
-
-      toast.addEventListener("mouseleave", () => {
-        progressBar.style.animationPlayState = "running";
-        setTimeout(() => hideToast(toast), duration);
-      });
-
-      function hideToast(element) {
-        element.classList.add("hiding");
-        setTimeout(() => element.remove(), 300);
-      }
-
-      // Limit to 3 toasts max
-      const toasts = container.querySelectorAll(".toast-notification");
-      if (toasts.length > 3) {
-        toasts[0].remove();
-      }
-    };
-  })();
-
   (function () {
     // ============================================================
     // Detect: Capacitor native vs Web browser
@@ -870,9 +694,9 @@
     // ============================================================
     function checkCameraSupport() {
       if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-        showToast("Your browser doesn't support camera access", "error");
+        window.showToast("Your browser doesn't support camera access", "error");
         startBtn?.classList.add("btn-disabled");
-        startBtn && (startBtn.disabled = true);
+        if (startBtn) startBtn.disabled = true;
         return false;
       }
       return true;
@@ -890,7 +714,7 @@
       try {
         var scanner = getBarcodeScannerPlugin();
         if (!scanner) {
-          showToast("Scanner plugin not available", "error");
+          window.showToast("Scanner plugin not available", "error");
           return;
         }
 
@@ -909,7 +733,7 @@
       } catch (err) {
         var msg = err?.message || "Scan failed";
         if (!msg.includes("cancelled") && !msg.includes("dismissed")) {
-          showToast(msg, "error");
+          window.showToast(msg, "error");
         }
       }
     }
@@ -927,7 +751,7 @@
         return;
       }
 
-      showToast("Loading scanner...", "info", 2000);
+      window.showToast("Loading scanner...", "info", 2000);
 
       var sources = [
         "/js/html5-qrcode.min.js",
@@ -938,7 +762,7 @@
 
       function tryNext() {
         if (idx >= sources.length) {
-          showToast("Failed to load scanner library", "error");
+          window.showToast("Failed to load scanner library", "error");
           return;
         }
         var s = document.createElement("script");
@@ -963,7 +787,7 @@
         console.log("html5-qrcode initialized");
       } catch (e) {
         console.error("Failed to init scanner:", e);
-        showToast("Failed to initialize scanner", "error");
+        window.showToast("Failed to initialize scanner", "error");
       }
     }
 
@@ -997,7 +821,7 @@
       }
 
       isScanning = true;
-      startBtn && (startBtn.disabled = true);
+      if (startBtn) startBtn.disabled = true;
       startBtn?.classList.add("loading");
 
       cameraPlaceholder?.classList.add("hidden");
@@ -1026,7 +850,11 @@
           () => {},
         );
 
-        showToast("Camera started. Point at a QR code!", "success", 3000);
+        window.showToast(
+          "Camera started. Point at a QR code!",
+          "success",
+          3000,
+        );
       } catch (err) {
         console.error("Camera start error:", err);
 
@@ -1049,20 +877,20 @@
             err2.message?.includes("Permission")
           ) {
             permissionDenied?.classList.remove("hidden");
-            showToast(
+            window.showToast(
               "Camera permission denied. Please enable it in settings.",
               "error",
             );
           } else if (err2.name === "NotFoundError") {
-            showToast("No camera found on this device", "warning");
+            window.showToast("No camera found on this device", "warning");
           } else {
-            showToast("Could not access camera", "error");
+            window.showToast("Could not access camera", "error");
           }
 
           stopWebCamera();
         }
       } finally {
-        startBtn && (startBtn.disabled = false);
+        if (startBtn) startBtn.disabled = false;
         startBtn?.classList.remove("loading");
       }
     }
@@ -1111,7 +939,7 @@
           const text = await scanViaCanvas(file);
           onScanSuccess(text);
         } catch (err2) {
-          showToast(
+          window.showToast(
             window.t?.("err_no_qr") || "No QR code found in image",
             "warning",
           );
@@ -1289,7 +1117,7 @@
       navigator.clipboard
         .writeText(currentResult)
         .then(function () {
-          showToast("Copied to clipboard!", "success", 2000);
+          window.showToast("Copied to clipboard!", "success", 2000);
 
           var originalHTML = copyBtn.innerHTML;
           copyBtn.innerHTML =
@@ -1306,7 +1134,7 @@
           }, 2000);
         })
         .catch(function () {
-          showToast("Failed to copy", "error");
+          window.showToast("Failed to copy", "error");
         });
     }
 
@@ -1335,7 +1163,7 @@
       var f = e.target.files[0];
 
       if (!f.type?.startsWith("image/")) {
-        showToast("Please select an image file", "warning");
+        window.showToast("Please select an image file", "warning");
         fileInput.value = "";
         return;
       }

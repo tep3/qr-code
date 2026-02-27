@@ -596,37 +596,96 @@
         animation: fadeUp 0.3s ease-out both;
       }
 
-      /* Toast notification */
+      /* ==========================================
+         Toast Notification System - Global Styles
+         ========================================== */
       .toast-container {
         position: fixed;
-        bottom: 1.5rem;
-        right: 1.5rem;
-        z-index: 100;
+        top: 1rem;
+        right: 1rem;
+        z-index: 9999;
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        pointer-events: none;
-      }
-
-      .toast {
-        background: oklch(var(--b1));
-        border: 1px solid oklch(var(--bc) / 0.1);
-        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-        border-radius: 0.75rem;
-        padding: 1rem 1.25rem;
-        display: flex;
-        align-items: center;
         gap: 0.75rem;
-        transform: translateX(100%);
-        opacity: 0;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        pointer-events: auto;
-        max-width: 320px;
+        pointer-events: none;
+        max-width: calc(100vw - 2rem);
       }
 
-      .toast.show {
-        transform: translateX(0);
-        opacity: 1;
+      @media (min-width: 640px) {
+        .toast-container {
+          top: 1.5rem;
+          right: 1.5rem;
+          width: 380px;
+        }
+      }
+
+      /* Toast Animations */
+      @keyframes slideInRight {
+        from {
+          opacity: 0;
+          transform: translateX(100%) scale(0.9);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0) scale(1);
+        }
+      }
+
+      @keyframes slideOutRight {
+        from {
+          opacity: 1;
+          transform: translateX(0) scale(1);
+        }
+        to {
+          opacity: 0;
+          transform: translateX(100%) scale(0.9);
+        }
+      }
+
+      @keyframes progress {
+        from {
+          width: 100%;
+        }
+        to {
+          width: 0%;
+        }
+      }
+
+      /* Toast Styles */
+      .toast-notification {
+        pointer-events: auto;
+        animation: slideInRight 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)
+          forwards;
+        max-width: 100%;
+        width: 100%;
+      }
+
+      .toast-notification.hiding {
+        animation: slideOutRight 0.3s ease-in forwards;
+      }
+
+      .toast-notification .progress-bar {
+        animation: progress linear forwards;
+      }
+
+      /* Reduced motion */
+      @media (prefers-reduced-motion: reduce) {
+        .toast-notification {
+          animation: none;
+          opacity: 1;
+        }
+        .toast-notification.hiding {
+          animation: none;
+          opacity: 0;
+        }
+      }
+
+      /* Mobile toast adjustments */
+      @media (max-width: 640px) {
+        .toast-container {
+          left: 1rem;
+          right: 1rem;
+        }
       }
 
       /* Language switcher improvements */
@@ -1003,11 +1062,13 @@
       </div>
     </footer>
 
-    <!-- Toast Container -->
+    <!-- Toast Notification Container - Global -->
     <div id="toast-container" class="toast-container"></div>
 
     <script>
+      // ==========================================
       // Mobile menu functions
+      // ==========================================
       function openMobileMenu() {
         document.getElementById("mobile-overlay").classList.add("open");
         document.getElementById("mobile-panel").classList.add("open");
@@ -1025,7 +1086,9 @@
         if (e.key === "Escape") closeMobileMenu();
       });
 
+      // ==========================================
       // Update history badges
+      // ==========================================
       (function () {
         try {
           var h = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
@@ -1041,7 +1104,9 @@
         } catch (e) {}
       })();
 
+      // ==========================================
       // Navigation active states
+      // ==========================================
       document.addEventListener("htmx:afterSwap", function (event) {
         if (event.detail.target.id === "main-content") {
           const path = window.location.pathname;
@@ -1069,40 +1134,9 @@
         }
       });
 
-      // Toast notification helper
-      window.showToast = function (message, type = "success") {
-        const container = document.getElementById("toast-container");
-        const toast = document.createElement("div");
-        toast.className = `toast ${type}`;
-
-        const icon = type === "success" ? "✓" : type === "error" ? "✕" : "ℹ";
-        const colorClass =
-          type === "success"
-            ? "text-success"
-            : type === "error"
-              ? "text-error"
-              : "text-info";
-
-        toast.innerHTML = `
-          <span class="text-lg ${colorClass}">${icon}</span>
-          <span class="text-sm font-medium">${message}</span>
-        `;
-
-        container.appendChild(toast);
-
-        // Trigger animation
-        requestAnimationFrame(() => {
-          toast.classList.add("show");
-        });
-
-        // Remove after delay
-        setTimeout(() => {
-          toast.classList.remove("show");
-          setTimeout(() => toast.remove(), 300);
-        }, 3000);
-      };
-
+      // ==========================================
       // Navbar scroll behavior
+      // ==========================================
       let lastScroll = 0;
       const navbar = document.getElementById("navbar");
 

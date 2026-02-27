@@ -157,7 +157,12 @@
 
               <!-- Actions -->
               <div class="flex flex-col sm:flex-row gap-1 shrink-0 opacity-100 sm:opacity-0 sm:group-hover:opacity-100 transition-opacity">
-                <a href="${item.thumbnail}" download="qr-${item.type}-${Date.now()}.png" class="btn btn-square btn-ghost btn-sm" title="Download Image">
+                <button onclick="window.regenerateQR('${item.id}')" class="btn btn-square btn-ghost btn-sm" title="Regenerate">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+                <a href="${item.thumbnail}" download="qr-${item.type}-${Date.now()}.png" class="btn btn-square btn-ghost btn-sm" title="Download Image" onclick="window.showToast('Downloading...', 'info', 1500)">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                   </svg>
@@ -175,30 +180,92 @@
           .join("");
       } catch (e) {
         console.error("Failed to load history", e);
+        window.showToast("Failed to load history", "error");
       }
     }
 
     // Attach functions to window object to be accessible by inline onclick handlers
+
+    // Regenerate QR Code from history
+    window.regenerateQR = function (id) {
+      try {
+        const history = JSON.parse(
+          localStorage.getItem("qrforge_history") || "[]",
+        );
+        const item = history.find((h) => h.id === id);
+
+        if (!item) {
+          window.showToast("Item not found", "error");
+          return;
+        }
+
+        // Navigate to home and populate form
+        // Store item data temporarily
+        sessionStorage.setItem("qrforge_regenerate", JSON.stringify(item));
+
+        // Navigate to home
+        window.location.href = "/";
+
+        window.showToast("Loading QR code...", "info", 2000);
+      } catch (e) {
+        console.error("Failed to regenerate QR", e);
+        window.showToast("Failed to regenerate QR code", "error");
+      }
+    };
+
+    // Delete single history item
     window.deleteHistoryItem = function (id) {
-      if (!confirm(window.t("confirm_delete"))) return;
+      const confirmMsg = window.t
+        ? window.t("confirm_delete")
+        : "Are you sure you want to delete this QR code from history?";
+      if (!confirm(confirmMsg)) return;
 
-      let history = JSON.parse(localStorage.getItem("qrforge_history") || "[]");
-      history = history.filter((item) => item.id !== id);
-      localStorage.setItem("qrforge_history", JSON.stringify(history));
+      try {
+        let history = JSON.parse(
+          localStorage.getItem("qrforge_history") || "[]",
+        );
+        const item = history.find((h) => h.id === id);
+        history = history.filter((item) => item.id !== id);
+        localStorage.setItem("qrforge_history", JSON.stringify(history));
 
-      loadHistory();
-      updateHistoryBadges();
+        loadHistory();
+        updateHistoryBadges();
+
+        window.showToast(`"${item?.label || "Item"}" deleted`, "success", 2000);
+      } catch (e) {
+        console.error("Failed to delete item", e);
+        window.showToast("Failed to delete item", "error");
+      }
     };
 
+    // Clear all history
     window.clearHistory = function () {
-      if (!confirm(window.t("confirm_clear"))) return;
+      const confirmMsg = window.t
+        ? window.t("confirm_clear")
+        : "Are you sure you want to clear ALL history? This cannot be undone.";
+      if (!confirm(confirmMsg)) return;
 
-      localStorage.removeItem("qrforge_history");
+      try {
+        const count = JSON.parse(
+          localStorage.getItem("qrforge_history") || "[]",
+        ).length;
+        localStorage.removeItem("qrforge_history");
 
-      loadHistory();
-      updateHistoryBadges();
+        loadHistory();
+        updateHistoryBadges();
+
+        window.showToast(
+          `${count} item${count !== 1 ? "s" : ""} cleared`,
+          "success",
+          2000,
+        );
+      } catch (e) {
+        console.error("Failed to clear history", e);
+        window.showToast("Failed to clear history", "error");
+      }
     };
 
+    // Update history badges in navbar
     function updateHistoryBadges() {
       try {
         const count = JSON.parse(
@@ -207,15 +274,18 @@
         ["history-badge", "history-badge-mobile"].forEach((id) => {
           const el = document.getElementById(id);
           if (el) {
-            el.textContent = count;
+            el.textContent = count > 99 ? "99+" : count;
             if (count === 0) el.classList.add("hidden");
             else el.classList.remove("hidden");
           }
         });
-      } catch (e) {}
+      } catch (e) {
+        console.error("Failed to update badges", e);
+      }
     }
 
     // Initialize immediately (useful for HTMX injections)
     loadHistory();
+    updateHistoryBadges();
   })();
 </script>
