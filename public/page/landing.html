@@ -1,0 +1,510 @@
+<!-- landing.html - Sliding Split UI Entry Point -->
+<div
+  id="split-ui"
+  class="fixed inset-0 flex flex-col z-10 bg-slate-50 font-sans text-slate-800"
+>
+  <!-- ================= บานเลื่อนตัวบน (สร้าง QR Code) ================= -->
+  <div
+    id="panel-top"
+    class="relative w-full overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] h-[50%]"
+  >
+    <!-- พื้นที่แสดงเนื้อหา (โหลดผ่าน HTMX) -->
+    <div class="absolute inset-0 bg-base-100 overflow-y-auto">
+      <!-- เว้น Padding ด้านบน 5rem (80px) เผื่อให้กับ Navbar ของ layout.html -->
+      <div id="create-container" class="w-full min-h-full pt-20 pb-10">
+        <!-- HTMX will load /create here -->
+        <div class="flex items-center justify-center h-[60vh]">
+          <span class="loading loading-spinner loading-lg text-sky-500"></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cover บานเลื่อนบน -->
+    <div
+      id="cover-top"
+      class="absolute inset-0 z-20 flex items-center justify-center bg-gradient-to-br from-sky-50 to-blue-100 touch-none shadow-[-15px_0_30px_rgba(0,0,0,0.05)] cursor-grab"
+      style="transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1)"
+    >
+      <!-- แถบด้ามจับ (Handle) ด้านซ้าย -->
+      <div
+        class="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-1.5 h-24 bg-slate-300/60 rounded-full pointer-events-none"
+      ></div>
+
+      <!-- เนื้อหาบน Cover -->
+      <div
+        class="text-center pointer-events-none select-none flex flex-col items-center px-4 w-full"
+      >
+        <div
+          class="mb-4 bg-white/80 p-5 rounded-full shadow-sm backdrop-blur-sm text-sky-500"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <rect width="5" height="5" x="3" y="3" rx="1" />
+            <rect width="5" height="5" x="16" y="3" rx="1" />
+            <rect width="5" height="5" x="3" y="16" rx="1" />
+            <path d="M21 16h-3a2 2 0 0 0-2 2v3" />
+            <path d="M21 21v.01" />
+            <path d="M12 7v3a2 2 0 0 1-2 2H7" />
+            <path d="M3 12h.01" />
+            <path d="M12 3h.01" />
+            <path d="M12 16v.01" />
+            <path d="M16 12h1" />
+            <path d="M21 12v.01" />
+            <path d="M12 21v-1" />
+          </svg>
+        </div>
+        <h2
+          class="text-3xl md:text-5xl font-bold tracking-tight mb-2 text-sky-900"
+          data-i18n="nav_generate"
+        >
+          สร้าง QR
+        </h2>
+        <p
+          class="text-sm md:text-lg mb-8 font-medium text-sky-700/70"
+          data-i18n="home_desc"
+        >
+          สร้าง QR Code ที่สวยงามสำหรับลิงก์, WiFi และอื่นๆ
+        </p>
+
+        <!-- Animation ลากเพื่อเปิด -->
+        <div class="flex flex-col items-center gap-3 text-slate-400">
+          <span
+            class="text-xs font-bold tracking-widest uppercase"
+            data-i18n="drag_to_open"
+            >ลากเพื่อเปิด</span
+          >
+          <div class="flex items-center gap-1 animate-pulse">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="opacity-40"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="opacity-70 -ml-3"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="-ml-3"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- เส้นแบ่งกลางจอ (Divider) -->
+  <div
+    id="split-divider"
+    class="h-1 w-full bg-white shadow-sm z-30 transition-opacity duration-500 opacity-100 relative"
+  >
+    <div
+      class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-white px-3 py-1 rounded-full shadow-sm text-slate-300 text-xs font-bold tracking-widest pointer-events-none"
+    >
+      OR
+    </div>
+  </div>
+
+  <!-- ================= บานเลื่อนตัวล่าง (สแกน QR Code) ================= -->
+  <div
+    id="panel-bottom"
+    class="relative w-full overflow-hidden transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] h-[50%]"
+  >
+    <!-- พื้นที่แสดงเนื้อหา (โหลดผ่าน HTMX) -->
+    <div class="absolute inset-0 bg-base-100 overflow-y-auto">
+      <div id="scan-container" class="w-full min-h-full pt-20 pb-10">
+        <!-- HTMX will load /scan here -->
+        <div class="flex items-center justify-center h-[60vh]">
+          <span
+            class="loading loading-spinner loading-lg text-emerald-500"
+          ></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cover บานเลื่อนล่าง -->
+    <div
+      id="cover-bottom"
+      class="absolute inset-0 z-20 flex items-center justify-center bg-gradient-to-br from-emerald-50 to-teal-100 touch-none shadow-[-15px_0_30px_rgba(0,0,0,0.05)] cursor-grab"
+      style="transition: transform 0.6s cubic-bezier(0.32, 0.72, 0, 1)"
+    >
+      <!-- แถบด้ามจับ (Handle) ด้านซ้าย -->
+      <div
+        class="absolute left-4 sm:left-6 top-1/2 -translate-y-1/2 w-1.5 h-24 bg-slate-300/60 rounded-full pointer-events-none"
+      ></div>
+
+      <!-- เนื้อหาบน Cover -->
+      <div
+        class="text-center pointer-events-none select-none flex flex-col items-center px-4 w-full"
+      >
+        <div
+          class="mb-4 bg-white/80 p-5 rounded-full shadow-sm backdrop-blur-sm text-emerald-500"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="48"
+            height="48"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M3 7V5a2 2 0 0 1 2-2h2" />
+            <path d="M17 3h2a2 2 0 0 1 2 2v2" />
+            <path d="M21 17v2a2 2 0 0 1-2 2h-2" />
+            <path d="M7 21H5a2 2 0 0 1-2-2v-2" />
+          </svg>
+        </div>
+        <h2
+          class="text-3xl md:text-5xl font-bold tracking-tight mb-2 text-emerald-900"
+          data-i18n="nav_scan"
+        >
+          สแกน QR
+        </h2>
+        <p
+          class="text-sm md:text-lg mb-8 font-medium text-emerald-700/70"
+          data-i18n="scan_desc"
+        >
+          ส่องกล้องไปที่ QR code เพื่ออ่านค่าทันที
+        </p>
+
+        <!-- Animation ลากเพื่อเปิด -->
+        <div class="flex flex-col items-center gap-3 text-slate-400">
+          <span
+            class="text-xs font-bold tracking-widest uppercase"
+            data-i18n="drag_to_open"
+            >ลากเพื่อเปิด</span
+          >
+          <div class="flex items-center gap-1 animate-pulse">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="opacity-40"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="opacity-70 -ml-3"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="-ml-3"
+            >
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ปุ่มย้อนกลับสู่เมนูหลัก (จะแสดงเมื่อเปิดบานเลื่อนแล้ว) -->
+<button
+  id="back-to-landing"
+  class="hidden fixed top-[4.5rem] sm:top-20 right-4 sm:right-6 z-[100] w-12 h-12 rounded-full bg-white/90 backdrop-blur-md border border-slate-200 text-slate-700 items-center justify-center shadow-lg hover:bg-white hover:scale-110 hover:rotate-90 hover:text-sky-600 transition-all duration-300"
+  onclick="resetLanding()"
+  aria-label="Back to menu"
+>
+  <svg
+    width="24"
+    height="24"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="2"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+  >
+    <path d="M18 6L6 18M6 6l12 12" />
+  </svg>
+</button>
+
+<script>
+  (function () {
+    let currentOpenedPanel = null;
+    let contentLoaded = { top: false, bottom: false };
+    const threshold = window.innerWidth * 0.25;
+
+    const panelTop = document.getElementById("panel-top");
+    const panelBottom = document.getElementById("panel-bottom");
+    const divider = document.getElementById("split-divider");
+    const coverTop = document.getElementById("cover-top");
+    const coverBottom = document.getElementById("cover-bottom");
+    const backBtn = document.getElementById("back-to-landing");
+
+    // อ้างอิง Navbar จาก layout.html
+    const globalNavbar = document.getElementById("navbar");
+
+    // ทันทีที่โหลดหน้า Landing -> ซ่อน Navbar
+    if (globalNavbar) {
+      globalNavbar.style.display = "none";
+    }
+
+    // ฟังก์ชันสำหรับสั่งขยายหน้าจอ (ถูกเรียกเมื่อลากถึงระยะ)
+    window.expandHalf = function (id) {
+      if (currentOpenedPanel === id) return;
+      currentOpenedPanel = id;
+
+      if (id === "top") {
+        panelTop.classList.replace("h-[50%]", "h-full");
+        panelTop.classList.replace("h-0", "h-full");
+        panelBottom.classList.replace("h-[50%]", "h-0");
+        panelBottom.classList.replace("h-full", "h-0");
+        divider.classList.replace("opacity-100", "opacity-0");
+        coverTop.style.transform = "translateX(100%)";
+        coverBottom.style.transform = "translateX(0px)";
+      } else if (id === "bottom") {
+        panelTop.classList.replace("h-[50%]", "h-0");
+        panelTop.classList.replace("h-full", "h-0");
+        panelBottom.classList.replace("h-[50%]", "h-full");
+        panelBottom.classList.replace("h-0", "h-full");
+        divider.classList.replace("opacity-100", "opacity-0");
+        coverTop.style.transform = "translateX(0px)";
+        coverBottom.style.transform = "translateX(100%)";
+      }
+
+      // แสดงปุ่มย้อนกลับ
+      backBtn.classList.remove("hidden");
+      backBtn.classList.add("flex");
+
+      // แสดง Navbar กลับมาเมื่อเปิดบานเลื่อน (เพื่อให้มีปุ่มเปลี่ยนภาษา/เมนูบน)
+      if (globalNavbar) {
+        globalNavbar.style.display = "";
+        globalNavbar.classList.add("animate-fade-in");
+      }
+
+      // ตรวจสอบและโหลดเนื้อหาผ่าน HTMX หากยังไม่เคยโหลด
+      if (!contentLoaded[id]) {
+        const container = document.getElementById(
+          `${id === "top" ? "create" : "scan"}-container`,
+        );
+        const endpoint = id === "top" ? "/create" : "/scan";
+
+        if (window.htmx) {
+          window.htmx.ajax("GET", endpoint, {
+            target: container,
+            swap: "innerHTML",
+            select: "#main-content", // <--- แก้ไขจุดนี้: กรองเอาเฉพาะเนื้อหาหลัก (ป้องกัน Navbar ซ้อน)
+          });
+        }
+        contentLoaded[id] = true;
+      }
+
+      // อัปเดต URL (Browser History) และ Active State บน Navbar
+      const path = id === "top" ? "/create" : "/scan";
+      history.pushState({ half: id, fromLanding: true }, "", path);
+      updateNavState(id);
+    };
+
+    // ฟังก์ชันย้อนกลับไปยังเมนูบานเลื่อนคู่
+    window.resetLanding = function () {
+      if (!currentOpenedPanel) return;
+      currentOpenedPanel = null;
+
+      panelTop.classList.replace("h-full", "h-[50%]");
+      panelTop.classList.replace("h-0", "h-[50%]");
+      panelBottom.classList.replace("h-full", "h-[50%]");
+      panelBottom.classList.replace("h-0", "h-[50%]");
+      divider.classList.replace("opacity-0", "opacity-100");
+      coverTop.style.transform = "translateX(0px)";
+      coverBottom.style.transform = "translateX(0px)";
+
+      // ซ่อนปุ่มย้อนกลับ
+      backBtn.classList.add("hidden");
+      backBtn.classList.remove("flex");
+
+      // ซ่อน Navbar กลับไปเมื่อกลับมาที่หน้าจอแชร์บานเลื่อน
+      if (globalNavbar) {
+        globalNavbar.style.display = "none";
+        globalNavbar.classList.remove("animate-fade-in");
+      }
+
+      // อัปเดต URL คืนกลับสู่หน้าหลัก
+      history.pushState({}, "", "/");
+      updateNavState(null);
+    };
+
+    // คืนค่า Navbar กรณีผู้ใช้ถูกเปลี่ยนหน้าไปยังเมนูอื่น เช่น History โดยสมบูรณ์แบบ
+    document.addEventListener("htmx:beforeSwap", function restoreNav(e) {
+      if (e.detail.target.id === "main-content") {
+        if (globalNavbar) {
+          globalNavbar.style.display = "";
+          globalNavbar.classList.remove("animate-fade-in");
+        }
+        document.removeEventListener("htmx:beforeSwap", restoreNav);
+      }
+    });
+
+    // ฟังก์ชันจัดการระบบ Touch & Drag
+    function initSplitPanelDrag(panelId) {
+      const cover = document.getElementById(`cover-${panelId}`);
+      if (!cover) return;
+
+      let isDragging = false;
+      let startX = 0;
+      let dragX = 0;
+
+      cover.addEventListener("pointerdown", (e) => {
+        if (currentOpenedPanel) return;
+        isDragging = true;
+        dragX = 0;
+        startX = e.clientX - dragX;
+        cover.setPointerCapture(e.pointerId);
+
+        cover.style.transition = "none";
+        cover.classList.remove("cursor-grab");
+        cover.classList.add("cursor-grabbing");
+      });
+
+      cover.addEventListener("pointermove", (e) => {
+        if (!isDragging) return;
+        let newX = e.clientX - startX;
+        if (newX < 0) newX = 0;
+        dragX = newX;
+        cover.style.transform = `translateX(${dragX}px)`;
+      });
+
+      const handleUp = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        cover.releasePointerCapture(e.pointerId);
+
+        cover.style.transition =
+          "transform 0.6s cubic-bezier(0.32, 0.72, 0, 1)";
+        cover.classList.remove("cursor-grabbing");
+        cover.classList.add("cursor-grab");
+
+        if (dragX > threshold) {
+          window.expandHalf(panelId);
+        } else {
+          cover.style.transform = `translateX(0px)`;
+        }
+      };
+
+      cover.addEventListener("pointerup", handleUp);
+      cover.addEventListener("pointercancel", handleUp);
+    }
+
+    initSplitPanelDrag("top");
+    initSplitPanelDrag("bottom");
+
+    // ==========================================
+    // ส่วนรองรับ Navigation และ Browser History
+    // ==========================================
+
+    function updateNavState(activeHalf) {
+      document
+        .querySelectorAll(".nav-link, .mobile-nav-link")
+        .forEach((link) => {
+          link.classList.remove("active");
+          const href = link.getAttribute("href");
+
+          if (activeHalf === "top" && (href === "/create" || href === "/")) {
+            link.classList.add("active");
+          } else if (activeHalf === "bottom" && href === "/scan") {
+            link.classList.add("active");
+          }
+        });
+    }
+
+    // จัดการตอนกดย้อนกลับ (Back/Forward) บนเบราว์เซอร์
+    window.addEventListener("popstate", (e) => {
+      if (e.state?.fromLanding) {
+        if (e.state.half && currentOpenedPanel !== e.state.half) {
+          window.expandHalf(e.state.half);
+        }
+      } else {
+        if (currentOpenedPanel) {
+          window.resetLanding();
+        }
+      }
+    });
+
+    document.querySelectorAll(".nav-link, .mobile-nav-link").forEach((link) => {
+      link.addEventListener("click", (e) => {
+        const href = link.getAttribute("href");
+        if (document.getElementById("split-ui")) {
+          if (href === "/create" || href === "/") {
+            e.preventDefault();
+            window.expandHalf("top");
+          } else if (href === "/scan") {
+            e.preventDefault();
+            window.expandHalf("bottom");
+          }
+        }
+      });
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && currentOpenedPanel) {
+        window.resetLanding();
+      }
+    });
+  })();
+</script>

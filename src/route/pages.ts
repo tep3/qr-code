@@ -7,7 +7,17 @@ export const pageRoutes = new Elysia()
   // ─── Page Routes ──────────────────────────────────────────────
 
   .get("/", async () => {
-    const html = await SimpleTemplate.renderPage("home", {
+    const html = await SimpleTemplate.renderPage("landing", {
+      title: "QR forge",
+      navGenerate: "active",
+    });
+    return new Response(html, {
+      headers: { "Content-Type": "text/html; charset=utf-8" },
+    });
+  })
+
+  .get("/create", async () => {
+    const html = await SimpleTemplate.renderPage("create", {
       title: "Generate QR Code",
       navGenerate: "active",
     });
@@ -71,8 +81,8 @@ export const pageRoutes = new Elysia()
     });
   })
 
-  .get('/privacy', () => {
-    return new Response(Bun.file('./public/page/privacy.html'), {
-      headers: { 'Content-Type': 'text/html; charset=utf-8' }
+  .get("/privacy", () => {
+    return new Response(Bun.file("./public/page/privacy.html"), {
+      headers: { "Content-Type": "text/html; charset=utf-8" },
     });
-  })
+  });
