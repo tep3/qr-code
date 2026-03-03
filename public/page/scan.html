@@ -728,9 +728,7 @@
           await scanner.checkPermission({ force: true });
         }
 
-        var result = await scanner.scanBarcode({
-          hint: "QR_CODE",
-        });
+        var result = await scanner.scanBarcode({});
 
         if (result?.ScanResult || result?.text) {
           onScanSuccess(result.ScanResult || result.text);
