@@ -468,7 +468,7 @@
         }
 
         var result = await scanner.scanBarcode({
-          targetedFormats: ["QR_CODE"]
+          hint: "QR_CODE"
         });
 
         if (result?.ScanResult || result?.text) {
