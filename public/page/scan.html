@@ -468,7 +468,14 @@
         }
 
         var result = await scanner.scanBarcode({
+<<<<<<< HEAD
           hint: "QR_CODE"
+=======
+          // Added options for a better native scanning experience
+          scanInstructions: "Point your camera at the QR code",
+          cameraDirection: 1, // 1 = Back camera, 2 = Front camera
+          scanButton: true, // Show scan button
+>>>>>>> 0d02aab (update start scan)
         });
 
         if (result?.ScanResult || result?.text) {
