@@ -2,51 +2,30 @@
   <!-- Header Section -->
   <div class="text-center mb-6 sm:mb-8 px-4">
     <div
-      class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase mb-4 shadow-sm border border-primary/20"
-    >
-      <svg
-        class="w-3.5 h-3.5"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2.5"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-        />
+      class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 text-primary text-xs font-bold tracking-wider uppercase mb-4 shadow-sm border border-primary/20">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round"
+          d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
       </svg>
       <span data-i18n="scan_badge">AI Powered & Secure</span>
     </div>
-    <h1
-      class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 tracking-tight text-base-content leading-tight"
-    >
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold mb-3 tracking-tight text-base-content leading-tight">
       <span data-i18n="scan_title">Scan</span>
-      <span
-        class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary"
-        >QR Code</span
-      >
+      <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">QR Code</span>
     </h1>
-    <p
-      class="text-base-content/60 text-base sm:text-lg max-w-md mx-auto leading-relaxed"
-      data-i18n="scan_desc"
-    >
+    <p class="text-base-content/60 text-base sm:text-lg max-w-md mx-auto leading-relaxed" data-i18n="scan_desc">
       Point your camera at a QR code or upload an image to decode instantly.
     </p>
   </div>
 
   <!-- Main Card -->
-  <div
-    class="bg-base-100 rounded-3xl shadow-xl border border-base-200 overflow-hidden relative mx-4 sm:mx-0"
-  >
+  <div class="bg-base-100 rounded-3xl shadow-xl border border-base-200 overflow-hidden relative mx-4 sm:mx-0">
     <!-- Decorative gradients -->
+    <div class="absolute top-0 right-0 -mt-20 -mr-20 w-60 h-60 bg-primary/5 rounded-full blur-3xl pointer-events-none">
+    </div>
     <div
-      class="absolute top-0 right-0 -mt-20 -mr-20 w-60 h-60 bg-primary/5 rounded-full blur-3xl pointer-events-none"
-    ></div>
-    <div
-      class="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-secondary/5 rounded-full blur-3xl pointer-events-none"
-    ></div>
+      class="absolute bottom-0 left-0 -mb-20 -ml-20 w-60 h-60 bg-secondary/5 rounded-full blur-3xl pointer-events-none">
+    </div>
 
     <div class="p-5 sm:p-8 relative z-10">
       <!-- Scanner UI (Active) -->
@@ -55,26 +34,13 @@
         <div id="native-scanner-ui" class="hidden">
           <div class="flex flex-col items-center justify-center py-10 sm:py-12">
             <div
-              class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-primary/20 to-primary/5 text-primary rounded-3xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20"
-            >
-              <svg
-                class="w-10 h-10 sm:w-12 sm:h-12"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                ></path>
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                ></path>
+              class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-primary/20 to-primary/5 text-primary rounded-3xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
+              <svg class="w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                </path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
               </svg>
             </div>
             <h3 class="text-lg font-semibold text-base-content mb-2">
@@ -83,22 +49,12 @@
             <p class="text-sm text-base-content/50 mb-6 text-center max-w-xs">
               Use your device's built-in camera with auto-focus for best results
             </p>
-            <button
-              id="native-scan-btn"
-              class="btn btn-primary btn-lg rounded-full px-8 sm:px-10 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all gap-2 mb-4 h-14"
-            >
-              <svg
-                class="w-5 h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                ></path>
+            <button id="native-scan-btn"
+              class="btn btn-primary btn-lg rounded-full px-8 sm:px-10 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all gap-2 mb-4 h-14">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                </path>
               </svg>
               <span data-i18n="btn_start_camera">Scan with Camera</span>
             </button>
@@ -108,31 +64,16 @@
         <!-- ===== Web Mode: html5-qrcode fallback ===== -->
         <div id="web-scanner-ui">
           <!-- Camera Preview -->
-          <div
-            id="video-wrapper"
+          <div id="video-wrapper"
             class="relative w-full bg-base-200 rounded-2xl sm:rounded-3xl overflow-hidden shadow-inner flex flex-col items-center justify-center border-2 border-base-300 border-dashed group transition-all duration-300 hover:border-primary/40 active:border-primary/60"
-            style="aspect-ratio: 4/3"
-          >
+            style="aspect-ratio: 4/3">
             <!-- Permission Denied Message -->
-            <div
-              id="permission-denied"
-              class="hidden absolute inset-0 z-30 bg-base-100 flex flex-col items-center justify-center p-6 text-center"
-            >
-              <div
-                class="w-16 h-16 bg-error/10 text-error rounded-2xl flex items-center justify-center mb-4"
-              >
-                <svg
-                  class="w-8 h-8"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-                  />
+            <div id="permission-denied"
+              class="hidden absolute inset-0 z-30 bg-base-100 flex flex-col items-center justify-center p-6 text-center">
+              <div class="w-16 h-16 bg-error/10 text-error rounded-2xl flex items-center justify-center mb-4">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
               </div>
               <h4 class="font-semibold text-base-content mb-2">
@@ -142,176 +83,91 @@
                 Please allow camera access in your browser settings to scan QR
                 codes.
               </p>
-              <button
-                onclick="location.reload()"
-                class="btn btn-outline btn-sm"
-              >
+              <button onclick="location.reload()" class="btn btn-outline btn-sm">
                 Try Again
               </button>
             </div>
 
             <!-- Scanning Frame Overlay -->
-            <div
-              id="scanning-frame"
-              class="absolute inset-0 z-20 pointer-events-none hidden"
-            >
+            <div id="scanning-frame" class="absolute inset-0 z-20 pointer-events-none hidden">
               <div class="absolute inset-0 bg-black/20"></div>
-              <div
-                class="absolute inset-8 sm:inset-12 border-2 border-white/30 rounded-2xl"
-              >
+              <div class="absolute inset-8 sm:inset-12 border-2 border-white/30 rounded-2xl">
                 <!-- Corner markers -->
-                <div
-                  class="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-primary rounded-tl-lg"
-                ></div>
-                <div
-                  class="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-primary rounded-tr-lg"
-                ></div>
-                <div
-                  class="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-primary rounded-bl-lg"
-                ></div>
-                <div
-                  class="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-primary rounded-br-lg"
-                ></div>
+                <div class="absolute -top-1 -left-1 w-6 h-6 border-t-4 border-l-4 border-primary rounded-tl-lg"></div>
+                <div class="absolute -top-1 -right-1 w-6 h-6 border-t-4 border-r-4 border-primary rounded-tr-lg"></div>
+                <div class="absolute -bottom-1 -left-1 w-6 h-6 border-b-4 border-l-4 border-primary rounded-bl-lg">
+                </div>
+                <div class="absolute -bottom-1 -right-1 w-6 h-6 border-b-4 border-r-4 border-primary rounded-br-lg">
+                </div>
                 <!-- Scanning line animation -->
                 <div
-                  class="absolute top-0 left-0 right-0 h-0.5 bg-primary shadow-[0_0_10px_rgba(var(--p),0.8)] animate-[scan_2s_ease-in-out_infinite]"
-                ></div>
+                  class="absolute top-0 left-0 right-0 h-0.5 bg-primary shadow-[0_0_10px_rgba(var(--p),0.8)] animate-[scan_2s_ease-in-out_infinite]">
+                </div>
               </div>
               <div class="absolute bottom-4 left-0 right-0 text-center">
                 <span
-                  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 text-white text-xs font-medium backdrop-blur-sm"
-                >
-                  <span
-                    class="w-2 h-2 bg-red-500 rounded-full animate-pulse"
-                  ></span>
+                  class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/50 text-white text-xs font-medium backdrop-blur-sm">
+                  <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
                   Scanning...
                 </span>
               </div>
             </div>
 
-            <div
-              id="reader-video"
-              class="w-full h-full absolute inset-0 z-10 bg-black"
-              style="display: none"
-            ></div>
+            <div id="reader-video" class="w-full h-full absolute inset-0 z-10 bg-black" style="display: none"></div>
 
             <!-- Placeholder State -->
-            <div
-              id="camera-placeholder"
-              class="text-center p-6 z-0 flex flex-col items-center justify-center h-full w-full"
-            >
+            <div id="camera-placeholder"
+              class="text-center p-6 z-0 flex flex-col items-center justify-center h-full w-full">
               <div
-                class="w-16 h-16 sm:w-20 sm:h-20 bg-base-100 shadow-lg text-primary rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 group-hover:shadow-xl transition-all duration-300"
-              >
-                <svg
-                  class="w-8 h-8 sm:w-10 sm:h-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"
-                  ></path>
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="1.5"
-                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"
-                  ></path>
+                class="w-16 h-16 sm:w-20 sm:h-20 bg-base-100 shadow-lg text-primary rounded-2xl flex items-center justify-center mb-4 group-hover:scale-105 group-hover:shadow-xl transition-all duration-300">
+                <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
+                  </path>
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+                    d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
                 </svg>
               </div>
-              <h3
-                class="text-base sm:text-lg font-bold text-base-content mb-1"
-                data-i18n="camera_access"
-              >
+              <h3 class="text-base sm:text-lg font-bold text-base-content mb-1" data-i18n="camera_access">
                 Camera Access
               </h3>
-              <p
-                class="text-xs sm:text-sm text-base-content/50 mb-5 max-w-[220px]"
-                data-i18n="camera_start_help"
-              >
+              <p class="text-xs sm:text-sm text-base-content/50 mb-5 max-w-[220px]" data-i18n="camera_start_help">
                 Click below to start scanning via your webcam.
               </p>
-              <button
-                id="start-camera-btn"
-                class="btn btn-primary rounded-full px-6 sm:px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all h-11 sm:h-12 text-sm sm:text-base"
-              >
-                <svg
-                  class="w-4 h-4 mr-2"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"
-                  />
+              <button id="start-camera-btn"
+                class="btn btn-primary rounded-full px-6 sm:px-8 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all h-11 sm:h-12 text-sm sm:text-base">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
                 </svg>
                 <span data-i18n="btn_start_camera">Start Camera</span>
               </button>
             </div>
 
             <!-- Stop Button -->
-            <button
-              id="stop-camera-btn"
+            <button id="stop-camera-btn"
               class="btn btn-circle btn-error btn-sm absolute top-3 right-3 sm:top-4 sm:right-4 hidden z-40 shadow-lg hover:scale-110 transition-transform border-2 border-white/20"
-              aria-label="Stop camera"
-            >
-              <svg
-                class="w-4 h-4 sm:w-5 sm:h-5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M6 18L18 6M6 6l12 12"
-                ></path>
+              aria-label="Stop camera">
+              <svg class="w-4 h-4 sm:w-5 sm:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
               </svg>
             </button>
           </div>
 
           <!-- Camera Tips -->
-          <div
-            class="flex items-center justify-center gap-4 mt-3 text-xs text-base-content/40"
-          >
+          <div class="flex items-center justify-center gap-4 mt-3 text-xs text-base-content/40">
             <span class="flex items-center gap-1">
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707"
-                />
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707" />
               </svg>
               Good lighting helps
             </span>
             <span class="w-1 h-1 bg-base-content/20 rounded-full"></span>
             <span class="flex items-center gap-1">
-              <svg
-                class="w-3.5 h-3.5"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"
-                />
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4" />
               </svg>
               Hold steady
             </span>
@@ -323,140 +179,77 @@
           <div class="flex-grow border-t border-base-200"></div>
           <span
             class="flex-shrink-0 mx-4 text-base-content/30 text-xs font-bold uppercase tracking-widest bg-base-100 px-2"
-            data-i18n="or_upload"
-            >OR</span
-          >
+            data-i18n="or_upload">OR</span>
           <div class="flex-grow border-t border-base-200"></div>
         </div>
 
         <!-- File Upload Area -->
         <div class="w-full">
-          <label
-            for="qr-input-file"
-            class="flex flex-col items-center justify-center w-full h-28 sm:h-32 border-2 border-dashed border-base-300 rounded-2xl cursor-pointer bg-base-100 hover:bg-base-200/30 hover:border-primary/50 transition-all group relative overflow-hidden"
-          >
-            <input
-              type="file"
-              id="qr-input-file"
-              accept="image/*"
-              class="hidden"
-              aria-label="Upload QR code image"
-            />
+          <label for="qr-input-file"
+            class="flex flex-col items-center justify-center w-full h-28 sm:h-32 border-2 border-dashed border-base-300 rounded-2xl cursor-pointer bg-base-100 hover:bg-base-200/30 hover:border-primary/50 transition-all group relative overflow-hidden">
+            <input type="file" id="qr-input-file" accept="image/*" class="hidden" aria-label="Upload QR code image" />
             <div
-              class="flex flex-col items-center justify-center pt-5 pb-6 relative z-10 transition-transform group-hover:scale-105"
-            >
+              class="flex flex-col items-center justify-center pt-5 pb-6 relative z-10 transition-transform group-hover:scale-105">
               <div
-                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-base-200 flex items-center justify-center mb-3 group-hover:bg-primary/10 transition-colors"
-              >
-                <svg
-                  class="w-5 h-5 sm:w-6 sm:h-6 text-base-content/40 group-hover:text-primary transition-colors"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                  ></path>
+                class="w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-base-200 flex items-center justify-center mb-3 group-hover:bg-primary/10 transition-colors">
+                <svg class="w-5 h-5 sm:w-6 sm:h-6 text-base-content/40 group-hover:text-primary transition-colors"
+                  fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z">
+                  </path>
                 </svg>
               </div>
               <p class="mb-1 text-sm text-base-content/70 text-center">
-                <span class="font-semibold text-primary" data-i18n="upload_help"
-                  >Click to upload</span
-                >
+                <span class="font-semibold text-primary" data-i18n="upload_help">Click to upload</span>
                 <span class="hidden sm:inline" data-i18n="upload_help_sub">
-                  or drag and drop</span
-                >
+                  or drag and drop</span>
               </p>
               <p class="text-xs text-base-content/40">PNG, JPG, WEBP</p>
             </div>
             <div
-              class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity"
-            ></div>
+              class="absolute inset-0 bg-gradient-to-r from-primary/0 via-primary/5 to-primary/0 opacity-0 group-hover:opacity-100 transition-opacity">
+            </div>
           </label>
         </div>
       </div>
 
       <!-- Result UI (Hidden by default) -->
-      <div
-        id="result-container"
-        class="hidden space-y-6 animate-[fadeUp_0.4s_ease-out]"
-      >
+      <div id="result-container" class="hidden space-y-6 animate-[fadeUp_0.4s_ease-out]">
         <div class="text-center pt-2">
           <div class="relative inline-block mb-4">
             <div
-              class="w-16 h-16 sm:w-20 sm:h-20 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto"
-            >
-              <svg
-                class="w-8 h-8 sm:w-10 sm:h-10"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2.5"
-                  d="M5 13l4 4L19 7"
-                ></path>
+              class="w-16 h-16 sm:w-20 sm:h-20 bg-success/10 text-success rounded-full flex items-center justify-center mx-auto">
+              <svg class="w-8 h-8 sm:w-10 sm:h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
               </svg>
             </div>
-            <div
-              class="absolute inset-0 rounded-full bg-success/20 animate-ping opacity-20"
-            ></div>
+            <div class="absolute inset-0 rounded-full bg-success/20 animate-ping opacity-20"></div>
           </div>
-          <h3
-            class="text-2xl sm:text-3xl font-bold mb-2 text-base-content"
-            data-i18n="scan_success"
-          >
+          <h3 class="text-2xl sm:text-3xl font-bold mb-2 text-base-content" data-i18n="scan_success">
             Success!
           </h3>
-          <p
-            class="text-sm sm:text-base text-base-content/50"
-            data-i18n="scan_success_desc"
-          >
+          <p class="text-sm sm:text-base text-base-content/50" data-i18n="scan_success_desc">
             Content successfully decoded.
           </p>
         </div>
 
         <!-- Result Card -->
-        <div
-          class="bg-base-200/50 rounded-2xl p-4 sm:p-6 border border-base-200"
-        >
+        <div class="bg-base-200/50 rounded-2xl p-4 sm:p-6 border border-base-200">
           <div class="flex justify-between items-center mb-3">
-            <label
-              class="text-xs uppercase tracking-wider text-base-content/50 font-bold"
-              data-i18n="result_content"
-              >Result Content</label
-            >
-            <span id="result-type-badge" class="badge badge-sm badge-neutral"
-              >Text</span
-            >
+            <label class="text-xs uppercase tracking-wider text-base-content/50 font-bold"
+              data-i18n="result_content">Result Content</label>
+            <span id="result-type-badge" class="badge badge-sm badge-neutral">Text</span>
           </div>
           <div class="relative group">
             <div
               class="break-all font-mono text-sm text-base-content bg-base-100 p-4 sm:p-5 rounded-xl border border-base-200 min-h-[5rem] flex items-center shadow-sm overflow-x-auto"
-              id="scanned-text"
-            ></div>
-            <button
-              id="quick-copy-btn"
+              id="scanned-text"></div>
+            <button id="quick-copy-btn"
               class="absolute top-2 right-2 btn btn-ghost btn-xs btn-square opacity-0 group-hover:opacity-100 transition-opacity"
-              title="Copy to clipboard"
-            >
-              <svg
-                class="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-                />
+              title="Copy to clipboard">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
               </svg>
             </button>
           </div>
@@ -464,65 +257,30 @@
 
         <!-- Action Buttons -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <button
-            id="copy-btn"
-            class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-400 text-base-content h-12 rounded-xl normal-case text-sm sm:text-base font-medium"
-          >
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"
-              ></path>
+          <button id="copy-btn"
+            class="btn btn-outline border-base-300 hover:bg-base-200 hover:border-base-400 text-base-content h-12 rounded-xl normal-case text-sm sm:text-base font-medium">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z">
+              </path>
             </svg>
             <span data-i18n="btn_copy">Copy Content</span>
           </button>
 
-          <a
-            id="open-link-btn"
-            href="#"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="btn btn-primary h-12 rounded-xl normal-case text-sm sm:text-base font-medium hidden shadow-lg shadow-primary/20 hover:shadow-primary/30"
-          >
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              ></path>
+          <a id="open-link-btn" href="#" target="_blank" rel="noopener noreferrer"
+            class="btn btn-primary h-12 rounded-xl normal-case text-sm sm:text-base font-medium hidden shadow-lg shadow-primary/20 hover:shadow-primary/30">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
             </svg>
             <span data-i18n="btn_open">Open Link</span>
           </a>
 
-          <button
-            id="share-btn"
-            class="btn btn-outline border-base-300 hover:bg-base-200 h-12 rounded-xl normal-case text-sm sm:text-base font-medium hidden sm:flex items-center justify-center"
-          >
-            <svg
-              class="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
-              />
+          <button id="share-btn"
+            class="btn btn-outline border-base-300 hover:bg-base-200 h-12 rounded-xl normal-case text-sm sm:text-base font-medium hidden sm:flex items-center justify-center">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
             </svg>
             Share
           </button>
@@ -530,22 +288,12 @@
 
         <!-- Back Button -->
         <div class="text-center pt-2">
-          <button
-            id="scan-again-btn"
-            class="btn btn-ghost text-base-content/50 hover:text-base-content hover:bg-base-200/50 -ml-2 group"
-          >
-            <svg
-              class="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M10 19l-7-7m0 0l7-7m-7 7h18"
-              ></path>
+          <button id="scan-again-btn"
+            class="btn btn-ghost text-base-content/50 hover:text-base-content hover:bg-base-200/50 -ml-2 group">
+            <svg class="w-4 h-4 mr-2 transform group-hover:-translate-x-1 transition-transform" fill="none"
+              stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18">
+              </path>
             </svg>
             <span data-i18n="btn_back_scan">Scan Another Code</span>
           </button>
@@ -556,21 +304,10 @@
 
   <!-- Footer Note -->
   <div class="px-4 sm:px-0 mt-6 sm:mt-8">
-    <div
-      class="flex items-center justify-center gap-2 text-xs text-base-content/30"
-    >
-      <svg
-        class="w-3.5 h-3.5"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"
-        />
+    <div class="flex items-center justify-center gap-2 text-xs text-base-content/30">
+      <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+          d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
       </svg>
       <span class="font-medium" data-i18n="scan_footer">
         Secure Client-Side Processing. No data is sent to servers.
@@ -582,10 +319,12 @@
 <style>
   /* Scanning animation */
   @keyframes scan {
+
     0%,
     100% {
       top: 0;
     }
+
     50% {
       top: 100%;
     }
@@ -595,9 +334,11 @@
   #scanned-text::-webkit-scrollbar {
     height: 6px;
   }
+
   #scanned-text::-webkit-scrollbar-track {
     background: transparent;
   }
+
   #scanned-text::-webkit-scrollbar-thumb {
     background: oklch(var(--bc) / 0.2);
     border-radius: 3px;
@@ -636,6 +377,7 @@
 
   /* Reduced motion */
   @media (prefers-reduced-motion: reduce) {
+
     .animate-ping,
     .animate-\[scan_2s_ease-in-out_infinite\] {
       animation: none !important;
@@ -725,7 +467,9 @@
           await scanner.checkPermission({ force: true });
         }
 
-        var result = await scanner.scanBarcode({});
+        var result = await scanner.scanBarcode({
+          targetedFormats: ["QR_CODE"]
+        });
 
         if (result?.ScanResult || result?.text) {
           onScanSuccess(result.ScanResult || result.text);
@@ -847,7 +591,7 @@
             },
           },
           onScanSuccess,
-          () => {},
+          () => { },
         );
 
         window.showToast(
@@ -867,7 +611,7 @@
               aspectRatio: 1.0,
             },
             onScanSuccess,
-            () => {},
+            () => { },
           );
         } catch (err2) {
           console.error("Front camera also failed:", err2);
@@ -901,7 +645,7 @@
       if (html5QrCode?.isScanning) {
         try {
           await html5QrCode.stop();
-        } catch (e) {}
+        } catch (e) { }
       }
       resetWebUI();
     }
@@ -1219,7 +963,7 @@
   (function () {
     function cleanup() {
       if (window.qrScannerInstance?.isScanning) {
-        window.qrScannerInstance.stop().catch(() => {});
+        window.qrScannerInstance.stop().catch(() => { });
       }
     }
 
