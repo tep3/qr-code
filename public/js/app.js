@@ -3,55 +3,8 @@
 // ==========================================
 
 // ==========================================
-// FORCE SERVICE WORKER UNREGISTRATION
+// Toast Notification System (MUST BE FIRST)
 // ==========================================
-(function forceUnregisterServiceWorker() {
-  if ("serviceWorker" in navigator) {
-    // Unregister all service workers
-    navigator.serviceWorker
-      .getRegistrations()
-      .then(function (registrations) {
-        if (registrations.length > 0) {
-          console.log(
-            `Found ${registrations.length} service worker(s) to unregister`,
-          );
-          for (let registration of registrations) {
-            registration.unregister().then(function (success) {
-              if (success) {
-                console.log("Service worker unregistered successfully");
-
-                // Clear all caches
-                if ("caches" in window) {
-                  caches.keys().then(function (cacheNames) {
-                    cacheNames.forEach(function (cacheName) {
-                      caches.delete(cacheName);
-                      console.log("Cache deleted:", cacheName);
-                    });
-                  });
-                }
-              }
-            });
-          }
-
-          // Force reload after unregistration
-          setTimeout(function () {
-            console.log("Force reloading page to clear service worker...");
-            window.location.reload(true); // Force reload from server
-          }, 1000);
-        } else {
-          console.log("No service workers found");
-        }
-      })
-      .catch(function (error) {
-        console.error("Error unregistering service worker:", error);
-      });
-  }
-})();
-
-/**
- * Toast Notification System
- * Global notification system for all pages
- */
 const ToastSystem = {
   container: null,
 
@@ -64,16 +17,9 @@ const ToastSystem = {
     return true;
   },
 
-  /**
-   * Show toast notification
-   * @param {string} message - Message to display
-   * @param {string} type - Type: 'success' | 'error' | 'warning' | 'info'
-   * @param {number} duration - Duration in milliseconds (default: 4000)
-   */
   show(message, type = "success", duration = 4000) {
     if (!this.container && !this.init()) return;
 
-    // Type configurations
     const configs = {
       success: {
         bg: "bg-success/10",
@@ -111,7 +57,6 @@ const ToastSystem = {
 
     const config = configs[type] || configs.success;
 
-    // Create toast element
     const toast = document.createElement("div");
     toast.className = `toast-notification relative overflow-hidden rounded-2xl shadow-2xl border backdrop-blur-md ${config.bg} ${config.border}`;
 
@@ -134,7 +79,6 @@ const ToastSystem = {
       <div class="progress-bar h-1 ${config.progress}" style="animation-duration: ${duration}ms;"></div>
     `;
 
-    // Add close functionality
     const closeBtn = toast.querySelector(".close-toast");
     let autoRemoveTimer;
 
@@ -148,7 +92,6 @@ const ToastSystem = {
       hideToast();
     });
 
-    // Pause on hover
     const progressBar = toast.querySelector(".progress-bar");
     toast.addEventListener("mouseenter", () => {
       progressBar.style.animationPlayState = "paused";
@@ -160,20 +103,15 @@ const ToastSystem = {
       autoRemoveTimer = setTimeout(hideToast, duration);
     });
 
-    // Auto remove after duration
     autoRemoveTimer = setTimeout(hideToast, duration);
-
-    // Add to container
     this.container.appendChild(toast);
 
-    // Limit to 3 toasts max
     const toasts = this.container.querySelectorAll(".toast-notification");
     if (toasts.length > 3) {
       toasts[0].remove();
     }
   },
 
-  // Shorthand methods
   success(message, duration) {
     this.show(message, "success", duration);
   },
@@ -188,13 +126,131 @@ const ToastSystem = {
   },
 };
 
-// Global showToast function for backward compatibility
+// Global showToast function
 window.showToast = function (message, type = "success", duration = 4000) {
   ToastSystem.show(message, type, duration);
 };
 
 // ==========================================
-// Global Functions: Download QR & Save to History
+// CACHE MANAGER MODULE (for Capacitor native apps)
+// ==========================================
+const CacheManager = (function () {
+  // Check if we're in a Capacitor native environment
+  const isNative =
+    typeof Capacitor !== "undefined" && Capacitor.isNativePlatform();
+  const platform = isNative ? Capacitor.getPlatform() : "web";
+
+  return {
+    async clearIfVersionChanged() {
+      // Only run on native platforms
+      if (!isNative) {
+        console.log("Web platform - skipping native cache clear");
+        return false;
+      }
+
+      try {
+        // Dynamically import Capacitor plugins only when needed
+        const { App } = await import("@capacitor/app");
+        const { Preferences } = await import("@capacitor/preferences");
+
+        // Get current app version
+        const info = await App.getInfo();
+        const currentVersion = info.version;
+
+        // Get last launched version from storage
+        const { value: lastLaunchedVersion } = await Preferences.get({
+          key: "app_version",
+        });
+
+        // If version changed or first launch
+        if (!lastLaunchedVersion || lastLaunchedVersion !== currentVersion) {
+          console.log(
+            `App version changed from ${lastLaunchedVersion} to ${currentVersion}. Clearing caches...`,
+          );
+
+          // Clear platform-specific caches
+          if (platform === "ios") {
+            try {
+              const { CapacitorIosWebviewCacheCleaner } =
+                await import("capacitor-ios-webview-cache-cleaner-plugin");
+              await CapacitorIosWebviewCacheCleaner.clearWebViewCache();
+              console.log("iOS WebView cache cleared");
+            } catch (e) {
+              console.warn("Failed to clear iOS cache:", e);
+            }
+          } else if (platform === "android") {
+            try {
+              const { WebViewCache } =
+                await import("capacitor-plugin-webview-cache");
+              await WebViewCache.clearCache();
+              console.log("Android WebView cache cleared");
+            } catch (e) {
+              console.warn("Failed to clear Android cache:", e);
+            }
+          }
+
+          // Clear web storage
+          try {
+            localStorage.clear();
+            sessionStorage.clear();
+            console.log("Web storage cleared");
+          } catch (e) {
+            console.warn("Failed to clear web storage:", e);
+          }
+
+          // Store the new version
+          await Preferences.set({
+            key: "app_version",
+            value: currentVersion,
+          });
+
+          console.log("Cache cleared for new version");
+          return true;
+        }
+
+        console.log("App version unchanged, no cache clearing needed");
+        return false;
+      } catch (error) {
+        console.error("Error in cache manager:", error);
+        return false;
+      }
+    },
+
+    // Force clear everything (for debugging)
+    async forceClearAll() {
+      if (!isNative) return;
+
+      console.warn("Force clearing ALL caches");
+
+      try {
+        const { Preferences } = await import("@capacitor/preferences");
+
+        if (platform === "ios") {
+          const { CapacitorIosWebviewCacheCleaner } =
+            await import("capacitor-ios-webview-cache-cleaner-plugin");
+          await CapacitorIosWebviewCacheCleaner.clearWebViewCache();
+        } else if (platform === "android") {
+          const { WebViewCache } =
+            await import("capacitor-plugin-webview-cache");
+          await WebViewCache.clearCache();
+        }
+
+        localStorage.clear();
+        sessionStorage.clear();
+        await Preferences.clear();
+
+        setTimeout(() => {
+          window.location.reload(true);
+        }, 500);
+      } catch (e) {
+        console.error("Force clear failed:", e);
+      }
+    },
+  };
+})();
+
+// ==========================================
+// QR Code Functions
 // ==========================================
 
 /**
@@ -419,10 +475,11 @@ function updateHistoryBadges(count) {
 }
 
 // ==========================================
-// Main DOMContentLoaded Setup
+// Main App Startup Function
 // ==========================================
+function startApp() {
+  console.log("QR Forge starting up...");
 
-document.addEventListener("DOMContentLoaded", () => {
   // Initialize Toast System
   ToastSystem.init();
 
@@ -572,8 +629,49 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   };
 
+  // Run all setup functions
   setupDropdowns();
   setupMobileMenu();
   setupTabs();
   setupForms();
-});
+
+  console.log("QR Forge ready!");
+}
+
+// ==========================================
+// APP INITIALIZATION (runs after all definitions)
+// ==========================================
+(async function initializeApp() {
+  console.log("Initializing QR Forge...");
+
+  // Handle cache clearing if in native app
+  if (typeof Capacitor !== "undefined" && Capacitor.isNativePlatform()) {
+    try {
+      const cacheCleared = await CacheManager.clearIfVersionChanged();
+
+      // If cache was cleared, reload once to ensure fresh start
+      if (cacheCleared && !sessionStorage.getItem("app_reloaded")) {
+        sessionStorage.setItem("app_reloaded", "true");
+        window.location.reload(true);
+        return; // Stop execution, reload will restart
+      }
+    } catch (e) {
+      console.warn("Cache clearing failed, continuing normal startup:", e);
+    }
+  }
+
+  // Continue with normal initialization when DOM is ready
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", startApp);
+  } else {
+    startApp();
+  }
+})();
+
+// Expose force cache clear for debugging (add ?debug=true to URL)
+if (window.location.search.includes("debug=true")) {
+  window.forceCacheClear = () => CacheManager.forceClearAll();
+  console.log(
+    "Debug mode enabled. Use window.forceCacheClear() to clear all caches",
+  );
+}
