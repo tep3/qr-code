@@ -2,6 +2,52 @@
 // QR Forge - Global Application JavaScript
 // ==========================================
 
+// ==========================================
+// FORCE SERVICE WORKER UNREGISTRATION
+// ==========================================
+(function forceUnregisterServiceWorker() {
+  if ("serviceWorker" in navigator) {
+    // Unregister all service workers
+    navigator.serviceWorker
+      .getRegistrations()
+      .then(function (registrations) {
+        if (registrations.length > 0) {
+          console.log(
+            `Found ${registrations.length} service worker(s) to unregister`,
+          );
+          for (let registration of registrations) {
+            registration.unregister().then(function (success) {
+              if (success) {
+                console.log("Service worker unregistered successfully");
+
+                // Clear all caches
+                if ("caches" in window) {
+                  caches.keys().then(function (cacheNames) {
+                    cacheNames.forEach(function (cacheName) {
+                      caches.delete(cacheName);
+                      console.log("Cache deleted:", cacheName);
+                    });
+                  });
+                }
+              }
+            });
+          }
+
+          // Force reload after unregistration
+          setTimeout(function () {
+            console.log("Force reloading page to clear service worker...");
+            window.location.reload(true); // Force reload from server
+          }, 1000);
+        } else {
+          console.log("No service workers found");
+        }
+      })
+      .catch(function (error) {
+        console.error("Error unregistering service worker:", error);
+      });
+  }
+})();
+
 /**
  * Toast Notification System
  * Global notification system for all pages
