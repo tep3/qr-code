@@ -30,38 +30,7 @@
     <div class="p-5 sm:p-8 relative z-10">
       <!-- Scanner UI (Active) -->
       <div id="scanner-container" class="space-y-6 transition-all duration-300">
-        <!-- ===== Native Mode: @capacitor/barcode-scanner ===== -->
-        <div id="native-scanner-ui" class="hidden">
-          <div class="flex flex-col items-center justify-center py-10 sm:py-12">
-            <div
-              class="w-20 h-20 sm:w-24 sm:h-24 bg-gradient-to-br from-primary/20 to-primary/5 text-primary rounded-3xl flex items-center justify-center mb-6 shadow-lg shadow-primary/20">
-              <svg class="w-10 h-10 sm:w-12 sm:h-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                </path>
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-                  d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path>
-              </svg>
-            </div>
-            <h3 class="text-lg font-semibold text-base-content mb-2">
-              Native Camera
-            </h3>
-            <p class="text-sm text-base-content/50 mb-6 text-center max-w-xs">
-              Use your device's built-in camera with auto-focus for best results
-            </p>
-            <button id="native-scan-btn"
-              class="btn btn-primary btn-lg rounded-full px-8 sm:px-10 shadow-lg shadow-primary/30 hover:shadow-primary/50 transition-all gap-2 mb-4 h-14">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                  d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z">
-                </path>
-              </svg>
-              <span data-i18n="btn_start_camera">Scan with Camera</span>
-            </button>
-          </div>
-        </div>
-
-        <!-- ===== Web Mode: html5-qrcode fallback ===== -->
+        <!-- ===== Web Mode: html5-qrcode ===== -->
         <div id="web-scanner-ui">
           <!-- Camera Preview -->
           <div id="video-wrapper"
@@ -385,18 +354,15 @@
   }
 </style>
 
+<!-- Add jsQR library for better image scanning -->
+<script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
 <script>
   (function () {
     // ============================================================
-    // Detect: Capacitor native vs Web browser
+    // Always use web scanner (native disabled)
     // ============================================================
-    var isNative = !!(
-      window.Capacitor &&
-      window.Capacitor.isNativePlatform &&
-      window.Capacitor.isNativePlatform()
-    );
-
-    isNative = false; // ใช้ web scanner
+    var isNative = false;
 
     // UI Elements
     var scannerContainer = document.getElementById("scanner-container");
@@ -424,14 +390,9 @@
     var currentResult = "";
     var isScanning = false;
 
-    // Show correct UI based on platform
-    if (isNative) {
-      nativeScannerUI?.classList.remove("hidden");
-      webScannerUI?.classList.add("hidden");
-    } else {
-      nativeScannerUI?.classList.add("hidden");
-      webScannerUI?.classList.remove("hidden");
-    }
+    // Show web UI
+    nativeScannerUI?.classList.add("hidden");
+    webScannerUI?.classList.remove("hidden");
 
     // ============================================================
     // Check Camera Support
@@ -444,159 +405,6 @@
         return false;
       }
       return true;
-    }
-
-    // ============================================================
-    // NATIVE: @capacitor/barcode-scanner
-    // ============================================================
-    function getBarcodeScannerPlugin() {
-      var P = window.Capacitor?.Plugins;
-      return P?.CapacitorBarcodeScanner || P?.BarcodeScanner || null;
-    }
-
-
-    function debugMLKitPlugin() {
-      const scanner = window.Capacitor?.Plugins?.BarcodeScanner;
-      if (!scanner) {
-        console.log("ML Kit plugin not found");
-        return;
-      }
-
-      console.log("=== ML Kit Plugin Debug ===");
-      console.log("Plugin methods:", Object.keys(scanner));
-
-      // ตรวจสอบแต่ละ method
-      if (scanner.scan) {
-        console.log("scan method exists, parameters:", scanner.scan.length);
-      }
-      if (scanner.startScan) {
-        console.log("startScan method exists");
-      }
-      if (scanner.stopScan) {
-        console.log("stopScan method exists");
-      }
-      if (scanner.addListener) {
-        console.log("addListener method exists");
-      }
-    }
-
-    // เรียกใช้ตอน native mode
-    if (isNative) {
-      setTimeout(debugMLKitPlugin, 1000);
-    }
-
-    async function nativeScan() {
-      try {
-        // ตรวจสอบว่า Capacitor พร้อมใช้งาน
-        if (!window.Capacitor) {
-          console.error("Capacitor not available");
-          window.showToast("Capacitor not available", "error");
-          return;
-        }
-
-        console.log("Available plugins:", Object.keys(window.Capacitor.Plugins));
-
-        // ดึง plugin ML Kit Barcode Scanner
-        const scanner = window.Capacitor.Plugins?.BarcodeScanner;
-
-        if (!scanner) {
-          console.error("Barcode scanner plugin not found");
-          window.showToast("Barcode scanner plugin not installed", "error");
-          fallbackToWebScanner();
-          return;
-        }
-
-        console.log("Found scanner plugin:", scanner);
-
-        // ขอ permissions ก่อน
-        if (scanner.requestPermissions) {
-          console.log("Requesting permissions...");
-          const permissionResult = await scanner.requestPermissions();
-          console.log("Permission result:", permissionResult);
-
-          // ตรวจสอบว่าได้ permission หรือไม่
-          if (permissionResult.camera !== 'granted') {
-            window.showToast("Camera permission denied", "error");
-            return;
-          }
-        }
-
-        // เตรียม UI สำหรับแสดงกล้อง
-        // @capacitor-mlkit/barcode-scanning จะแสดงกล้องแบบเต็มจอ
-
-        // เริ่ม scan
-        console.log("Starting scan...");
-
-        // แบบที่ 1: ใช้ scan() แบบครั้งเดียว
-        if (scanner.scan) {
-          const result = await scanner.scan({
-            formats: ['qr_code'], // เฉพาะ QR code
-          });
-
-          console.log("Scan result:", result);
-
-          // จัดการผลลัพธ์
-          if (result.barcodes && result.barcodes.length > 0) {
-            const barcode = result.barcodes[0];
-            const scannedText = barcode.displayValue || barcode.rawValue;
-            if (scannedText) {
-              onScanSuccess(scannedText);
-            }
-          } else {
-            window.showToast("No QR code found", "warning");
-          }
-        }
-
-        // แบบที่ 2: ใช้ startScan() แบบต่อเนื่อง (ถ้าต้องการ)
-        else if (scanner.startScan) {
-          // ฟังผลลัพธ์
-          scanner.addListener('barcodeScanned', (result) => {
-            console.log("Barcode scanned:", result);
-            if (result.barcode) {
-              const scannedText = result.barcode.displayValue || result.barcode.rawValue;
-              if (scannedText) {
-                onScanSuccess(scannedText);
-                scanner.stopScan(); // หยุด scan เมื่อเจอแล้ว
-              }
-            }
-          });
-
-          // เริ่ม scan
-          await scanner.startScan({
-            formats: ['qr_code'],
-          });
-        }
-
-      } catch (err) {
-        console.error("Scan error:", err);
-        // ตรวจสอบว่าเป็นการยกเลิกหรือ error จริงๆ
-        if (err.message &&
-          !err.message.includes('canceled') &&
-          !err.message.includes('cancelled')) {
-          window.showToast(err.message || 'Scan failed', 'error');
-        }
-      }
-    }
-
-    // ฟังก์ชันสำหรับ fallback ไปใช้ web scanner
-    function fallbackToWebScanner() {
-      console.log("Falling back to web scanner");
-
-      // ซ่อน native UI และแสดง web UI
-      nativeScannerUI?.classList.add("hidden");
-      webScannerUI?.classList.remove("hidden");
-
-      // เปลี่ยน isNative เป็น false เพื่อใช้ web scanner
-      isNative = false;
-
-      // เริ่มต้น web scanner
-      setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
-
-      window.showToast("Using web-based scanner", "info");
-    }
-
-    function nativeScanFromFile(file) {
-      webScanFromFile(file);
     }
 
     // ============================================================
@@ -774,11 +582,14 @@
       videoWrapper?.classList.remove("border-transparent", "shadow-2xl");
     }
 
+    // ============================================================
+    // File Upload Scanning (Improved)
+    // ============================================================
     function webScanFromFile(file) {
       if (!html5QrCode) {
         loadHtml5Qrcode(function () {
           initWebScanner();
-          setTimeout(() => doWebFileScan(file), 100);
+          setTimeout(() => doWebFileScan(file), 500);
         });
         return;
       }
@@ -788,57 +599,190 @@
     async function doWebFileScan(file) {
       videoWrapper?.classList.add("opacity-50", "pointer-events-none");
 
+      // Show loading toast
+      const loadingToast = window.showToast("Scanning image for QR code...", "info", 0);
+
       try {
-        const text = await html5QrCode.scanFile(file, false);
-        onScanSuccess(text);
-      } catch (err) {
-        try {
-          const text = await scanViaCanvas(file);
+        // Method 1: Try html5-qrcode scanFile first
+        console.log("Attempting scan with html5-qrcode scanFile");
+        const text = await html5QrCode.scanFile(file, true);
+
+        if (text && text.trim()) {
           onScanSuccess(text);
+          return;
+        }
+      } catch (err) {
+        console.log("html5-qrcode scanFile failed:", err);
+
+        // Method 2: Try with jsQR
+        try {
+          console.log("Attempting scan with jsQR");
+          const text = await scanWithJsQR(file);
+
+          if (text && text.trim()) {
+            onScanSuccess(text);
+            return;
+          }
         } catch (err2) {
-          window.showToast(
-            window.t?.("err_no_qr") || "No QR code found in image",
-            "warning",
-          );
-          fileInput.value = "";
+          console.log("jsQR scan failed:", err2);
+
+          // Method 3: Try with canvas and multiple sizes
+          try {
+            console.log("Attempting scan with canvas method");
+            const text = await scanWithCanvas(file);
+
+            if (text && text.trim()) {
+              onScanSuccess(text);
+              return;
+            }
+          } catch (err3) {
+            console.log("Canvas method failed:", err3);
+            throw new Error("All scan methods failed");
+          }
         }
       } finally {
+        // Dismiss loading toast
+        if (loadingToast && loadingToast.dismiss) {
+          loadingToast.dismiss();
+        } else {
+          window.showToast.dismiss();
+        }
         videoWrapper?.classList.remove("opacity-50", "pointer-events-none");
+        fileInput.value = ""; // Clear file input
       }
     }
 
-    function scanViaCanvas(file) {
+    // Scan with jsQR library
+    function scanWithJsQR(file) {
       return new Promise((resolve, reject) => {
-        var r = new FileReader();
-        r.onerror = reject;
-        r.onload = function (ev) {
-          var img = new Image();
-          img.onerror = reject;
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const img = new Image();
+
           img.onload = function () {
             try {
-              var c = document.createElement("canvas");
-              var mx = 1500,
-                w = img.width,
-                h = img.height;
-              if (w > mx || h > mx) {
-                var s = mx / Math.max(w, h);
-                w = Math.round(w * s);
-                h = Math.round(h * s);
+              const canvas = document.createElement("canvas");
+              const ctx = canvas.getContext("2d");
+
+              // Try multiple sizes for better detection
+              const sizes = [
+                { width: img.width, height: img.height },
+                { width: 1000, height: Math.round(1000 * img.height / img.width) },
+                { width: 800, height: Math.round(800 * img.height / img.width) },
+                { width: 500, height: Math.round(500 * img.height / img.width) }
+              ];
+
+              let attemptIndex = 0;
+
+              function tryNextSize() {
+                if (attemptIndex >= sizes.length) {
+                  reject(new Error("No QR code found with jsQR"));
+                  return;
+                }
+
+                const size = sizes[attemptIndex];
+                canvas.width = size.width;
+                canvas.height = size.height;
+
+                ctx.drawImage(img, 0, 0, size.width, size.height);
+
+                const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                const code = jsQR(imageData.data, canvas.width, canvas.height, {
+                  inversionAttempts: "dontInvert",
+                });
+
+                if (code && code.data) {
+                  resolve(code.data);
+                } else {
+                  attemptIndex++;
+                  tryNextSize();
+                }
               }
-              c.width = w;
-              c.height = h;
-              c.getContext("2d").drawImage(img, 0, 0, w, h);
-              c.toBlob(function (blob) {
-                if (!blob) return reject(new Error("Canvas failed"));
-                html5QrCode.scanFile(blob, false).then(resolve).catch(reject);
-              }, "image/png");
-            } catch (e) {
-              reject(e);
+
+              tryNextSize();
+
+            } catch (err) {
+              reject(err);
             }
           };
-          img.src = ev.target.result;
+
+          img.onerror = reject;
+          img.src = e.target.result;
         };
-        r.readAsDataURL(file);
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Scan with canvas and html5-qrcode (multiple sizes)
+    function scanWithCanvas(file) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+          const img = new Image();
+
+          img.onload = function () {
+            try {
+              // Try different sizes
+              const sizes = [1500, 1000, 800, 500];
+              let attemptIndex = 0;
+
+              function tryNextSize() {
+                if (attemptIndex >= sizes.length) {
+                  reject(new Error("No QR code found with canvas method"));
+                  return;
+                }
+
+                const maxSize = sizes[attemptIndex];
+                let w = img.width;
+                let h = img.height;
+
+                if (w > maxSize || h > maxSize) {
+                  const scale = maxSize / Math.max(w, h);
+                  w = Math.round(w * scale);
+                  h = Math.round(h * scale);
+                }
+
+                const canvas = document.createElement("canvas");
+                canvas.width = w;
+                canvas.height = h;
+
+                const ctx = canvas.getContext("2d");
+                ctx.drawImage(img, 0, 0, w, h);
+
+                canvas.toBlob(async function (blob) {
+                  if (!blob) {
+                    attemptIndex++;
+                    tryNextSize();
+                    return;
+                  }
+
+                  try {
+                    const result = await html5QrCode.scanFile(blob, false);
+                    resolve(result);
+                  } catch (err) {
+                    attemptIndex++;
+                    tryNextSize();
+                  }
+                }, "image/png", 0.9);
+              }
+
+              tryNextSize();
+
+            } catch (err) {
+              reject(err);
+            }
+          };
+
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
     }
 
@@ -956,7 +900,13 @@
     // ============================================================
     // Event Listeners
     // ============================================================
-    nativeScanBtn?.addEventListener("click", nativeScan);
+    if (nativeScanBtn) {
+      nativeScanBtn.addEventListener("click", function () {
+        window.showToast("Native scanner not available, using web scanner", "info");
+        startWebCamera();
+      });
+    }
+
     startBtn?.addEventListener("click", startWebCamera);
     stopBtn?.addEventListener("click", stopWebCamera);
 
@@ -1025,11 +975,7 @@
         return;
       }
 
-      if (isNative) {
-        nativeScanFromFile(f);
-      } else {
-        webScanFromFile(f);
-      }
+      webScanFromFile(f);
     });
 
     // Drag and drop
@@ -1057,19 +1003,24 @@
       });
 
       dropZone.addEventListener("drop", (e) => {
-        var dt = e.dataTransfer;
-        var files = dt.files;
+        e.preventDefault();
+        e.stopPropagation();
+
+        const files = e.dataTransfer.files;
         if (files.length > 0) {
-          fileInput.files = files;
-          fileInput.dispatchEvent(new Event("change"));
+          const file = files[0];
+          if (file.type.startsWith("image/")) {
+            fileInput.files = files;
+            fileInput.dispatchEvent(new Event("change"));
+          } else {
+            window.showToast("Please drop an image file", "warning");
+          }
         }
       });
     }
 
     // Initialize
-    if (!isNative) {
-      setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
-    }
+    setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
   })();
 
   // Cleanup
