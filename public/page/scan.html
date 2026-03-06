@@ -452,7 +452,7 @@
       return P?.CapacitorBarcodeScanner || P?.BarcodeScanner || null;
     }
 
-    // Add this diagnostic function to check the plugin structure
+
     function diagnoseNativePlugin() {
       const scanner = getBarcodeScannerPlugin();
       if (!scanner) {
@@ -479,23 +479,91 @@
 
     async function nativeScan() {
       try {
-        const { BarcodeScanner } = window.Capacitor.Plugins;
+        // ตรวจสอบว่า Capacitor พร้อมใช้งาน
+        if (!window.Capacitor) {
+          console.error("Capacitor not available");
+          window.showToast("Capacitor not available", "error");
+          return;
+        }
+
+        console.log("Available plugins:", Object.keys(window.Capacitor.Plugins));
+
+        // ลองหา plugin จากหลายๆ ชื่อ
+        const scanner = window.Capacitor.Plugins?.BarcodeScanner ||
+          window.Capacitor.Plugins?.MLKitBarcodeScanner ||
+          window.Capacitor.Plugins?.CapacitorMlkitBarcodeScanner;
+
+        if (!scanner) {
+          console.error("Barcode scanner plugin not found");
+          window.showToast("Barcode scanner plugin not installed", "error");
+
+          // fallback ไปใช้ web scanner
+          fallbackToWebScanner();
+          return;
+        }
+
+        console.log("Found scanner plugin:", scanner);
 
         // ขอ permissions
-        await BarcodeScanner.requestPermissions();
+        if (scanner.requestPermissions) {
+          console.log("Requesting permissions...");
+          await scanner.requestPermissions();
+        }
 
-        // เริ่ม scan
-        const { barcodes } = await BarcodeScanner.scan();
+        // เริ่ม scan (รูปแบบของ @capacitor-mlkit/barcode-scanning)
+        if (scanner.scan) {
+          console.log("Starting scan...");
+          const result = await scanner.scan({
+            formats: ['qr_code'], // เฉพาะ QR code
+          });
 
-        if (barcodes && barcodes.length > 0) {
-          onScanSuccess(barcodes[0].displayValue || barcodes[0].rawValue);
+          console.log("Scan result:", result);
+
+          if (result.barcodes && result.barcodes.length > 0) {
+            const barcode = result.barcodes[0];
+            onScanSuccess(barcode.displayValue || barcode.rawValue);
+          }
+        }
+        // หรือแบบ startScan (ถ้ามี)
+        else if (scanner.startScan) {
+          console.log("Starting continuous scan...");
+          await scanner.startScan({
+            formats: ['qr_code'],
+          });
+
+          // ฟังผลลัพธ์
+          scanner.addListener('barcodeScanned', (result) => {
+            console.log("Barcode scanned:", result);
+            if (result.barcode) {
+              onScanSuccess(result.barcode.displayValue || result.barcode.rawValue);
+              scanner.stopScan();
+            }
+          });
         }
 
       } catch (err) {
-        if (err.message !== 'canceled') {
-          window.showToast(err.message, 'error');
+        console.error("Scan error:", err);
+        if (err.message !== 'canceled' && !err.message.includes('cancelled')) {
+          window.showToast(err.message || 'Scan failed', 'error');
         }
       }
+    }
+
+    // ฟังก์ชันสำหรับ fallback ไปใช้ web scanner
+    function fallbackToWebScanner() {
+      console.log("Falling back to web scanner");
+
+      // ซ่อน native UI และแสดง web UI
+      nativeScannerUI?.classList.add("hidden");
+      webScannerUI?.classList.remove("hidden");
+
+      // เปลี่ยน isNative เป็น false เพื่อใช้ web scanner
+      isNative = false;
+
+      // เริ่มต้น web scanner
+      setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
+
+      window.showToast("Using web-based scanner", "info");
     }
 
     function nativeScanFromFile(file) {
