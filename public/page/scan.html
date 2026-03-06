@@ -477,7 +477,8 @@
       setTimeout(diagnoseNativePlugin, 1000);
     }
 
-    // แก้ไข nativeScan function ให้สมบูรณ์
+    // แก้ไข nativeScan function เป็นแบบนี้:
+
     async function nativeScan() {
       try {
         var scanner = getBarcodeScannerPlugin();
@@ -486,42 +487,123 @@
           return;
         }
 
-        // 1. ขอ permissions ก่อน
+        console.log("=== Native Scanner Debug ===");
+        console.log("Scanner object:", scanner);
+
+        // ขอ permissions ก่อน
         if (scanner.requestPermissions) {
-          await scanner.requestPermissions();
+          console.log("Requesting permissions...");
+          const permissionResult = await scanner.requestPermissions();
+          console.log("Permission result:", permissionResult);
         }
 
-        // 2. สำหรับ v3 ต้องเตรียมพื้นหลังหรือ container
-        // ถ้าต้องการให้แสดง camera preview ใน UI ของเรา
+        // ลองตรวจสอบว่า scanBarcode รับพารามิเตอร์อะไรบ้าง
+        if (scanner.scanBarcode) {
+          console.log("scanBarcode function exists");
+          console.log("scanBarcode length (expected params):", scanner.scanBarcode.length);
 
-        // 3. เรียก scan ด้วย options ที่ถูกต้อง
-        const result = await scanner.scanBarcode({
-          // ค่าที่เป็นไปได้สำหรับ v3
-          cameraDirection: 1, // 1 = หลัง, 0 = หน้า
-          scanOrientation: 0, // 0 = portrait
-          showCameraPreview: true,
-          showFlipCameraButton: true,
-          showTorchButton: true,
-          promptText: "วาง QR Code ในกรอบสี่เหลี่ยม",
-        });
+          // ลองดู function signature
+          const fnStr = scanner.scanBarcode.toString();
+          console.log("Function signature:", fnStr.substring(0, 200));
+        }
 
-        // 4. จัดการผลลัพธ์
-        if (result && result.ScanResult) {
-          onScanSuccess(result.ScanResult);
-        } else if (result && typeof result === 'object') {
-          // ลองหาข้อมูลจาก property อื่นๆ
-          const text = result.text || result.value || result.code || JSON.stringify(result);
-          if (text && text !== '{}') {
-            onScanSuccess(text);
+        // ลอง scan ด้วยพารามิเตอร์ต่างๆ ทีละแบบ
+        let result = null;
+        let lastError = null;
+
+        // แบบที่ 1: ไม่ส่งพารามิเตอร์
+        try {
+          console.log("Trying scanBarcode() with no params...");
+          result = await scanner.scanBarcode();
+          console.log("Success with no params:", result);
+        } catch (err) {
+          console.log("No params failed:", err);
+          lastError = err;
+
+          // แบบที่ 2: ส่ง empty object
+          try {
+            console.log("Trying scanBarcode({})...");
+            result = await scanner.scanBarcode({});
+            console.log("Success with empty object:", result);
+          } catch (err2) {
+            console.log("Empty object failed:", err2);
+            lastError = err2;
+
+            // แบบที่ 3: ส่ง options ตาม documentation ของ v3
+            try {
+              console.log("Trying with full options...");
+              result = await scanner.scanBarcode({
+                cameraDirection: 1, // back camera
+                scanOrientation: 0, // portrait
+                showCameraPreview: true,
+                showFlipCameraButton: true,
+                showTorchButton: true,
+                promptText: "Scan QR Code"
+              });
+              console.log("Success with full options:", result);
+            } catch (err3) {
+              console.log("Full options failed:", err3);
+              lastError = err3;
+
+              // แบบที่ 4: ลองแบบ minimal options
+              try {
+                console.log("Trying minimal options...");
+                result = await scanner.scanBarcode({
+                  cameraDirection: 1
+                });
+                console.log("Success with minimal options:", result);
+              } catch (err4) {
+                console.log("Minimal options failed:", err4);
+                lastError = err4;
+
+                // แบบที่ 5: ลองแบบที่ใช้ใน capacitor community plugin
+                try {
+                  console.log("Trying community plugin style...");
+                  result = await scanner.scanBarcode({
+                    target: 0, // back camera
+                    formats: ["QR_CODE"]
+                  });
+                  console.log("Success with community style:", result);
+                } catch (err5) {
+                  console.log("Community style failed:", err5);
+                  lastError = err5;
+                }
+              }
+            }
+          }
+        }
+
+        // ถ้ามี result
+        if (result) {
+          console.log("Final result:", result);
+
+          // ลองหาข้อความจาก property ต่างๆ
+          const scannedText = result.ScanResult ||
+            result.text ||
+            result.content ||
+            result.value ||
+            result.code ||
+            result.data ||
+            (typeof result === 'string' ? result : null);
+
+          if (scannedText) {
+            onScanSuccess(scannedText);
+          } else {
+            console.log("Could not find text in result:", result);
+            window.showToast("Scan successful but no text found", "warning");
+          }
+        } else {
+          console.log("All scan attempts failed:", lastError);
+          if (lastError && !lastError.message?.includes('cancelled')) {
+            window.showToast(lastError.message || 'Scan failed', 'error');
           }
         }
 
       } catch (err) {
-        // ถ้า user กดยกเลิก จะมี error message ที่มีคำว่า cancelled
+        console.error("Native scan outer error:", err);
         if (err.message && !err.message.includes('cancelled')) {
           window.showToast(err.message || 'Scan failed', 'error');
         }
-        console.log("Scan cancelled or error:", err);
       }
     }
 
