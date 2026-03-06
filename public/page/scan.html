@@ -477,6 +477,7 @@
       setTimeout(diagnoseNativePlugin, 1000);
     }
 
+    // แก้ไข nativeScan function ให้สมบูรณ์
     async function nativeScan() {
       try {
         var scanner = getBarcodeScannerPlugin();
@@ -485,43 +486,42 @@
           return;
         }
 
-        // Request permissions
+        // 1. ขอ permissions ก่อน
         if (scanner.requestPermissions) {
           await scanner.requestPermissions();
-        } else if (scanner.checkPermission) {
-          await scanner.checkPermission({ force: true });
         }
 
-        // Check the plugin's available methods and expected parameters
-        console.log("Scanner plugin:", scanner);
+        // 2. สำหรับ v3 ต้องเตรียมพื้นหลังหรือ container
+        // ถ้าต้องการให้แสดง camera preview ใน UI ของเรา
 
-        // Option 1: If the plugin expects a specific format
-        // Based on the error, try passing the correct parameters
-        var result;
+        // 3. เรียก scan ด้วย options ที่ถูกต้อง
+        const result = await scanner.scanBarcode({
+          // ค่าที่เป็นไปได้สำหรับ v3
+          cameraDirection: 1, // 1 = หลัง, 0 = หน้า
+          scanOrientation: 0, // 0 = portrait
+          showCameraPreview: true,
+          showFlipCameraButton: true,
+          showTorchButton: true,
+          promptText: "วาง QR Code ในกรอบสี่เหลี่ยม",
+        });
 
-        if (scanner.scanBarcode) {
-          // Try with empty object first
-          result = await scanner.scanBarcode({});
-        } else if (scanner.scan) {
-          result = await scanner.scan();
-        } else if (scanner.startScan) {
-          result = await scanner.startScan();
-        }
-
-        // Handle the result based on the plugin's return format
-        if (result) {
-          // Try different possible result formats
-          const scannedText = result.ScanResult || result.text || result.content || result;
-          if (scannedText) {
-            onScanSuccess(scannedText);
+        // 4. จัดการผลลัพธ์
+        if (result && result.ScanResult) {
+          onScanSuccess(result.ScanResult);
+        } else if (result && typeof result === 'object') {
+          // ลองหาข้อมูลจาก property อื่นๆ
+          const text = result.text || result.value || result.code || JSON.stringify(result);
+          if (text && text !== '{}') {
+            onScanSuccess(text);
           }
         }
+
       } catch (err) {
-        var msg = err?.message || "Scan failed";
-        if (!msg.includes("cancelled") && !msg.includes("dismissed")) {
-          window.showToast(msg, "error");
+        // ถ้า user กดยกเลิก จะมี error message ที่มีคำว่า cancelled
+        if (err.message && !err.message.includes('cancelled')) {
+          window.showToast(err.message || 'Scan failed', 'error');
         }
-        console.error("Native scan error:", err);
+        console.log("Scan cancelled or error:", err);
       }
     }
 
