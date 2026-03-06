@@ -479,57 +479,22 @@
 
     async function nativeScan() {
       try {
-        var scanner = getBarcodeScannerPlugin();
-        if (!scanner) {
-          window.showToast("Scanner plugin not available", "error");
-          return;
-        }
+        const { BarcodeScanner } = window.Capacitor.Plugins;
 
-        console.log("=== Native Scanner Debug ===");
+        // ขอ permissions
+        await BarcodeScanner.requestPermissions();
 
-        // ขอ permissions ก่อน
-        if (scanner.requestPermissions) {
-          console.log("Requesting permissions...");
-          const permissionResult = await scanner.requestPermissions();
-          console.log("Permission result:", permissionResult);
-        }
+        // เริ่ม scan
+        const { barcodes } = await BarcodeScanner.scan();
 
-        // ลอง scan ด้วย parameter ที่ถูกต้องตาม @capacitor/barcode-scanner v3
-        try {
-          console.log("Trying scanBarcode with correct v3 params...");
-
-          // จาก documentation ของ @capacitor/barcode-scanner v3
-          const result = await scanner.scanBarcode({
-            // ใส่ parameter ที่จำเป็น
-          });
-
-          console.log("Scan result:", result);
-
-          if (result && result.ScanResult) {
-            onScanSuccess(result.ScanResult);
-          } else if (result && result.text) {
-            onScanSuccess(result.text);
-          } else if (result && typeof result === 'string') {
-            onScanSuccess(result);
-          } else {
-            console.log("Unexpected result format:", result);
-            window.showToast("Scan successful but unknown format", "warning");
-          }
-
-        } catch (err) {
-          console.error("Scan error:", err);
-
-          // ถ้า user กด cancel จะมีข้อความนี้
-          if (err.message && err.message.includes('cancelled')) {
-            console.log("User cancelled scan");
-          } else {
-            window.showToast(err.message || 'Scan failed', 'error');
-          }
+        if (barcodes && barcodes.length > 0) {
+          onScanSuccess(barcodes[0].displayValue || barcodes[0].rawValue);
         }
 
       } catch (err) {
-        console.error("Native scan outer error:", err);
-        window.showToast(err.message || 'Scan failed', 'error');
+        if (err.message !== 'canceled') {
+          window.showToast(err.message, 'error');
+        }
       }
     }
 
