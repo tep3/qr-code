@@ -628,6 +628,19 @@
     var currentResult = "";
     var isScanning = false;
 
+    // Safari/iPad detection — used to pick the direct jsQR path
+    var isSafari =
+      /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
+      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+
+    // Direct camera state (Safari path)
+    var directStream = null;
+    var directVideo = null;
+    var scanCanvas = null;
+    var scanCtx = null;
+    var scanRAF = null;
+
     // Show web UI
     nativeScannerUI?.classList.add("hidden");
     webScannerUI?.classList.remove("hidden");
@@ -646,7 +659,7 @@
     }
 
     // ============================================================
-    // WEB: html5-qrcode
+    // WEB: html5-qrcode (non-Safari path)
     // ============================================================
     function loadHtml5Qrcode(callback) {
       if (typeof Html5Qrcode !== "undefined") {
@@ -697,18 +710,134 @@
     async function startWebCamera() {
       if (!checkCameraSupport()) return;
 
+      // Safari/iPad: use direct getUserMedia + jsQR (bypasses html5-qrcode entirely)
+      if (isSafari && typeof jsQR !== "undefined") {
+        doStartCameraDirect();
+        return;
+      }
+
       if (!html5QrCode) {
         loadHtml5Qrcode(function () {
           initWebScanner();
-          if (html5QrCode) doStartCamera();
+          if (html5QrCode) doStartCameraLib();
         });
         return;
       }
 
-      doStartCamera();
+      doStartCameraLib();
     }
 
-    async function doStartCamera() {
+    // ============================================================
+    // SAFARI PATH: Direct getUserMedia + jsQR frame scanning
+    // ============================================================
+    async function doStartCameraDirect() {
+      if (isScanning) return;
+
+      isScanning = true;
+      if (startBtn) startBtn.disabled = true;
+      startBtn?.classList.add("loading");
+
+      cameraPlaceholder?.classList.add("hidden");
+      readerVideo.style.display = "block";
+      stopBtn?.classList.remove("hidden");
+      scanningFrame?.classList.remove("hidden");
+
+      videoWrapper?.classList.remove("border-dashed", "border-base-300");
+      videoWrapper?.classList.add("border-transparent", "shadow-2xl");
+
+      try {
+        directStream = await navigator.mediaDevices.getUserMedia({
+          video: {
+            facingMode: { ideal: "environment" },
+            width: { ideal: 1280 },
+            height: { ideal: 720 },
+          },
+          audio: false,
+        });
+        window._directStream = directStream;
+
+        // Create a real <video> element inside reader-video
+        directVideo = document.createElement("video");
+        directVideo.setAttribute("autoplay", "");
+        directVideo.setAttribute("playsinline", "");
+        directVideo.setAttribute("muted", "");
+        directVideo.muted = true;
+        directVideo.style.cssText = "width:100%;height:100%;object-fit:cover;";
+        readerVideo.innerHTML = "";
+        readerVideo.appendChild(directVideo);
+
+        directVideo.srcObject = directStream;
+        await directVideo.play();
+
+        // Prepare offscreen canvas for frame capture
+        scanCanvas = document.createElement("canvas");
+        scanCtx = scanCanvas.getContext("2d", { willReadFrequently: true });
+
+        // Wait a moment for the video to stabilize, then start scanning loop
+        setTimeout(function () {
+          scanFrameLoop();
+        }, 500);
+
+        window.showToast(
+          "Camera started. Point at a QR code!",
+          "success",
+          3000,
+        );
+        console.log("Safari direct camera started");
+      } catch (err) {
+        console.error("Direct camera error:", err);
+
+        if (err.name === "NotAllowedError") {
+          permissionDenied?.classList.remove("hidden");
+          window.showToast(
+            "Camera permission denied. Please enable it in settings.",
+            "error",
+          );
+        } else if (err.name === "NotFoundError") {
+          window.showToast("No camera found on this device", "warning");
+        } else {
+          window.showToast("Could not access camera: " + err.message, "error");
+        }
+
+        stopWebCamera();
+      } finally {
+        if (startBtn) startBtn.disabled = false;
+        startBtn?.classList.remove("loading");
+      }
+    }
+
+    function scanFrameLoop() {
+      if (!isScanning || !directVideo) return;
+
+      // Only scan when video has actual data
+      if (directVideo.readyState === directVideo.HAVE_ENOUGH_DATA) {
+        var vw = directVideo.videoWidth;
+        var vh = directVideo.videoHeight;
+
+        if (vw > 0 && vh > 0) {
+          scanCanvas.width = vw;
+          scanCanvas.height = vh;
+          scanCtx.drawImage(directVideo, 0, 0, vw, vh);
+
+          var imageData = scanCtx.getImageData(0, 0, vw, vh);
+          var code = jsQR(imageData.data, vw, vh, {
+            inversionAttempts: "dontInvert",
+          });
+
+          if (code && code.data) {
+            onScanSuccess(code.data);
+            return; // Stop loop on success
+          }
+        }
+      }
+
+      scanRAF = requestAnimationFrame(scanFrameLoop);
+    }
+
+    // ============================================================
+    // NON-SAFARI PATH: html5-qrcode library
+    // ============================================================
+    async function doStartCameraLib() {
       if (isScanning) return;
 
       try {
@@ -735,13 +864,6 @@
       videoWrapper?.classList.remove("border-dashed", "border-base-300");
       videoWrapper?.classList.add("border-transparent", "shadow-2xl");
 
-      // Detect Safari/iPad to avoid buggy BarcodeDetector API
-      var isSafari =
-        /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
-        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-      // Responsive qrbox: use ~60% of the smaller dimension of the video wrapper
       var wrapperRect = videoWrapper?.getBoundingClientRect() || {
         width: 400,
         height: 300,
@@ -750,7 +872,7 @@
         Math.floor(Math.min(wrapperRect.width, wrapperRect.height) * 0.6),
         250,
       );
-      qrboxSize = Math.max(qrboxSize, 150); // minimum 150px
+      qrboxSize = Math.max(qrboxSize, 150);
 
       try {
         await html5QrCode.start(
@@ -758,14 +880,7 @@
           {
             fps: 10,
             qrbox: { width: qrboxSize, height: qrboxSize },
-            // Don't force aspectRatio — let the camera use its native ratio
-            // Safari's BarcodeDetector is unreliable on iPadOS; fall back to ZXing
-            experimentalFeatures: { useBarCodeDetectorIfSupported: !isSafari },
-            videoConstraints: {
-              facingMode: { ideal: "environment" },
-              width: { min: 640, ideal: 1280, max: 1920 },
-              height: { min: 480, ideal: 720, max: 1080 },
-            },
+            experimentalFeatures: { useBarCodeDetectorIfSupported: false },
           },
           onScanSuccess,
           () => {},
@@ -785,9 +900,7 @@
             {
               fps: 10,
               qrbox: { width: qrboxSize, height: qrboxSize },
-              experimentalFeatures: {
-                useBarCodeDetectorIfSupported: !isSafari,
-              },
+              experimentalFeatures: { useBarCodeDetectorIfSupported: false },
             },
             onScanSuccess,
             () => {},
@@ -818,14 +931,41 @@
       }
     }
 
+    // ============================================================
+    // Stop & Reset (handles both paths)
+    // ============================================================
     async function stopWebCamera() {
       isScanning = false;
 
+      // Stop jsQR frame loop
+      if (scanRAF) {
+        cancelAnimationFrame(scanRAF);
+        scanRAF = null;
+      }
+
+      // Stop direct stream tracks
+      if (directStream) {
+        directStream.getTracks().forEach(function (t) {
+          t.stop();
+        });
+        directStream = null;
+        window._directStream = null;
+      }
+
+      // Remove direct video element
+      if (directVideo) {
+        directVideo.srcObject = null;
+        directVideo.remove();
+        directVideo = null;
+      }
+
+      // Stop html5-qrcode if it was used
       if (html5QrCode?.isScanning) {
         try {
           await html5QrCode.stop();
         } catch (e) {}
       }
+
       resetWebUI();
     }
 
@@ -844,6 +984,12 @@
     // File Upload Scanning (Improved)
     // ============================================================
     function webScanFromFile(file) {
+      // Safari: try jsQR first since it's already loaded
+      if (isSafari && typeof jsQR !== "undefined") {
+        doWebFileScanJsQRFirst(file);
+        return;
+      }
+
       if (!html5QrCode) {
         loadHtml5Qrcode(function () {
           initWebScanner();
@@ -852,6 +998,57 @@
         return;
       }
       doWebFileScan(file);
+    }
+
+    async function doWebFileScanJsQRFirst(file) {
+      videoWrapper?.classList.add("opacity-50", "pointer-events-none");
+      const loadingToast = window.showToast(
+        "Scanning image for QR code...",
+        "info",
+        0,
+      );
+
+      try {
+        var text = await scanWithJsQR(file);
+        if (text && text.trim()) {
+          onScanSuccess(text);
+          return;
+        }
+      } catch (err) {
+        console.log(
+          "jsQR file scan failed, falling back to html5-qrcode:",
+          err,
+        );
+        // Fall back to html5-qrcode
+        try {
+          if (!html5QrCode) {
+            await new Promise(function (resolve) {
+              loadHtml5Qrcode(function () {
+                initWebScanner();
+                resolve();
+              });
+            });
+          }
+          if (html5QrCode) {
+            var text2 = await html5QrCode.scanFile(file, true);
+            if (text2 && text2.trim()) {
+              onScanSuccess(text2);
+              return;
+            }
+          }
+        } catch (err2) {
+          console.log("html5-qrcode file scan also failed:", err2);
+        }
+        window.showToast("No QR code found in the image", "warning");
+      } finally {
+        if (loadingToast && loadingToast.dismiss) {
+          loadingToast.dismiss();
+        } else {
+          window.showToast.dismiss?.();
+        }
+        videoWrapper?.classList.remove("opacity-50", "pointer-events-none");
+        fileInput.value = "";
+      }
     }
 
     async function doWebFileScan(file) {
@@ -1300,15 +1497,25 @@
       });
     }
 
-    // Initialize
-    setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
+    // Initialize: Safari uses jsQR directly for live scanning, only needs html5-qrcode for file scan
+    if (!isSafari) {
+      setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
+    }
   })();
 
   // Cleanup
   (function () {
     function cleanup() {
+      // Stop html5-qrcode
       if (window.qrScannerInstance?.isScanning) {
         window.qrScannerInstance.stop().catch(() => {});
+      }
+      // Stop any direct camera stream (Safari path)
+      if (window._directStream) {
+        window._directStream.getTracks().forEach(function (t) {
+          t.stop();
+        });
+        window._directStream = null;
       }
     }
 
