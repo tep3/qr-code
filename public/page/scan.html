@@ -762,6 +762,7 @@
             // Safari's BarcodeDetector is unreliable on iPadOS; fall back to ZXing
             experimentalFeatures: { useBarCodeDetectorIfSupported: !isSafari },
             videoConstraints: {
+              facingMode: { ideal: "environment" },
               width: { min: 640, ideal: 1280, max: 1920 },
               height: { min: 480, ideal: 720, max: 1080 },
             },
