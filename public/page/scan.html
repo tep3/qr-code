@@ -408,6 +408,192 @@
           </div>
         </div>
 
+        <!-- PromptPay Parsed Details (hidden by default) -->
+        <div
+          id="promptpay-details"
+          class="hidden bg-gradient-to-br from-[#1a1145]/60 to-[#0d2137]/60 rounded-2xl p-4 sm:p-6 border border-purple-500/20 backdrop-blur-sm"
+        >
+          <div class="flex items-center gap-2.5 mb-4">
+            <div
+              class="w-9 h-9 bg-purple-500/15 rounded-xl flex items-center justify-center"
+            >
+              <span class="text-lg">🇹🇭</span>
+            </div>
+            <div>
+              <h4 class="font-bold text-base-content text-sm">PromptPay</h4>
+              <p class="text-[11px] text-base-content/40 font-medium">
+                EMVCo QR Payment
+              </p>
+            </div>
+            <div id="pp-verified" class="ml-auto hidden">
+              <span
+                class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-success/10 text-success text-[10px] font-bold uppercase tracking-wider"
+              >
+                <svg
+                  class="w-3 h-3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2.5"
+                    d="M5 13l4 4L19 7"
+                  ></path>
+                </svg>
+                CRC Valid
+              </span>
+            </div>
+          </div>
+
+          <div class="space-y-3">
+            <!-- Account ID -->
+            <div
+              id="pp-row-id"
+              class="hidden flex items-start gap-3 bg-base-100/5 rounded-xl p-3 border border-white/5"
+            >
+              <div
+                class="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
+              >
+                <svg
+                  class="w-4 h-4 text-primary"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <p
+                  id="pp-id-type"
+                  class="text-[11px] text-base-content/40 font-semibold uppercase tracking-wider mb-0.5"
+                >
+                  Account
+                </p>
+                <p
+                  id="pp-id-value"
+                  class="text-base font-bold text-base-content font-mono tracking-wide break-all"
+                ></p>
+              </div>
+            </div>
+
+            <!-- Amount -->
+            <div
+              id="pp-row-amount"
+              class="hidden flex items-start gap-3 bg-base-100/5 rounded-xl p-3 border border-white/5"
+            >
+              <div
+                class="w-8 h-8 bg-warning/10 rounded-lg flex items-center justify-center shrink-0 mt-0.5"
+              >
+                <svg
+                  class="w-4 h-4 text-warning"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <p
+                  class="text-[11px] text-base-content/40 font-semibold uppercase tracking-wider mb-0.5"
+                >
+                  Amount
+                </p>
+                <p
+                  id="pp-amount-value"
+                  class="text-xl font-bold text-warning font-mono"
+                ></p>
+              </div>
+            </div>
+
+            <!-- Static / Dynamic -->
+            <div
+              id="pp-row-type"
+              class="hidden flex items-center gap-3 bg-base-100/5 rounded-xl p-3 border border-white/5"
+            >
+              <div
+                class="w-8 h-8 bg-info/10 rounded-lg flex items-center justify-center shrink-0"
+              >
+                <svg
+                  class="w-4 h-4 text-info"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                  ></path>
+                </svg>
+              </div>
+              <div class="min-w-0 flex-1">
+                <p
+                  class="text-[11px] text-base-content/40 font-semibold uppercase tracking-wider mb-0.5"
+                >
+                  QR Type
+                </p>
+                <p
+                  id="pp-type-value"
+                  class="text-sm font-semibold text-base-content"
+                ></p>
+              </div>
+            </div>
+
+            <!-- Country & Currency -->
+            <div class="flex gap-3">
+              <div
+                id="pp-row-country"
+                class="hidden flex-1 flex items-center gap-2.5 bg-base-100/5 rounded-xl p-3 border border-white/5"
+              >
+                <span class="text-base">🇹🇭</span>
+                <div>
+                  <p
+                    class="text-[10px] text-base-content/40 font-semibold uppercase tracking-wider"
+                  >
+                    Country
+                  </p>
+                  <p
+                    id="pp-country-value"
+                    class="text-xs font-semibold text-base-content"
+                  ></p>
+                </div>
+              </div>
+              <div
+                id="pp-row-currency"
+                class="hidden flex-1 flex items-center gap-2.5 bg-base-100/5 rounded-xl p-3 border border-white/5"
+              >
+                <span class="text-base">💰</span>
+                <div>
+                  <p
+                    class="text-[10px] text-base-content/40 font-semibold uppercase tracking-wider"
+                  >
+                    Currency
+                  </p>
+                  <p
+                    id="pp-currency-value"
+                    class="text-xs font-semibold text-base-content"
+                  ></p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Action Buttons -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
           <button
@@ -628,19 +814,6 @@
     var currentResult = "";
     var isScanning = false;
 
-    // Safari/iPad detection — used to pick the direct jsQR path
-    var isSafari =
-      /^((?!chrome|android).)*safari/i.test(navigator.userAgent) ||
-      /iPad|iPhone|iPod/.test(navigator.userAgent) ||
-      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-
-    // Direct camera state (Safari path)
-    var directStream = null;
-    var directVideo = null;
-    var scanCanvas = null;
-    var scanCtx = null;
-    var scanRAF = null;
-
     // Show web UI
     nativeScannerUI?.classList.add("hidden");
     webScannerUI?.classList.remove("hidden");
@@ -659,7 +832,7 @@
     }
 
     // ============================================================
-    // WEB: html5-qrcode (non-Safari path)
+    // WEB: html5-qrcode
     // ============================================================
     function loadHtml5Qrcode(callback) {
       if (typeof Html5Qrcode !== "undefined") {
@@ -710,134 +883,18 @@
     async function startWebCamera() {
       if (!checkCameraSupport()) return;
 
-      // Safari/iPad: use direct getUserMedia + jsQR (bypasses html5-qrcode entirely)
-      if (isSafari && typeof jsQR !== "undefined") {
-        doStartCameraDirect();
-        return;
-      }
-
       if (!html5QrCode) {
         loadHtml5Qrcode(function () {
           initWebScanner();
-          if (html5QrCode) doStartCameraLib();
+          if (html5QrCode) doStartCamera();
         });
         return;
       }
 
-      doStartCameraLib();
+      doStartCamera();
     }
 
-    // ============================================================
-    // SAFARI PATH: Direct getUserMedia + jsQR frame scanning
-    // ============================================================
-    async function doStartCameraDirect() {
-      if (isScanning) return;
-
-      isScanning = true;
-      if (startBtn) startBtn.disabled = true;
-      startBtn?.classList.add("loading");
-
-      cameraPlaceholder?.classList.add("hidden");
-      readerVideo.style.display = "block";
-      stopBtn?.classList.remove("hidden");
-      scanningFrame?.classList.remove("hidden");
-
-      videoWrapper?.classList.remove("border-dashed", "border-base-300");
-      videoWrapper?.classList.add("border-transparent", "shadow-2xl");
-
-      try {
-        directStream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: { ideal: "environment" },
-            width: { ideal: 1280 },
-            height: { ideal: 720 },
-          },
-          audio: false,
-        });
-        window._directStream = directStream;
-
-        // Create a real <video> element inside reader-video
-        directVideo = document.createElement("video");
-        directVideo.setAttribute("autoplay", "");
-        directVideo.setAttribute("playsinline", "");
-        directVideo.setAttribute("muted", "");
-        directVideo.muted = true;
-        directVideo.style.cssText = "width:100%;height:100%;object-fit:cover;";
-        readerVideo.innerHTML = "";
-        readerVideo.appendChild(directVideo);
-
-        directVideo.srcObject = directStream;
-        await directVideo.play();
-
-        // Prepare offscreen canvas for frame capture
-        scanCanvas = document.createElement("canvas");
-        scanCtx = scanCanvas.getContext("2d", { willReadFrequently: true });
-
-        // Wait a moment for the video to stabilize, then start scanning loop
-        setTimeout(function () {
-          scanFrameLoop();
-        }, 500);
-
-        window.showToast(
-          "Camera started. Point at a QR code!",
-          "success",
-          3000,
-        );
-        console.log("Safari direct camera started");
-      } catch (err) {
-        console.error("Direct camera error:", err);
-
-        if (err.name === "NotAllowedError") {
-          permissionDenied?.classList.remove("hidden");
-          window.showToast(
-            "Camera permission denied. Please enable it in settings.",
-            "error",
-          );
-        } else if (err.name === "NotFoundError") {
-          window.showToast("No camera found on this device", "warning");
-        } else {
-          window.showToast("Could not access camera: " + err.message, "error");
-        }
-
-        stopWebCamera();
-      } finally {
-        if (startBtn) startBtn.disabled = false;
-        startBtn?.classList.remove("loading");
-      }
-    }
-
-    function scanFrameLoop() {
-      if (!isScanning || !directVideo) return;
-
-      // Only scan when video has actual data
-      if (directVideo.readyState === directVideo.HAVE_ENOUGH_DATA) {
-        var vw = directVideo.videoWidth;
-        var vh = directVideo.videoHeight;
-
-        if (vw > 0 && vh > 0) {
-          scanCanvas.width = vw;
-          scanCanvas.height = vh;
-          scanCtx.drawImage(directVideo, 0, 0, vw, vh);
-
-          var imageData = scanCtx.getImageData(0, 0, vw, vh);
-          var code = jsQR(imageData.data, vw, vh, {
-            inversionAttempts: "dontInvert",
-          });
-
-          if (code && code.data) {
-            onScanSuccess(code.data);
-            return; // Stop loop on success
-          }
-        }
-      }
-
-      scanRAF = requestAnimationFrame(scanFrameLoop);
-    }
-
-    // ============================================================
-    // NON-SAFARI PATH: html5-qrcode library
-    // ============================================================
-    async function doStartCameraLib() {
+    async function doStartCamera() {
       if (isScanning) return;
 
       try {
@@ -864,23 +921,19 @@
       videoWrapper?.classList.remove("border-dashed", "border-base-300");
       videoWrapper?.classList.add("border-transparent", "shadow-2xl");
 
-      var wrapperRect = videoWrapper?.getBoundingClientRect() || {
-        width: 400,
-        height: 300,
-      };
-      var qrboxSize = Math.min(
-        Math.floor(Math.min(wrapperRect.width, wrapperRect.height) * 0.6),
-        250,
-      );
-      qrboxSize = Math.max(qrboxSize, 150);
-
       try {
         await html5QrCode.start(
           { facingMode: "environment" },
           {
             fps: 10,
-            qrbox: { width: qrboxSize, height: qrboxSize },
-            experimentalFeatures: { useBarCodeDetectorIfSupported: false },
+            qrbox: { width: 200, height: 200 },
+            aspectRatio: 1.0,
+            experimentalFeatures: { useBarCodeDetectorIfSupported: true },
+            videoConstraints: {
+              facingMode: "environment",
+              width: { ideal: 1280 },
+              height: { ideal: 720 },
+            },
           },
           onScanSuccess,
           () => {},
@@ -899,8 +952,8 @@
             { facingMode: "user" },
             {
               fps: 10,
-              qrbox: { width: qrboxSize, height: qrboxSize },
-              experimentalFeatures: { useBarCodeDetectorIfSupported: false },
+              qrbox: { width: 200, height: 200 },
+              aspectRatio: 1.0,
             },
             onScanSuccess,
             () => {},
@@ -931,41 +984,14 @@
       }
     }
 
-    // ============================================================
-    // Stop & Reset (handles both paths)
-    // ============================================================
     async function stopWebCamera() {
       isScanning = false;
 
-      // Stop jsQR frame loop
-      if (scanRAF) {
-        cancelAnimationFrame(scanRAF);
-        scanRAF = null;
-      }
-
-      // Stop direct stream tracks
-      if (directStream) {
-        directStream.getTracks().forEach(function (t) {
-          t.stop();
-        });
-        directStream = null;
-        window._directStream = null;
-      }
-
-      // Remove direct video element
-      if (directVideo) {
-        directVideo.srcObject = null;
-        directVideo.remove();
-        directVideo = null;
-      }
-
-      // Stop html5-qrcode if it was used
       if (html5QrCode?.isScanning) {
         try {
           await html5QrCode.stop();
         } catch (e) {}
       }
-
       resetWebUI();
     }
 
@@ -984,12 +1010,6 @@
     // File Upload Scanning (Improved)
     // ============================================================
     function webScanFromFile(file) {
-      // Safari: try jsQR first since it's already loaded
-      if (isSafari && typeof jsQR !== "undefined") {
-        doWebFileScanJsQRFirst(file);
-        return;
-      }
-
       if (!html5QrCode) {
         loadHtml5Qrcode(function () {
           initWebScanner();
@@ -998,57 +1018,6 @@
         return;
       }
       doWebFileScan(file);
-    }
-
-    async function doWebFileScanJsQRFirst(file) {
-      videoWrapper?.classList.add("opacity-50", "pointer-events-none");
-      const loadingToast = window.showToast(
-        "Scanning image for QR code...",
-        "info",
-        0,
-      );
-
-      try {
-        var text = await scanWithJsQR(file);
-        if (text && text.trim()) {
-          onScanSuccess(text);
-          return;
-        }
-      } catch (err) {
-        console.log(
-          "jsQR file scan failed, falling back to html5-qrcode:",
-          err,
-        );
-        // Fall back to html5-qrcode
-        try {
-          if (!html5QrCode) {
-            await new Promise(function (resolve) {
-              loadHtml5Qrcode(function () {
-                initWebScanner();
-                resolve();
-              });
-            });
-          }
-          if (html5QrCode) {
-            var text2 = await html5QrCode.scanFile(file, true);
-            if (text2 && text2.trim()) {
-              onScanSuccess(text2);
-              return;
-            }
-          }
-        } catch (err2) {
-          console.log("html5-qrcode file scan also failed:", err2);
-        }
-        window.showToast("No QR code found in the image", "warning");
-      } finally {
-        if (loadingToast && loadingToast.dismiss) {
-          loadingToast.dismiss();
-        } else {
-          window.showToast.dismiss?.();
-        }
-        videoWrapper?.classList.remove("opacity-50", "pointer-events-none");
-        fileInput.value = "";
-      }
     }
 
     async function doWebFileScan(file) {
@@ -1262,6 +1231,220 @@
     }
 
     // ============================================================
+    // PromptPay EMVCo TLV Parser
+    // ============================================================
+    function parseTLV(data) {
+      var result = {};
+      var i = 0;
+      while (i + 4 <= data.length) {
+        var tag = data.substring(i, i + 2);
+        var len = parseInt(data.substring(i + 2, i + 4), 10);
+        if (isNaN(len) || i + 4 + len > data.length) break;
+        var val = data.substring(i + 4, i + 4 + len);
+        result[tag] = val;
+        i += 4 + len;
+      }
+      return result;
+    }
+
+    function isPromptPayQR(text) {
+      // EMVCo QR starts with tag 00 (Payload Format Indicator)
+      // and contains tag 29 with PromptPay AID A000000677010111
+      if (!text || typeof text !== "string") return false;
+      if (!/^0002\d{2}/.test(text)) return false;
+      return text.indexOf("A000000677010111") !== -1;
+    }
+
+    function parsePromptPay(text) {
+      try {
+        var root = parseTLV(text);
+        var info = {
+          formatIndicator: root["00"] || "",
+          pointOfInitiation: root["01"] || "",
+          countryCode: root["58"] || "",
+          currencyCode: root["53"] || "",
+          amount: root["54"] || "",
+          crc: root["63"] || "",
+          idType: "",
+          idValue: "",
+          idDisplay: "",
+        };
+
+        // Parse tag 29 (PromptPay merchant account info)
+        var merchantData = root["29"] || root["30"] || "";
+        if (merchantData) {
+          var sub = parseTLV(merchantData);
+          // sub["00"] = AID (A000000677010111)
+          // sub["01"] = mobile (0066xxxxxxxxx, 13 chars)
+          // sub["02"] = national ID / tax ID (13 digits)
+          // sub["03"] = e-wallet ID (15 digits)
+
+          if (sub["01"]) {
+            info.idType = "mobile";
+            var raw = sub["01"];
+            // Convert 0066xxxxxxxxx back to 0x-xxxx-xxxx
+            if (raw.startsWith("0066") && raw.length === 13) {
+              var local = "0" + raw.substring(4);
+              info.idValue = local;
+              info.idDisplay = local.replace(
+                /(\d{3})(\d{3})(\d{4})/,
+                "$1-$2-$3",
+              );
+            } else {
+              info.idValue = raw;
+              info.idDisplay = raw;
+            }
+          } else if (sub["02"]) {
+            var nid = sub["02"];
+            info.idValue = nid;
+            if (nid.length === 13 && /^\d+$/.test(nid)) {
+              // Check if likely a tax ID (starts with 0) or national ID
+              info.idType = nid.startsWith("0") ? "tax_id" : "national_id";
+              info.idDisplay = nid.replace(
+                /(\d)(\d{4})(\d{5})(\d{2})(\d)/,
+                "$1-$2-$3-$4-$5",
+              );
+            } else {
+              info.idType = "national_id";
+              info.idDisplay = nid;
+            }
+          } else if (sub["03"]) {
+            info.idType = "ewallet";
+            info.idValue = sub["03"];
+            info.idDisplay = sub["03"];
+          }
+        }
+
+        // Verify CRC
+        if (info.crc) {
+          var payloadWithoutCRC = text.substring(0, text.length - 4);
+          var computed = crc16CCITT(payloadWithoutCRC);
+          info.crcValid = computed === info.crc.toUpperCase();
+        }
+
+        // Map currency code
+        var currencyMap = { 764: "THB (฿)", 840: "USD ($)", 978: "EUR (€)" };
+        info.currencyDisplay =
+          currencyMap[info.currencyCode] || info.currencyCode;
+
+        // Map country
+        var countryMap = { TH: "Thailand", SG: "Singapore", MY: "Malaysia" };
+        info.countryDisplay = countryMap[info.countryCode] || info.countryCode;
+
+        return info;
+      } catch (e) {
+        console.error("PromptPay parse error:", e);
+        return null;
+      }
+    }
+
+    function crc16CCITT(data) {
+      var crc = 0xffff;
+      for (var i = 0; i < data.length; i++) {
+        crc ^= data.charCodeAt(i) << 8;
+        for (var j = 0; j < 8; j++) {
+          if (crc & 0x8000) {
+            crc = ((crc << 1) ^ 0x1021) & 0xffff;
+          } else {
+            crc = (crc << 1) & 0xffff;
+          }
+        }
+      }
+      return crc.toString(16).toUpperCase().padStart(4, "0");
+    }
+
+    function showPromptPayDetails(info) {
+      var container = document.getElementById("promptpay-details");
+      if (!container || !info) return;
+
+      container.classList.remove("hidden");
+
+      // Account ID
+      var rowId = document.getElementById("pp-row-id");
+      var idTypeEl = document.getElementById("pp-id-type");
+      var idValueEl = document.getElementById("pp-id-value");
+      if (info.idValue && rowId) {
+        rowId.classList.remove("hidden");
+        var typeLabels = {
+          mobile: "📱 Mobile Number",
+          national_id: "🪪 National ID",
+          tax_id: "🏢 Tax ID",
+          ewallet: "💳 E-Wallet ID",
+        };
+        idTypeEl.textContent = typeLabels[info.idType] || "Account ID";
+        idValueEl.textContent = info.idDisplay;
+      }
+
+      // Amount
+      var rowAmount = document.getElementById("pp-row-amount");
+      var amountEl = document.getElementById("pp-amount-value");
+      if (info.amount && rowAmount) {
+        rowAmount.classList.remove("hidden");
+        var num = parseFloat(info.amount);
+        amountEl.textContent =
+          "฿" +
+          num.toLocaleString("th-TH", {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          });
+      }
+
+      // Static / Dynamic
+      var rowType = document.getElementById("pp-row-type");
+      var typeEl = document.getElementById("pp-type-value");
+      if (info.pointOfInitiation && rowType) {
+        rowType.classList.remove("hidden");
+        if (info.pointOfInitiation === "11") {
+          typeEl.textContent = "Static QR — Reusable, no fixed amount";
+        } else if (info.pointOfInitiation === "12") {
+          typeEl.textContent = "Dynamic QR — Single-use, fixed amount";
+        } else {
+          typeEl.textContent = info.pointOfInitiation;
+        }
+      }
+
+      // Country
+      var rowCountry = document.getElementById("pp-row-country");
+      var countryEl = document.getElementById("pp-country-value");
+      if (info.countryCode && rowCountry) {
+        rowCountry.classList.remove("hidden");
+        countryEl.textContent = info.countryDisplay;
+      }
+
+      // Currency
+      var rowCurrency = document.getElementById("pp-row-currency");
+      var currencyEl = document.getElementById("pp-currency-value");
+      if (info.currencyCode && rowCurrency) {
+        rowCurrency.classList.remove("hidden");
+        currencyEl.textContent = info.currencyDisplay;
+      }
+
+      // CRC
+      var verifiedEl = document.getElementById("pp-verified");
+      if (info.crcValid && verifiedEl) {
+        verifiedEl.classList.remove("hidden");
+      }
+    }
+
+    function hidePromptPayDetails() {
+      var container = document.getElementById("promptpay-details");
+      if (container) container.classList.add("hidden");
+
+      // Reset all rows
+      [
+        "pp-row-id",
+        "pp-row-amount",
+        "pp-row-type",
+        "pp-row-country",
+        "pp-row-currency",
+        "pp-verified",
+      ].forEach(function (id) {
+        var el = document.getElementById(id);
+        if (el) el.classList.add("hidden");
+      });
+    }
+
+    // ============================================================
     // SHARED: Result handling
     // ============================================================
     function onScanSuccess(decodedText) {
@@ -1273,6 +1456,9 @@
       scannerContainer?.classList.add("hidden");
       resultContainer?.classList.remove("hidden");
 
+      // Reset PromptPay details
+      hidePromptPayDetails();
+
       if (scannedTextEl) {
         scannedTextEl.textContent = decodedText;
         scannedTextEl.scrollLeft = 0;
@@ -1281,64 +1467,114 @@
       var isUrl = false;
       var isEmail = false;
       var isPhone = false;
+      var isPromptPay = false;
+      var detectedType = "text";
 
-      try {
-        const url = new URL(decodedText);
-        isUrl = /^https?:$/.test(url.protocol);
-      } catch (_) {
-        isUrl = /^https?:\/\//.test(decodedText);
-      }
+      // Check PromptPay first
+      if (isPromptPayQR(decodedText)) {
+        isPromptPay = true;
+        detectedType = "promptpay";
+        var ppInfo = parsePromptPay(decodedText);
 
-      isEmail =
-        /^mailto:/.test(decodedText) ||
-        /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(decodedText);
-      isPhone =
-        /^tel:/.test(decodedText) || /^\+?[\d\s-()]{7,}$/.test(decodedText);
-
-      if (isUrl) {
-        resultTypeBadge.textContent = "URL";
-        resultTypeBadge.className = "badge badge-sm badge-primary";
-        openLinkBtn?.classList.remove("hidden");
-        openLinkBtn.href = decodedText;
-        shareBtn?.classList.remove("hidden");
-      } else if (isEmail) {
-        resultTypeBadge.textContent = "Email";
-        resultTypeBadge.className = "badge badge-sm badge-secondary";
-        openLinkBtn?.classList.remove("hidden");
-        openLinkBtn.href = decodedText.startsWith("mailto:")
-          ? decodedText
-          : `mailto:${decodedText}`;
-        shareBtn?.classList.remove("hidden");
-      } else if (isPhone) {
-        resultTypeBadge.textContent = "Phone";
-        resultTypeBadge.className = "badge badge-sm badge-accent";
-        openLinkBtn?.classList.remove("hidden");
-        openLinkBtn.href = decodedText.startsWith("tel:")
-          ? decodedText
-          : `tel:${decodedText}`;
-        shareBtn?.classList.remove("hidden");
-      } else {
-        resultTypeBadge.textContent = "Text";
-        resultTypeBadge.className = "badge badge-sm badge-neutral";
+        resultTypeBadge.textContent = "PromptPay";
+        resultTypeBadge.className =
+          "badge badge-sm bg-purple-500/20 text-purple-300 border-purple-500/30";
         openLinkBtn?.classList.add("hidden");
-        shareBtn?.classList.add("hidden");
+        shareBtn?.classList.remove("hidden");
+
+        // Show brief summary in the result text
+        if (ppInfo && scannedTextEl) {
+          var summary = "PromptPay";
+          if (ppInfo.idDisplay) summary += " • " + ppInfo.idDisplay;
+          if (ppInfo.amount) {
+            var num = parseFloat(ppInfo.amount);
+            summary +=
+              " • ฿" +
+              num.toLocaleString("th-TH", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+          }
+          scannedTextEl.textContent = summary;
+        }
+
+        // Show parsed details card
+        if (ppInfo) showPromptPayDetails(ppInfo);
+      } else {
+        try {
+          const url = new URL(decodedText);
+          isUrl = /^https?:$/.test(url.protocol);
+        } catch (_) {
+          isUrl = /^https?:\/\//.test(decodedText);
+        }
+
+        isEmail =
+          /^mailto:/.test(decodedText) ||
+          /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(decodedText);
+        isPhone =
+          /^tel:/.test(decodedText) || /^\+?[\d\s-()]{7,}$/.test(decodedText);
+
+        if (isUrl) {
+          detectedType = "url";
+          resultTypeBadge.textContent = "URL";
+          resultTypeBadge.className = "badge badge-sm badge-primary";
+          openLinkBtn?.classList.remove("hidden");
+          openLinkBtn.href = decodedText;
+          shareBtn?.classList.remove("hidden");
+        } else if (isEmail) {
+          detectedType = "email";
+          resultTypeBadge.textContent = "Email";
+          resultTypeBadge.className = "badge badge-sm badge-secondary";
+          openLinkBtn?.classList.remove("hidden");
+          openLinkBtn.href = decodedText.startsWith("mailto:")
+            ? decodedText
+            : `mailto:${decodedText}`;
+          shareBtn?.classList.remove("hidden");
+        } else if (isPhone) {
+          detectedType = "phone";
+          resultTypeBadge.textContent = "Phone";
+          resultTypeBadge.className = "badge badge-sm badge-accent";
+          openLinkBtn?.classList.remove("hidden");
+          openLinkBtn.href = decodedText.startsWith("tel:")
+            ? decodedText
+            : `tel:${decodedText}`;
+          shareBtn?.classList.remove("hidden");
+        } else {
+          resultTypeBadge.textContent = "Text";
+          resultTypeBadge.className = "badge badge-sm badge-neutral";
+          openLinkBtn?.classList.add("hidden");
+          shareBtn?.classList.add("hidden");
+        }
       }
 
-      saveToHistory(decodedText, isUrl);
+      saveToHistory(decodedText, detectedType);
 
       if (window.navigator.vibrate) {
         window.navigator.vibrate(50);
       }
     }
 
-    function saveToHistory(text, isUrl) {
+    function saveToHistory(text, detectedType) {
+      var isUrl = detectedType === "url";
       var entry = {
         id:
           Date.now().toString(36) + Math.random().toString(36).substring(2, 7),
-        type: isUrl ? "url" : "text",
-        content: isUrl ? { url: text } : { text: text },
+        type: detectedType || (isUrl ? "url" : "text"),
+        content: isUrl
+          ? { url: text }
+          : detectedType === "promptpay"
+            ? { promptpayRaw: text }
+            : { text: text },
         style: {},
-        label: text.substring(0, 50) + (text.length > 50 ? "..." : ""),
+        label:
+          detectedType === "promptpay"
+            ? "PromptPay " +
+              (function () {
+                var pp = parsePromptPay(text);
+                if (pp && pp.idDisplay) return pp.idDisplay;
+                return text.substring(0, 30) + "...";
+              })()
+            : text.substring(0, 50) + (text.length > 50 ? "..." : ""),
         starred: false,
         createdAt: new Date().toISOString(),
         source: "scanned",
@@ -1352,7 +1588,8 @@
         if (
           history.length > 0 &&
           (history[0].content?.url === text ||
-            history[0].content?.text === text)
+            history[0].content?.text === text ||
+            history[0].content?.promptpayRaw === text)
         ) {
           return;
         }
@@ -1391,6 +1628,7 @@
     scanAgainBtn?.addEventListener("click", function () {
       resultContainer?.classList.add("hidden");
       scannerContainer?.classList.remove("hidden");
+      hidePromptPayDetails();
       fileInput.value = "";
       currentResult = "";
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -1497,25 +1735,15 @@
       });
     }
 
-    // Initialize: Safari uses jsQR directly for live scanning, only needs html5-qrcode for file scan
-    if (!isSafari) {
-      setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
-    }
+    // Initialize
+    setTimeout(() => loadHtml5Qrcode(initWebScanner), 500);
   })();
 
   // Cleanup
   (function () {
     function cleanup() {
-      // Stop html5-qrcode
       if (window.qrScannerInstance?.isScanning) {
         window.qrScannerInstance.stop().catch(() => {});
-      }
-      // Stop any direct camera stream (Safari path)
-      if (window._directStream) {
-        window._directStream.getTracks().forEach(function (t) {
-          t.stop();
-        });
-        window._directStream = null;
       }
     }
 
